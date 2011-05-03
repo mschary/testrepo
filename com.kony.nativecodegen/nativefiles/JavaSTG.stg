@@ -1,0 +1,331 @@
+
+group Java;
+
+typeInitMap ::= [
+        "int":"0",
+        "long":"0",
+        "float":"0.0",
+        "double":"0.0",
+        "boolean":"false",
+        "byte":"0",
+        "short":"0",
+        "char":"0",
+        default:"null" // anything other than an atomic type
+]
+
+javaMethodMap ::= [
+        "print":"System.out.println",
+        "math.sqrt":"Math.sqrt",
+        "os.exit":"StandardLib.exit",
+        "exit":"StandardLib.exit",
+        "os.platform":"OSLib.platform",
+        "os.useragent":"OSLib.useragent",
+        "phone.dial":"PhoneLib.dial"
+]
+
+javaWidgetMap ::= [
+  "box.add" : "KonyContainer",
+  "form.add" : "KonyForm",
+  "popup.add" : "KonyPopup",
+  "form.show" : "KonyForm",
+  "popup.dismiss" : "KonyPopup",
+  "popup.show" : "KonyPopup",
+  "popup.setcontext" : "KonyPopup",
+  "segui.setdata" : "KonySegmentedUI",
+  "widget.setvisibility" : "KonyWidget"
+]
+
+javaAPIInstanceMap ::= [
+  "box.add" : "add",
+  "form.add" : "add",
+  "popup.add" : "add",
+  "popup.setcontext" : "setContext",
+  "segui.setdata" : "setdata",
+  "widget.setvisibility" : "setVisibility"
+]
+
+javaAPIInstance0Map ::= [
+  "form.show" : "show",
+  "popup.dismiss" : "dismiss",
+  "popup.show" : "show"
+]
+
+javaAPIMap ::= [
+  "window.Alert":"KonyAlert.create",
+  "window.Box" : "KonyContainer.create",
+  "window.Button" : "KonyButton.create",
+  "window.Calendar" : "KonyCalendar.create",
+  "window.Camera" : "KonyCamera.create",
+  "window.CheckBoxGroup" : "KonyCheckBoxGroup.create",
+  "window.Form" : "KonyForm.create",
+  "window.Image" : "KonyImage.create",
+  "window.Label" : "KonyLabel.create",
+  "window.Line" : "KonyLine.create",
+  "window.Map" : "KonyMap.create",
+  "window.Popup" : "KonyPopup.create",
+  "window.RadioButtonGroup" : "KonyRadioButtonGroup.create",
+  "window.SegmentedUI" : "KonySegmentedUI.create",
+  "window.Skin" : "new KonySkin",
+  "window.TextField" : "KonyTextField.create",
+
+  "net.invokeservice" : "NetworkLib.invokeservice",
+  "net.invokeserviceasync" : "NetworkLib.invokeserviceasync",
+
+  "string.find" : "StringLib.find",
+  "string.len" : "StringLib.len",
+  "string.rep" : "StringLib.rep",
+  "string.sub" : "StringLib.sub",
+ 
+  "table.append" : "TableLib.append",
+  "table.get" : "TableLib.get",
+  "table.insert" : "TableLib.insert",
+
+  "setappmenu" : "KonyForm.setAppMenu"  
+]
+
+global_tmpl(globalVars,globalFunctions) ::= <<
+
+package com.konylabs.api.nativecode;
+
+class Global {
+    <globalVars; separator="\n">
+    <globalFunctions; separator="\n">
+}
+>>
+
+program_tmpl(fileName, vars,functions ) ::= <<
+package com.konylabs.api.nativecode;
+
+import com.konylabs.api.*;
+import com.konylabs.vm.*;
+import com.konylabs.api.ui.calendar.*;
+import com.konylabs.api.ui.camera.*;
+import com.konylabs.api.ui.segui.*;
+import com.konylabs.api.ui.*;
+
+class <fileName> {
+    <vars; separator="\n">
+    <functions; separator="\n">
+}
+>>
+// START: file
+file(defs) ::= <<
+<defs; separator="\n">
+>>
+
+block_tmpl(stmt) ::= <<
+{
+  <stmt; separator="\n">
+}
+>>
+
+comment_tmpl(comment, stmt) ::= <<
+<stmt><if(comment)>/*<comment>*/<endif>
+>>
+blockComment_tmpl(comment, stmt) ::= <<
+<if(comment)>/*<comment>*/<endif>
+<stmt>
+>>
+comment2_tmpl(prevComment, stmt, postComment) ::= <<
+<if(prevComment)><prevComment><endif>
+<stmt><if(postComment)><postComment><endif>
+>>
+
+comment1_tmpl(comment, stmt) ::= <<
+/*<comment>*/
+<stmt>
+>>
+
+var_tmpl(prefix, type, name, init, ptype) ::= <<
+<type> <name> = <if(init)><if(ptype)>(<ptype>) <endif><init><else><typeInitMap.(type)><endif>;
+>>
+
+varDecl_tmpl(isGlobal, prefix, type, name) ::= <<
+<if(isGlobal)>public static <else>private static <endif><type> <if(prefix)><prefix>.<name><else><name><endif> = <typeInitMap.(type)>;
+>>
+
+varList_tmpl(vars) ::= <<
+<vars; separator="\n">
+>>
+
+assign_tmpl(isLocal, prefix, a, b, ptype) ::= <<
+<if(isLocal)><a> = <if(ptype)>(<ptype>) <endif><b><else><if(prefix)><prefix>.<endif><a> = <if(ptype)>(<ptype>) <endif><b><endif>;
+>>
+
+pow_tmpl(a,b) ::= "Math.pow(<a>,<b>)"
+
+expression_tmpl(expr) ::= <<
+<expr>
+>>
+
+bop_tmpl(op, a, b) ::= <<
+<a> <op> <b>
+>>
+
+uop_tmpl(op, a) ::= <<
+<op><a>
+>>
+
+hash_tmpl(a) ::= "<a>.length()"
+
+expr_tmpl(expr) ::= "<expr>"
+
+arrAccess_tmpl(name,mem, tcast) ::= <<
+<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable(<name>)
+>>
+
+methodCallStmt_tmpl(call) ::= "<call>;"
+
+methodCall1_tmpl(prefix, name, args) ::= <<
+<if(javaMethodMap.(name))><javaMethodMap.(name)><else><if(prefix)><prefix>.<endif><name><endif>(<args; separator=",">)
+>>
+
+methodCall2_tmpl(cast, instance, name, args) ::= <<
+<if(instance)>((<cast>)<instance>).<endif><name>(new Object[] {<args; separator=",">})
+>>
+
+methodCall3_tmpl(cast, instance, name) ::= <<
+((<cast>)<instance>).<name>()
+>>
+
+javaapi_tmpl(name) ::= <<
+<if (javaAPIMap.(name))><javaAPIMap.(name)><else><name><endif>
+>>
+
+javaapiinstance_tmpl(name) ::= <<
+<if (javaAPIInstanceMap.(name))><javaAPIInstanceMap.(name)><else><name><endif>
+>>
+
+javaapiinstance0_tmpl(name) ::= <<
+<if (javaAPIInstance0Map.(name))><javaAPIInstance0Map.(name)><else><name><endif>
+>>
+
+javawidget_tmpl(name) ::= <<
+<if (javaWidgetMap.(name))><javaWidgetMap.(name)><else><name><endif>
+>>
+
+exprList_tmpl(expr) ::= <<
+<expr; separator=",">
+>>
+
+while_tmpl(cond, stmt) ::= <<
+while(<cond>)<stmt>
+>>
+
+doWhile_tmpl(cond, stmt) ::= <<
+do<stmt>while(<cond>);
+>>
+
+return_tmpl(val) ::= "return <val>;"
+
+if_stmt(cond, stmt, elb) ::= <<
+if(<cond>)<stmt><if(elb)>else <elb><endif>
+>>
+
+if_stmt1(cond, stmt) ::= "if(<cond>)<stmt>"
+
+ifelse_stmt(cond, stmt, elseb) ::= <<
+if(<cond>)<stmt><if(elseb)>else<elseb><endif>
+>>
+
+dotMember_tmpl(mem, name, cast, tcast) ::= <<
+<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")))<else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")<endif>
+>>
+
+method_dotMember_tmpl(mem, name) ::= <<
+<mem>.<name>
+>>
+
+ident_tmpl(name) ::= "<name>"
+
+dotList_tmpl(names) ::= <<
+<names; separator=".">
+>>
+
+param_tmpl(type, name) ::= "<type> <name>"
+
+paramList_tmpl(params) ::= <<
+<params; separator=",">
+>>
+
+vararg_tmpl() ::= <<
+Object arg
+>>
+
+methodDecl_tmpl(isLocal, type,name,params,bl) ::= <<
+<if(isLocal)>private <else>public static <endif><type> <name>(<params>)<bl>
+>>
+
+forInit_tmpl(type, var , init) ::= "<type> <var> = <init>"
+forCondition_tmpl(name, cond) ::= <<
+<name> \< <cond>
+>> 
+
+forUpdater_tmpl(name, cond) ::= "<name><cond>" 
+
+for_tmpl(init, cond, updt, stmt) ::= <<
+<if(updt)>
+for(<init>;<cond>;<updt>)<stmt>
+<else>
+for(<init> ; <cond> ; <init.stmt.var>++)<stmt>
+<endif>
+>>
+
+forIpair_tmpl(type, val, type1, val1, met, type2, var, bl) ::= <<
+for(<type> <val>=0; <val> \< <var>.size(); <val>++){
+  <type1> <val1> = (<type1>) <var>.get(i);
+  <bl; separator="\n">
+} 
+>>
+
+forPair_tmpl(type, val, met, type1, var, bl) ::= <<
+java.util.Iterator _itr = <var>.iterator(); 
+for(int _idx = 0; _itr.hasNext(); _idx++){
+  <type> <val> = (<type>) _itr.getNext();
+  <bl; separator="\n">
+} 
+>>
+
+break_tmpl() ::= "break;"
+
+tbl_param_tmpl(type, name) ::= "<type> <name>"
+
+table_init_tmpl(prefix, fname, params) ::= <<
+<if(prefix)><prefix>.<endif><fname>(<params; separator=",">)
+>>
+
+table_func_tmpl(fname, tname, body, params) ::= <<
+private static LuaTable <fname>(<params; separator=",">)
+{
+     LuaTable <tname> = new LuaTable();
+     <body>
+     return <tname>;
+}
+>>
+
+fieldList_tmpl(field) ::= <<
+<field; separator=";\n">
+>>
+
+tblFieldList_tmpl(field) ::= <<
+<field; separator="\n">
+>>
+
+field1_tmpl(tname, expr, indx) ::= <<
+<tname>.setTable(new Double(<indx>), <expr>);
+>>
+
+field2_tmpl(tname, fname, expr, tcast) ::= <<
+<if(tcast)>((LuaTable)(<tname>))<else><tname><endif>.setTable("<fname>", <expr>);
+>>
+
+field3_tmpl(tname, expr1, expr2, tcast) ::= <<
+<if(tcast)>((LuaTable)(<tname>))<else><tname><endif>.setTable(<expr1>, <expr2>);
+>>
+
+field_tmpl(fields) ::= <<
+<fields; separator=",">
+>>
+
+qualifiedDecl_tmpl(prefix, mem) ::= "<if(prefix)><prefix>.<endif><mem>"
+

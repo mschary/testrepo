@@ -1,0 +1,652 @@
+
+group iPhone;
+
+typeInitMap ::= [
+        "int":"0",
+        "long":"0",
+        "float":"0.0",
+        "double":"0.0",
+        "boolean":"false",
+        "byte":"0",
+        "short":"0",
+        "char":"0",
+        default:"nil" // anything other than an atomic type
+]
+
+getObjectMap ::= [
+  "table" : "getObjectForKey",
+  default:"objectForKey"
+]
+
+typeMap ::= [
+        "closure":"id",
+        "null":"id",
+        "int":"int",
+        "long":"long",
+        "float":"float",
+        "double":"double",
+        "boolean":"bool",
+        "byte":"unsigned char",
+        "short":"short",
+        "char":"char",
+        "String" : "NSString*",
+        "Object" : "id",
+        "Table" : "LuaTable*",
+        "table" : "LuaTable*",
+        "LuaTable" : "LuaTable*",
+        "skinTable" : "LuaTable*",
+        "KonyLabel" : "KonyLabel*",
+        "NSDictionary" : "NSDictionary*",
+        "NSString" : "NSString*",
+        "NSMutableDictionary" : "NSMutableDictionary*",
+        "id" : "id",
+  "KonyTextBox" : "KonyTextBox*",
+  "KonyBox" : "KonyBox*",
+  "KonyForm" : "KonyForm*",
+  "KonyWidget" : "KonyWidget*",
+  "KonyTab" : "KonyTab*",
+  "KonyPopup" : "KonyPopup*",
+  "KonyButton" : "KonyButton*",
+  "KonyCalendar" : "KonyCalendar*",
+  "KonyCheckboxGroup" : "KonyCheckboxGroup*",
+  "KonyCombobox" : "KonyCombobox*",
+  "KonyDatagrid" : "KonyDatagrid*",
+  "KonyImage" : "KonyImage*",
+  "KonyLabel" : "KonyLabel*",
+  "KonyLine" : "KonyLine*",
+  "KonyLink" : "KonyLink*",
+  "KonyListBox" : "KonyListBox*",
+  "KonyRadioButton" : "KonyRadioButton*",
+  "KonyRichText" : "KonyRichText*",
+  "KonyTextArea" : "KonyTextArea*",
+  "KonyTextField" : "KonyTextField*",
+  "KonyWeb" : "KonyWeb*",
+  "KonyCamera" : "KonyCamera*",
+  "KonyImageStrip" : "KonyImageStrip*",
+  "KonyGallery" : "KonyGallery*",
+  "KonyMap" : "KonyMap*",
+  "KonySegUI" : "KonySegUI*",
+  "KonySlider" : "KonySlider*",
+  "KonyRaw" : "KonyRaw*"
+]
+
+convMap ::= [
+  "int" : "[NSNumber numberWithInt:",
+  "float" : "[NSNumber numberWithFloat:",
+  "double" : "[NSNumber numberWithDouble:",
+  "boolean" : "[NSNumber numberWithInt:"
+]
+
+boolMap ::= [
+  "true" : "@\"true\"",
+  "false" : "@\"false\""
+]
+
+
+formatMap ::= [
+        "int":"%d",
+        "long":"%l",
+        "float":"%f",
+        "double":"%lf",
+        "boolean":"%s",
+        "byte":"%d",
+        "short":"%d",
+        "char":"%c",
+        default:"%@" // anything other than an atomic type
+]
+dictionaryMethodMap ::= [
+"no*()~!@" : ""
+]
+
+arrayMethodMap ::= [
+  "window.Box" : "createBox",
+  "window.image" : "createImage",
+  "window.Button":"createButton",
+  "window.Form" : "createForm",
+  "window.Label" : "createLabel",
+	"window.CheckBoxGroup" : "createCheckBoxGroup",
+	"window.Line" : "createLine",
+	"window.TextField" : "createTextField",
+  "window.Map" : "createMapWidget",
+"window.Calendar" : "createCalendarWidget",
+"window.Camera" : "createCamera",
+"window.Popup" : "createPopup",
+"window.SegementedUI" : "createSegmentedUI",
+"segui.addall" : "addAllToSUI",
+"widget.setvisibility" : "setVisibility",
+  "string.find" : "stringFind",
+  "string.len" : "stringLen",
+  "string.rep" : "stringRep",
+  "string.sub" : "stringSub",
+  "table.append" : "tableAppend",
+  "table.get" : "tableGet",
+  "table.insert" : "tableInsert",
+  "net.invokeservice" : "netInvokeService",
+  "net.invokeserviceasync" : "netInvokeServiceAsync",
+  "window.Alert":"createAlert"
+]  
+
+widgetMethodMap ::= [
+  "box.add" : "addWidgetsToBox",
+  "form.add" : "addWidgetsToForm"
+]
+isMethodCheck ::= [
+  "Method":"true"
+] 
+
+checkDictionary(method) ::= <<
+  <if(dictionaryMethodMap.(method))>true<endif>
+>>
+
+checkArrayMap(method) ::= <<
+  <if(arrayMethodMap.(method))>true<endif>
+>>
+
+checkWidgetMap(method) ::= <<
+  <if(widgetMethodMap.(method))>true<endif>
+>>
+
+checkAbstractTypeMap(type) ::= <<
+  <if(abstractTypes.(type))><abstractTypes.(type)><endif>
+>>
+nullMap ::= [
+"nil":"[NSNull null]"
+]
+
+abstractTypes ::= [
+  "skinTable" : "LuaTable*",
+  "String" : "NSString*",
+  "Object" : "id",
+  "Table" : "LuaTable*",
+        "table" : "LuaTable*",
+  "LuaTable" : "LuaTable*",
+  "skinTable" : "LuaTable*",
+  "KonyLabel" : "KonyLabel*",
+  "NSDictionary" : "NSDictionary*",
+  "NSString" : "NSString*",
+  "NSMutableDictionary" : "NSMutableDictionary*",
+  "id" : "id",
+  "KonyTextBox" : "KonyTextBox*",
+  "KonyBox" : "KonyBox*",
+  "KonyForm" : "KonyForm*",
+  "KonyWidget" : "KonyWidget*",
+  "KonyTab" : "KonyTab*",
+  "KonyPopup" : "KonyPopup*",
+  "KonyButton" : "KonyButton*",
+  "KonyCalendar" : "KonyCalendar*",
+  "KonyCheckboxGroup" : "KonyCheckboxGroup*",
+  "KonyCombobox" : "KonyCombobox*",
+  "KonyDatagrid" : "KonyDatagrid*",
+  "KonyImage" : "KonyImage*",
+  "KonyLabel" : "KonyLabel*",
+  "KonyLine" : "KonyLine*",
+  "KonyLink" : "KonyLink*",
+  "KonyListBox" : "KonyListBox*",
+  "KonyRadioButton" : "KonyRadioButton*",
+  "KonyRichText" : "KonyRichText*",
+  "KonyTextArea" : "KonyTextArea*",
+  "KonyTextField" : "KonyTextField*",
+  "KonyWeb" : "KonyWeb*",
+  "KonyCamera" : "KonyCamera*",
+  "KonyImageStrip" : "KonyImageStrip*",
+  "KonyGallery" : "KonyGallery*",
+  "KonyMap" : "KonyMap*",
+  "KonySegUI" : "KonySegUI*",
+  "KonySlider" : "KonySlider*",
+  "KonyRaw" : "KonyRaw*"
+]
+arrayMethod_tmpl(args) ::= <<
+[NSArray arrayWithObjects : <args; separator=",\n">,nil]
+>>
+
+widgetMethod_tmpl(args) ::= <<
+<first(args)>, 
+[NSArray arrayWithObjects : <rest(args); separator=",\n">,nil]
+>>
+arrayArg_tmpl(arg, isMethod) ::= <<
+<if(nullMap.(arg))>[NSNull null]<else><if(isMethod)>@"<arg>:"<else><if(boolMap.(arg))><boolMap.(arg)><else><arg><endif><endif><endif>
+>>
+
+vararg_tmpl() ::= "id param"
+
+argType_tmpl(arg, type) ::= <<
+<if(boolMap.(arg))><boolMap.(arg)><else>
+<if(convMap.(type))><convMap.(type)> <arg>]<else>
+<if(nullMap.(arg))>[NSNull null]<else>
+<if(isMethodCheck.(type))>@"<arg>:"<else>
+<arg>
+<endif>
+<endif>
+<endif>
+<endif>
+>>
+
+skinTemplate_tmpl(method) ::= <<
+   <method>
+>>
+methodMap ::= [
+        "box.add" : "addWidgetsToBox",
+        "print":"NSLog",
+        "math.sqrt":"sqrt",
+        "os.exit":"exit",
+        "exit":"exit",
+        "os.platform":"osPlatform",
+        "os.useragent":"osUserAgent",
+        "phone.dial":"dial",
+  "window.Skin" : "createSkin",
+  "window.Alert":"createAlert",
+  "window.Calendar" : "createCalendar",
+  "window.Camera" : "createCamera",
+  "window.CheckBoxGroup" : "createCheckBoxGroup",
+  "window.Box" : "createBox",
+  "window.Button" : "createButton",
+  "window.Form" : "createForm",
+  "window.Image" : "createImage",
+  "window.Label" : "createLabel",
+  "window.Line" : "createLine",
+  "window.Map" : "createMap",
+  "window.Popup" : "createPopup",
+  "window.SegmentedUI" : "createSegmentedUI",
+  "window.TextField" : "createTextField",
+
+  "net.invokeservice" : "netInvokeService",
+  "net.invokeserviceasync" : "netInvokeServiceAsync",
+
+  "string.find" : "stringFind",
+  "string.len" : "stringLen",
+  "string.rep" : "stringRep",
+  "string.sub" : "stringSub",
+ 
+  "table.append" : "tableAppend",
+  "table.get" : "tableGet",
+  "table.insert" : "tableInsert",
+  "box.add" : "addWidgetsToBox",
+  "form.add" : "addWidgetsToForm",
+  "form.show" : "showForm",
+  "popup.dismiss": "dismissPopup",
+  "popup.add" : "addToPopup",
+  "segui.setdata" : "setDataInSUI",
+"widget.setvisibility" : "setVisibility",
+"setappmenu" : "setAppMenu",
+"setappmenufocusindex" :"setAppMenuFocusItem",
+"showappmenuitems" : "showAppMenuItems",
+"hidappmenuitems" : "hideAppMenuItems"
+]
+
+globalHeaderFile_tmpl(globalVars, globalFunctionDefs) ::= <<
+/*
+Generate by Kony Lua Source to Source Translator.
+Do not moify. Modifications if any are done to this file will make input lua and this source out of sync. 
+The changes in native code cannot be mapped back to lua code
+
+*/
+
+#import \<Foundation/Foundation.h\>
+#import "KonyForm.h"
+#import "LuaTable.h"
+#import "KonyButton.h"
+#import "KonyLabel.h"
+#import "KonyWrapperDS.h"
+#import "KonyAlert.h"
+#import "KonyBox.h"
+#import "KonyImage.h"
+#import "KonyWrapper.h"
+#import "KonyLine.h"
+#import "KonyTextBox.h"
+#import "MapWidget.h"
+#import "KonyPopup.h"
+
+LuaTable* appMetaData;
+
+extern <globalVars; separator="\nextern ">
+
+<globalFunctionDefs; separator=";\n\n">;
+
+>>
+
+globalClassFile_tmpl(globalVars, globalFunctions) ::= <<
+/*
+Generate by Kony Lua Source to Source Translator.
+Do not moify. Modifications if any are done to this file will make input lua and this source out of sync. 
+The changes in native code cannot be mapped back to lua code
+
+*/
+
+#import \<Foundation/Foundation.h\>
+#import "KonyForm.h"
+
+<globalVars; separator="\n\n">
+
+<globalFunctions; separator="\n\n">
+
+>>
+
+headerFile_tmpl(fileName, imports,vars,lfunctions, gfunctions) ::= <<
+/*
+Generate by Kony Lua Source to Source Translator.
+Do not moify. Modifications if any are done to this file will make input lua and this source out of sync. 
+The changes in native code cannot be mapped back to lua code
+
+*/
+
+#import "GlobalsExtern.h"
+<if(imports)>#import "<imports; separator="\"\n#import \"">"<endif>
+#import "CodeGenBinding.h"
+
+@interface <fileName> : NSObject {
+<if(vars)>@public<endif>
+
+<vars; separator="\n\n">
+
+}
+<gfunctions; separator=";\n\n">;
+
+<lfunctions; separator=";\n\n">;
+
+@end
+>>
+
+classFile_tmpl(fileName,imports, vars, gvars,functions,gfunctions) ::= <<
+/*
+Generate by Kony Lua Source to Source Translator.
+Do not moify. Modifications if any are done to this file will make input lua and this source out of sync. 
+The changes in native code cannot be mapped back to lua code
+
+*/
+
+#import "<fileName>.h"
+<if(imports)>#import "<imports; separator="\"\n#import \"">"<endif>
+
+<if(gvars)><gvars; separator="\n\n">
+
+<endif>
+
+<if(functions)>@implementation <fileName><else><if(gfunctions)>@implementation <fileName><endif><endif>
+   <if(vars)><vars; separator="\n\n">
+   
+   <endif>
+   <if(functions)><functions; separator="\n\n"><endif>
+    
+    <if(gfunctions)><gfunctions; separator="\n\n">
+    <endif>
+<if(functions)>@end<else><if(gfunctions)>@end<endif><endif>
+>>
+
+
+// START: file
+file(defs) ::= <<
+<defs; separator="\n">
+>>
+cast_tmpl(type,init) ::= "( <if(typeMap.(type))><typeMap.(type)><else><type><endif> ) ( <init> )"
+
+block_tmpl(stmt) ::= <<
+{
+  <stmt; separator="\n\n">
+}
+
+>>
+
+comment_tmpl(comment, stmt) ::= <<
+<stmt><if(comment)>/*<comment>*/<endif>
+>>
+blockComment_tmpl(comment, stmt) ::= <<
+<if(comment)>/*<comment>*/<endif>
+<stmt>
+>>
+comment2_tmpl(prevComment, stmt, postComment) ::= <<
+<if(prevComment)><prevComment><endif>
+<stmt><if(postComment)><postComment><endif>
+>>
+
+comment1_tmpl(comment, stmt) ::= <<
+/*<comment>*/
+<stmt>
+>>
+
+var_tmpl(prefix, type, name, init) ::= <<
+<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name> <if(init)>= <init><else><if(typeInitMap.(type))>= <typeInitMap.(type)><else>= nil<endif><endif>;
+>>
+
+varGl_tmpl(prefix, type, name, init) ::= <<
+<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name> <if(init)>= <init><endif>;
+>>
+
+varDecl_tmpl(isGlobal, prefix, type, name) ::= <<
+<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name>;
+>>
+
+varList_tmpl(vars) ::= <<
+<vars; separator="\n">
+>>
+
+assign_tmpl(prefix, a, b) ::= <<
+<if(prefix)>[ <prefix> <endif><a> = <b> <if(prefix)>]<endif>;
+>>
+
+concat_tmpl(a,aType, b, bType) ::= <<
+[NSString stringWithFormat:@"<formatMap.(aType)>, <formatMap.(bType)>", <a>, <b>]
+>>
+pow_tmpl(a,b) ::= "pow(<a>,<b>)"
+
+expression_tmpl(expr) ::= <<
+<expr>
+>>
+
+bop_tmpl(op, a, b) ::= <<
+<a> <op> <b>
+>>
+
+uop_tmpl(op, a) ::= <<
+<op><a>
+>>
+
+hash_tmpl(a) ::= "<a>.length()"
+
+expr_tmpl(expr) ::= "<expr>"
+
+arrAccess_tmpl(name,index, ptype) ::= <<
+getObject(<name>, <index>)
+>>
+
+methodCallStmt_tmpl(call) ::= "<call>;"
+
+methodCall1_tmpl(prefix, name, args, nargs) ::= <<
+<if(prefix)>[ <prefix> <name> <if(args)> : <args; separator=" "><endif>]<else><if(methodMap.(name))><methodMap.(name)><else><name><endif>(<args; separator=",">)<endif>
+>>
+
+callArgument_tmpl(qual, arg) ::= <<
+<if(qual)><qual>:<endif> <arg>
+>>
+
+methodCall2_tmpl(name, args) ::= <<
+<name>(new Object[] {<args; separator=",">})
+>>
+
+javaapi_tmpl(name) ::= <<
+<if (APIMap.(name))><APIMap.(name)><else><name><endif>
+>>
+
+exprList_tmpl(expr) ::= <<
+<expr; separator=",">
+>>
+
+while_tmpl(cond, stmt) ::= <<
+while(<cond>)<stmt>
+>>
+
+doWhile_tmpl(cond, stmt) ::= <<
+do<stmt>while(<cond>);
+>>
+
+return_tmpl(val) ::= "return <val>;"
+
+
+
+
+
+isNil(val) ::= <<
+<nullMap.(val)>
+>>
+
+if_stmt(cond, stmt, elb) ::= <<
+<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif><if(elb)>else <elb><endif>
+>>
+
+if_stmt1(cond, stmt) ::= "<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif>"
+
+
+ifelse_stmt(cond, stmt, elseb) ::= <<
+<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif>else<elseb>
+>>
+
+dotMember_tmpl(mem, name, cast) ::= <<
+getObject(<mem>,@"<name>")
+>>
+
+method_dotMember_tmpl(mem, name) ::= <<
+<mem>.<name>
+>>
+
+property_tmpl(fparam, member, expr1, expr2, type) ::= <<
+setObject(getObject(<fparam>,@"<member>"), @"<expr1>", <convMap.(type)> <expr2><if(convMap.(type))>]<endif>);
+>>
+
+ident_tmpl(name) ::= "<name>"
+
+dotList_tmpl(names) ::= <<
+<names; separator=".">
+>>
+
+param_tmpl(type, name) ::= "<name>: (<if(typeMap.(type))><typeMap.(type)><else>id<endif>) <name>"
+
+fparam_tmpl(type, name) ::= "(<if(typeMap.(type))><typeMap.(type)><else>id<endif>) <name>"
+
+paramList_tmpl(params) ::= <<
+<params; separator=",">
+>>
+
+methodDecl_tmpl(isLocal, type,name, params,bl) ::= <<
++ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> <if(params)>: (<getArgType(type=first(params).stmt.type)>) <first(params).stmt.name> <rest(params); separator=" "><endif>
+<bl>
+>>
+
+methodCallbackDecl_tmpl(isLocal, type,name, params,bl) ::= <<
++ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> : (NSArray*) params 
+{
+  <params; separator="\n\n">
+
+  <bl.stmt; separator="\n\n">
+
+}
+>>
+
+callbackParams_tmpl(lName, param, index) ::= <<
+id <lName> = [params objectAtIndex:<index>];
+>>
+methodDeclGlobal_tmpl(type,name, params) ::= <<
++ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> <if(params)>: (<getArgType(type=first(params).stmt.type)>) <first(params).stmt.name> <rest(params); separator=" "><endif>
+>>
+
+getType(type) ::= <<
+<if(typeMap.(type))><typeMap.(type)><else><type><endif>
+>>
+
+getArgType(type) ::= <<
+<if(typeMap.(type))><typeMap.(type)><else>id<endif>
+>>
+forInit_tmpl(type, var , init) ::= "<if(typeMap.(type))><typeMap.(type)><else><type><endif> <var> = <init>"
+forCondition_tmpl(name, cond) ::= <<
+<name> \< <cond>
+>> 
+
+forUpdater_tmpl(name, cond) ::= "<name><cond>" 
+
+for_tmpl(init, cond, updt, stmt) ::= <<
+<if(updt)>
+for(<init>;<cond>;<updt>)
+<stmt>
+<else>
+for(<init> ; <cond> ; <init.stmt.var>++)
+<stmt>
+<endif>
+
+>>
+
+forIpair_tmpl(type, val, type1, val1, met, type2, var, bl) ::= <<
+for(<if(typeMap.(type))><typeMap.(type)><else><type><endif> <val>=0; <val> \< <var>.size(); <val>++){
+  <type1> <val1> = (<type1>) <var>.get(i);
+  <bl; separator="\n">
+} 
+
+>>
+
+
+forPair_tmpl(type, val, met, type1, var, bl) ::= <<
+for(<if(typeMap.(type))><typeMap.(type)><else><type><endif> <val> in <var>){
+  <bl; separator="\n">
+} 
+
+>>
+
+
+
+
+break_tmpl() ::= "break;"
+
+tbl_param_tmpl(type, name) ::= "<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name>"
+
+table_init_tmpl(prefix, fname, params) ::= <<
+[self <fname> <params; separator=" ">]
+>>
+
+table_func_tmpl(fname, tname, body, params) ::= <<
++ (LuaTable*) <fname> <params; separator=" ">
+{
+     LuaTable* <tname> = luaTableWithArraySize: 2 hashSize: 2;
+     <body>
+     return <tname>;
+}
+>>
+
+fieldList_tmpl(field) ::= <<
+<field; separator=";\n">
+>>
+
+tblFieldList_tmpl(field) ::= <<
+<field; separator="\n">
+>>
+
+inlineTblFieldList_tmpl(field) ::= <<
+<field; separator=",">
+>>
+field1_tmpl(tname, expr) ::= <<
+[<tname>.array addObject: expr];
+
+>>
+
+getValid(arg) ::= <<
+<if(convMap.(type))><convMap.(type)><else><if(nullMap.(expr))>[NSNull null]<else><if(boolMap.(arg))><boolMap.(arg)><else><arg><endif><endif><endif>
+>>
+
+field2_tmpl(tname, fname, expr, type) ::= <<
+<if(nullMap.(expr))><else>[<tname> setObject: <if(boolMap.(expr))><boolMap.(expr)><else><if(convMap.(type))><convMap.(type)> <expr> ] <else><expr><endif><endif> forKey: @"<fname>"];<endif>
+>>
+
+field3_tmpl(tname, expr1, expr2, type) ::= <<
+<if(nullMap.(expr2))><else>[<tname> setObject: <expr1> key <if(boolMap.(expr2))><boolMap.(expr2)><else><if(convMap.(type))><convMap.(type)> <expr2> ] <else><expr2><endif><endif>];<endif>
+>>
+
+field4_tmpl(tname, fname, expr, type) ::= <<
+<if(nullMap.(expr))><else>setObject(<tname>, @"<fname>", <if(boolMap.(expr))><boolMap.(expr)><else><if(convMap.(type))><convMap.(type)> <expr> ] <else><expr><endif><endif>);<endif>
+>>
+
+field5_tmpl(tname, expr1, expr2, type) ::= <<
+<if(nullMap.(expr2))><else>setObject(<tname>, <expr1>, <if(boolMap.(expr2))><boolMap.(expr2)><else><if(convMap.(type))><convMap.(type)> <expr2> ] <else><expr2><endif><endif>);<endif>
+>>
+
+field_tmpl(fields) ::= <<
+<fields; separator=",">
+>>
+
+qualifiedDecl_tmpl(prefix, mem) ::= "<if(prefix)><prefix>.<endif><mem>"
+

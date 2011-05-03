@@ -1,0 +1,46 @@
+Loading API Symbols from ... D:\Prasad\nativecodegen\com.kony.nativecodegen\nativefiles\apiDef/GUIApiGrammar.api
+Loading API Symbols from ... D:\Prasad\nativecodegen\com.kony.nativecodegen\nativefiles\apiDef/NonGUIAPIGrammar.api
+Lexing... rcchannel.lua
+Parsing... rcchannel.lua
+Parse tree: (LUA_SOURCE (VAR_DECLARATION (VAR_DECLARATOR_LIST (VAR_DECLARATOR kiden)) (EXPR "rcid")) (VAR_DECLARATION (VAR_DECLARATOR_LIST (VAR_DECLARATOR konychannel)) (EXPR "rc")))
+FileName Rcchannel
+Declaring DEFS <global.kiden:void> in scope [boolean, char, int, float, void, skin, skinHandle, voidHandle, widgetHandle, formHandle, boxHandle, tabHandle, popupHandle, buttonHandle, calendarHandle, checkboxgroupHandle, comboboxHandle, datagridHandle, imageHandle, labelHandle, lineHandle, linkHandle, listboxHandle, radiobuttongroupHandle, richtextHandle, textareaHandle, textfieldHandle, webHandle, cameraHandle, imagestripHandle, galleryHandle, mapHandle, segmenteduiHandle, showloadingscreenHandle, sliderHandle, advertisementHandle, rawbytesHandle, formPSPHandle, boxPSPHandle, tabPSPHandle, popupPSPHandle, buttonPSPHandle, calendarPSPHandle, checkboxgroupPSPHandle, comboboxPSPHandle, datagridPSPHandle, imagePSPHandle, labelPSPHandle, linePSPHandle, linkPSPHandle, listboxPSPHandle, radiobuttongroupPSPHandle, richtextPSPHandle, textareaPSPHandle, textfieldPSPHandle, webPSPHandle, cameraPSPHandle, imagestripPSPHandle, galleryPSPHandle, mapPSPHandle, segmenteduiPSPHandle, showloadingscreenPSPHandle, sliderPSPHandle, advertisementPSPHandle, widget, window, menu, form, box, tabwidget, popupContextTable, popup, button, calendar, datagrid, image, label, line, link, listbox, combobox, checkboxgroup, radiobuttongroup, richtext, textarea, web, camera, imagestrip, gallery, map, segui, Showloadingscreen, slider, advertisement, String, KonySkin, Object, KonyForm, KonyContainer, todo, KonyWidget, KonyCalendar, KonyCheckBoxGroup, KonyComboBox, KonyDataGrid, KonyImage, KonyLabel, KonyListBox, KonyRadioButtonGroup, KonyRichText, KonyTextArea, KonyTextField, KonyWeb, KonyCamera, KonyMap, KonySegmentedUI, LuaTable, closure, addeventhandle, findeventhandle, findRet, luaReturn, phone, contact, dssavehashtable, ds, networksynchandle, networkasynchandle, net, streamhandle, streaming, timerhandle, timer, i18n, string, table, math, os, global, array, kiden]
+Declaring DEFS <global.konychannel:void> in scope [boolean, char, int, float, void, skin, skinHandle, voidHandle, widgetHandle, formHandle, boxHandle, tabHandle, popupHandle, buttonHandle, calendarHandle, checkboxgroupHandle, comboboxHandle, datagridHandle, imageHandle, labelHandle, lineHandle, linkHandle, listboxHandle, radiobuttongroupHandle, richtextHandle, textareaHandle, textfieldHandle, webHandle, cameraHandle, imagestripHandle, galleryHandle, mapHandle, segmenteduiHandle, showloadingscreenHandle, sliderHandle, advertisementHandle, rawbytesHandle, formPSPHandle, boxPSPHandle, tabPSPHandle, popupPSPHandle, buttonPSPHandle, calendarPSPHandle, checkboxgroupPSPHandle, comboboxPSPHandle, datagridPSPHandle, imagePSPHandle, labelPSPHandle, linePSPHandle, linkPSPHandle, listboxPSPHandle, radiobuttongroupPSPHandle, richtextPSPHandle, textareaPSPHandle, textfieldPSPHandle, webPSPHandle, cameraPSPHandle, imagestripPSPHandle, galleryPSPHandle, mapPSPHandle, segmenteduiPSPHandle, showloadingscreenPSPHandle, sliderPSPHandle, advertisementPSPHandle, widget, window, menu, form, box, tabwidget, popupContextTable, popup, button, calendar, datagrid, image, label, line, link, listbox, combobox, checkboxgroup, radiobuttongroup, richtext, textarea, web, camera, imagestrip, gallery, map, segui, Showloadingscreen, slider, advertisement, String, KonySkin, Object, KonyForm, KonyContainer, todo, KonyWidget, KonyCalendar, KonyCheckBoxGroup, KonyComboBox, KonyDataGrid, KonyImage, KonyLabel, KonyListBox, KonyRadioButtonGroup, KonyRichText, KonyTextArea, KonyTextField, KonyWeb, KonyCamera, KonyMap, KonySegmentedUI, LuaTable, closure, addeventhandle, findeventhandle, findRet, luaReturn, phone, contact, dssavehashtable, ds, networksynchandle, networkasynchandle, net, streamhandle, streaming, timerhandle, timer, i18n, string, table, math, os, global, array, kiden, konychannel]
+Lexing... startup.lua
+Parsing... startup.lua
+Parse tree: (LUA_SOURCE (METHOD_CALL initializeApp ARGUMENT_LIST))
+FileName Startup
+Linking... Rcchannel
+Overrode type of <global.kiden:String>
+Overrode type of <global.konychannel:String>
+Linking... Startup
+Casting... Rcchannel
+Casting... Startup
+Generating... Rcchannel
+Globals... 
+Output : package com.konylabs.api.nativecode;
+
+import com.konylabs.api.*;
+import com.konylabs.vm.*;
+import com.konylabs.api.ui.calendar.*;
+import com.konylabs.api.ui.camera.*;
+import com.konylabs.api.ui.segui.*;
+import com.konylabs.api.ui.*;
+
+class Rcchannel {
+    public static String kiden = null;
+    public static String konychannel = null;
+}
+Generating... Startup
+Globals... 
+Output : package com.konylabs.api.nativecode;
+
+import com.konylabs.api.*;
+import com.konylabs.vm.*;
+import com.konylabs.api.ui.calendar.*;
+import com.konylabs.api.ui.camera.*;
+import com.konylabs.api.ui.segui.*;
+import com.konylabs.api.ui.*;
+
+class Startup {
+}

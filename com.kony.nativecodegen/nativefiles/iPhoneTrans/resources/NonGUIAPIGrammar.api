@@ -1,0 +1,295 @@
+--//Draft Version : 1.3
+--//Property Syntax :  <property_name> = <default_value> -- <data_type>
+--//Function Syntax :  <ret_val> = <function_name>(<parameter_name> --[[<data_type]] …) --<return_data_type>
+
+--//Non-GUI APIs
+
+--//Phone Namespace
+--//phone.sendSMS(int,text)
+--//phone.dial(int)
+--//phone.mylocation()
+--//phone.openmediagallery(onselectioncallback, querycontext)-<<todo - representing onselectioncallback prototype)
+--//phone.openemail( torecipients, ccrecipients, bccrecipients, subject, messagebody, ismessagebodyhtml, attachments)
+--//phone.openmapsapplication(locationcontext[luatable])
+--//phone.addevent({summary=”short desc”, start=”dd/mm/yyyy hh:mm:ss”, finish=” dd/mm/yyyy hh:mm:ss”, alarm=int, note=”long description” , access=”public,private,confidential”,})
+--//phone.removeevent(event)
+--//phone.findevent({type=”starting/ending/occurring”, start=” dd/mm/yyyy”, finish=” dd/mm/yyyy”});
+
+addeventhandle = {handle --[[Object]] , include="todo" }
+findeventhandle = {handle --[[Object]], include="todo" }
+--//voidHandle = {handle --[[void]]}
+findRet = {NSNumber}
+
+
+
+luaReturn = {status --[[int]], msg --[[String]]}
+
+phone = {
+        ret1 = sendSMS(number --[[String]], text --[[String]]) --[[int]]
+        , ret2 = dial(number --[[String]]) --[[int]]
+        , coordinates = mylocation() --[[Table]]
+        , rettable1 = openmediagallery(onselectioncallback --[[closure]], querycontext --[[Table]]) --[[Table]]
+        , rettable2 = openemail(torecipients --[[array]] , ccrecipients --[[array]], bccrecipients --[[array]], subject --[[String]], messagebody --[[String]], ismessagebodyhtml --[[boolean]], attachments --[[array]]) --[[Table]]
+        , a=openmapsapplication(locationcontext --[[Table]])
+        , event = addevent(eventdesc --[[Table]]) --[[addeventhandle.handle]]
+        , eventlist = findevent(searchevent --[[Table]]) --[[findeventhandle.handle]]
+        , v = removeevent(eventlist --[[findeventhandle]]) --[[voidHandle.handle]]
+}
+
+--// Contact Namespace
+--//contact.add()
+--//contact.find()
+--//contact.delete()
+
+contact = {
+        reftable1 = add(contactinfo --[[Table]]) --[[Table]]
+        , findtable = find(contactname --[[String]]) --[[Table]]
+        , reftable2 = delete(findtable --[[Table]]) --[[Table]]
+}
+
+--// Storage API's
+--// ds.save(luatable,identifieri,metainfo)
+--// ds.read(identifier)
+--// ds.delete(identifier)
+
+dssavehashtable = {dsmode="cache/session/cookie" --[[String]]} 
+ds = {
+        ret = save(data --[[Table]], id --[[String]], metainfo --[[Table]]) --[[luaReturn]]
+        , data = read(id --[[String]], metainfo --[[Table]]) --[[Table]]
+        , ret = delete(id --[[String]], metainfo --[[Table]]) --[[boolean]]
+}
+
+--// Network API's
+
+--//net.invokeservice(url,parameters,isblocking)
+--//connHandle = net.invokeserviceasync (url, inputparameters, callback)
+--//net.cancel(connHandle) 
+--//appmiddlewaresecureinvoker(inputParamTab, isBlockingUI, indicator) <<todo - not clear whether these are exposed to dev>>
+--//appmiddlewareinvoker(inputParamTab, isBlockingUI, indicator) <<todo - not clear whether these are exposed to dev>>
+--//appmiddlewaresecureinvokerasync(inputParamTab, callback) <<todo - not clear whether these are exposed to dev>>
+--//appmiddlewareinvokerasync(inputParamTab, callback) <<todo - not clear whether these are exposed to dev>>
+
+networkasynchandle = {handle  --[[Object]]}
+
+net = {
+	rettbl = invokeservice(url --[[String]], params --[[Table]], isblock --[[boolean]]) --[[LuaTable]]
+	, hndl = invokeserviceasync(url --[[String]], params --[[Table]], callbk --[[closure]]) --[[Object]]
+	, v = cancel(id --[[networkasynchandle]]) --[[voidHandle.handle]]
+}
+
+--//Streaming API's
+
+--//streamidentifer , status = streaming.registerdatastream(protocol[String], configparams[lua Table], outputformat[String],callback[function])
+--//status = streaming.deregisterdatastream (streamingidentifier[String])
+
+streamhandle = {id  --[[String]]}
+streaming = {
+ret = registerdatastream(protocol --[[String]], configparams --[[Table]], outputformat --[[String]], callback --[[closure]]) --[[luaReturn]]
+, status = deregisterdatastream (streamingidentifier --[[streamhandle]]) --[[voidHandle.handle]]
+}
+
+--// Timer API's
+
+--//timer.schedule(timerid,luafunction,interval,repeat)
+--//timer.cancel(timerid)
+timerhandle = {handle --[[String]]}
+timer = {
+	f1 = schedule(id --[[timerhandle]] , func --[[closure]], interval --[[int]], repeat --[[boolean]]) --[[voidHandle.handle]]
+	, f2 = cancel(id --[[timerhandle]]) --[[voidHandle.handle]]
+}
+
+--//Internationalization API's
+
+--//getcurrentlocale()
+--//setdefaultlocale([String]locale)
+--//setresourcebundle([Table]bundle,[String]locale)
+--//updateresourcebundle([Table]bundle,[String]locale)
+--//isresourcebundlepresent([String]locale)
+--//getlocalizedstring([String] i18nkey)
+--//deleteresourcebundle([String]locale)
+
+i18n = {
+	locale = getcurrentlocale() --[[String]]
+	, f1 = setdefaultlocale(locale --[[String]]) --[[voidHandle.handle]]
+	, f2 = setresourcebundle(bundle --[[Table]], locale --[[String]]) --[[voidHandle.handle]]
+	, f3 = updateresourcebundle(bundle --[[Table]], locale --[[String]]) --[[voidHandle.handle]]
+	, flag = isresourcebundlepresent(locale --[[String]]) --[[boolean]]
+	, value = getlocalizedstring(i18nkey --[[String]]) --[[String]]
+	, f4 = deleteresourcebundle(locale --[[String]]) --[[voidHandle.handle]]
+}
+
+--// Crypt API's todo
+
+
+
+--// Core API's
+
+--// String API's
+
+--//String.find(s, searchString [, int]) <<todo - representing optional args>>
+--//String.len(s)
+--//String.split (s,separator)
+--//String.lower(s)
+--//String.upper(s)
+--//String.rep(s, n)
+--//String.reverse(s)
+--//String.sub(s, i [, j])
+--//String.replace(s, find, replace)
+--//String.trim(s)
+--//String.startswith(s,String,ignorecase[default true])todo
+--//String.endswith(s,String,ignorecase[default true])
+--//String.equalsignorecase(s1,s2)
+--//String.charat(s1,index)
+--//String.compare(s1,s2)
+--//String.isasciialpha(input[String])
+--//String.isasciialphanumeric(input[String])
+--//String.isnumeric(input[String])
+--//String.containschars(input[String],chars[Table])
+--//String.containsonlygivenchars(input[String],chars[Table])
+--//String.containsnogivenchars(input[String],chars[Table])
+--//String.isvalidemail(input[String])
+
+
+string = {
+	ret = find(str1 --[[String]],str2 --[[String]],index --[[int]]) --[[ findRet]]
+	, num = len(str1 --[[String]]) --[[int]]
+	, splittable = split(str1 --[[String]], sep --[[String]]) --[[Table]]
+	, str21 = lower(str1 --[[String]]) --[[String]]
+	, str22 = upper(str1 --[[String]]) --[[String]]
+	, str23 = rep(str1 --[[String]], num --[[int]]) --[[String]]
+	, str24 = reverse(str1 --[[String]]) --[[String]]
+	, str25 = sub(str1 --[[String]],index1 --[[int]],index2 --[[int]]) --[[String]]
+	, str41 = replace(str1 --[[String]], str2 --[[String]], str3 --[[String]]) --[[String]]
+	, str26 = trim(str1 --[[String]]) --[[String]]
+	, ret1  = startswith(str1 --[[String]], str2 --[[String]], flag --[[boolean]]) --[[boolean]]
+	, ret2  = endswith(str1 --[[String]], str2 --[[String]], flag --[[boolean]]) --[[boolean]]
+	, ret3  = equalsignorecase(str1 --[[String]], str2 --[[String]]) --[[boolean]]
+	, str27 = charat(str1 --[[String]], num --[[int]]) --[[String]]
+	, num	 = compare(str1 --[[String]],str2 --[[String]]) --[[int]]
+	, flag1 = isasciialpha(input --[[String]]) --[[boolean]]
+	, flag2 = isasciialphanumeric(input --[[String]]) --[[boolean]]
+	, flag3 = isnumeric(input --[[String]]) --[[boolean]]
+	, flag4 = containschars(input --[[String]], input1 --[[Table]]) --[[boolean]]
+	, flag5 = containsonlygivenchars(input --[[String]], input1 --[[Table]]) --[[boolean]]
+	, flag6 = containsnogivenchars(input --[[String]], input1 --[[Table]]) --[[boolean]]
+	, flag7 = isvalidemail(input --[[String]]) --[[boolean]]
+}
+
+--// Table API's
+
+--//Table.concat(Table [, sep [, i [, j]]])
+--//Table.sort(Table [, comp])
+--//Table.insert(Table, [pos,] value)
+--//Table.remove(Table [, pos])
+--//Table.sort (input[Table],sortkey[String])
+--//Table.filter(input[Table],criteria[function])
+--//Table.map(input[Table],function)
+--//Table.mapnew(input[Table],function)
+--//Table.get(input[Table],key) 
+--//Table.contains(input[Table],key) 
+--//Table.append(target[Table],source[Table])
+--//Table.removeall(tableid)
+
+table = {
+	str21 = concat(tbl1 --[[Table]], sep --[[String]], num1 --[[int]], num2 --[[int]]) --[[String]]
+	, tbl21 = sort(tbl1 --[[Table]], func --[[closure]]) --[[Table]]
+	, tbl22 = insert(tbl1 --[[Table]], pos --[[int]], value --[[String]]) --[[Table]]
+	, value1 = remove(tbl1 --[[Table]], pos --[[int]]) --[[todo]]	
+	, tbl23 = sort(tbl1 --[[Table]], sortkey --[[String]]) --[[Table]]
+	, tbl24 = filter(tbl1 --[[Table]], criteria --[[closure]]) --[[Table]]
+	, tbl25 = map(tbl1 --[[Table]], func --[[closure]]) --[[Table]]
+	, tbl26 = mapnew(tbl1 --[[Table]], func --[[closure]]) --[[Table]]
+	, value2 = get(tbl1 --[[Table]], key --[[todo]]) --[[todo]]
+	, flag = contains(tbl1 --[[Table]], key --[[todo]]) --[[boolean]]
+	, tbl31 = append(tbl1 --[[Table]], tbl2 --[[Table]]) --[[Table]]
+	, v = removeall(id --[[String]]) --[[voidHandle.handle]] --//<<todo-crosscheck>>
+	
+}
+
+
+--// Math API's
+--//math.tointeger(number) 
+--//math.pow()
+--//math.min()
+--//math.max() 
+--//math.sqrt()
+--//math.random
+--//math.randomseed()
+--//math.pi
+
+math = {
+		num21 = tointeger(num1 --[[float]]) --[[int]]
+		, num31 = pow(num1 --[[float]], num2 --[[float]]) --[[float]]
+		, num32 = min(num1 --[[float]], num2 --[[float]]) --[[float]] --// <<todo - representing n values of args>>
+		, num33 = max(num1 --[[float]], num2 --[[float]]) --[[float]]
+		, num22 = sqrt(num1 --[[int]]) --[[int]]
+		, num11 = random() --[[float]]
+		, num23 = randomseed(num1 --[[int]]) --[[float]]
+		, pi --[[float]]
+}
+
+--// OS API's
+--//os.tonumber(e)
+--//os.date()
+--//os.time()
+--//os.diffdatetime(t2[String],t1[String])
+--//os.comparedates(date1[String],date2[String],format[String])
+--//os.addtodate(date1[String],format[String],units[String],count[int])
+--//os.date(format[String])
+--//os.isvaliddate(date[String],format[String])
+--//os.isleapyear(date[String],format[String]) 
+--//os.tocurrency([number])
+--//os.freememory()
+--//os.useragent()
+--//os.platform()
+--//os.formatdate(inputdate[String],sourceformat[String],targetformat[String])
+
+
+os = {
+	num11 = tonumber(data1 --[[String]]) --[[int]]
+	, num12 = tonumber(data1 --[[int]]) --[[int]]
+	, str12 = date() --[[String]]
+	, str13 = time() --[[String]]
+	, diff11 = diffdatetime(str1 --[[String]], str2 --[[String]]) --[[int]]
+	, diff12 = comparedates(str1  --[[String]], str2 --[[String]], str3 --[[String]]) --[[int]]
+	, str21 = addtodata(date1 --[[String]], format --[[String]], units --[[String]], count --[[int]]) --[[String]]
+	, date1 = date(format --[[String]]) --[[String]]
+	, flag1 = isvaliddate(date --[[String]], format --[[String]]) --[[boolean]]
+	, flag2 = isleapyear(date --[[String]], format --[[String]]) --[[boolean]]
+	, curr = tocurrency(value --[[float]]) --[[todo]]
+	, mem  = freememory() --[[int]]
+	, agent = useragent() --[[String]]
+	, tbl1 = platform() --[[Table]]
+	, date2 = formatdate(date1 --[[String]], srcformat --[[String]], tgtformat --[[String]]) --[[String]]
+	
+}
+
+
+--//Global API's
+
+--//ipairs() 
+--//pairs()	 
+--//unpack(Table)
+--//print(x,y,...) --todo
+--//[String] converttobase64([userdata]rawbytes)
+--//[userdata]rawbytes readfrombase64([userdata]rawbytes) 
+--//registerforidletimeout(timeout, function)
+--//unregisterforidletimeout()
+globalapi = {
+a=ipairs() --todo
+,b=pairs()	 --todo
+,elem = unpack(tbl1 --[[Table]]) --[[todo]]
+,c=print(x,y) --todo
+,str1 = converttobase64(rawbytes --[[todo]]) --[[String]]
+,rawbytes = readfrombase64(str1 --[[String]]) --[[todo]]
+,regtimeout = registerforidletimeout(timeout --[[int]], func --[[closure]]) --[[voidHandle.handle]]
+,tiout = unregisterforidletimeout() --[[voidHandle.handle]],
+
+a1 = appmiddlewaresecureinvoker(inputParamTab --[[table]], isBlocking --[[boolean]], indicator --[[boolean]], datasetID --[[String]])--[[void]] ,
+a2 = appmiddlewareinvoker(inputParamTab --[[table]], isBlocking --[[boolean]], indicator --[[boolean]], datasetID --[[String]])--[[LuaTable]] ,
+a3 = appmiddlewaresecureinvokerasync(inputParamTab --[[table]], callback --[[closure]])--[[id]],
+a4 = appmiddlewareinvokerasync(inputParamTab --[[table]], callback --[[closure]])--[[void]],
+a5 = displayError(code --[[String]],  msg --[[String]]) --[[void]],
+a6 = displayMWError() --[[void]]
+}
+
