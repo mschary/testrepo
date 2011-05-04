@@ -1,20 +1,6 @@
 --// Property Syntax :  <property_name> = <default_value> --<data_type>
 --// Function Syntax :  <ret_val> = <function_name>(<parameter_name> --[[<data_type]] â) --<return_data_type>
 
-iPhone = {
-KonyFormHandle = createForm( parameters --[[NSArray]]) --[[KonyForm]],
-NSDictionaryHandle  = createSkin( skinParameters --[[NSDictionary]]) --[[NSDictionary]],
-KonyButtonHandle  = createButton( parameters --[[NSArray]]) --[[KonyButton]],
-KonyBoxHandle  = createBox( parameters --[[NSArray]]) --[[KonyBox]],
-KonyLabelHandle  = createLabel( parameters --[[NSArray]]) --[[KonyLabel]],
-voidHandle  = addWidgetsToBox( box --[[KonyBox]],  widgets --[[NSArray]]) ,
-voidHandle  = addWidgetsToForm ( form --[[KonyForm]],  widgets --[[NSArray]]) ,
-voidHandle   = showForm(  form --[[KonyForm]]) ,
-idHandle  = getWidget( idHeirarchy --[[String]]) --[[id]],
-idHandle  = getWidgetProperty( widget ,  propName --[[String]]) --[[id]],
-voidHandle  = setWidgetProperty( widget --[[id]],  propName --[[String]],  value --[[id]]) 
-}
-
 skin = {
 	background_color = 0xFFFFFF	--int
 	,  background_gradient_top_color = 0xFFFFFF --int
@@ -33,37 +19,37 @@ skin = {
 
 --// Declaration of handles as return types from platform API code
 
-skinHandle = {handle --[[LuaTable]]}
+skinHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
 voidHandle = {handle --[[void]]}
-widgetHandle = {handle --[[KonyWidget]]}
-formHandle = {handle --[[KonyForm]], include="KonyForm.h"}
-boxHandle = {handle --[[KonyBox]], include="<todo>"}
-tabHandle = {handle --[[KonyTab]], include="<todo>"}
-popupHandle = {handle --[[KonyPopup]], include="<todo>"}
-buttonHandle = {handle --[[KonyButton]], include="<todo>"}
-calendarHandle = {handle --[[KonyCalendar]], include="<todo>"}
-checkboxgroupHandle = {handle --[[KonyCheckboxGroup]], include="<todo>"} 
-comboboxHandle = {handle --[[KonyCombobox]], include="<todo>"} 
-datagridHandle = {handle --[[KonyDatagrid]], include="<todo>"}
-imageHandle = {handle --[[KonyImage]], include="<todo>"}
-labelHandle = {handle --[[KonyLabel]], include="<todo>"}
-lineHandle = {handle --[[KonyLine]], include="<todo>"}
-linkHandle = {handle --[[KonyLink]], include="<todo>"}
-listboxHandle = {handle --[[KonyListBox]], include="<todo>"}
-radiobuttongroupHandle = {handle --[[KonyRadioButton]], include="<todo>"}
-richtextHandle = {handle --[[KonyRichText]], include="<todo>"}
-textareaHandle = {handle --[[KonyTextArea]], include="<todo>"}
-textfieldHandle = {handle --[[KonyTextField]], include="<todo>"}
-webHandle = {handle --[[KonyWeb]], include="<todo>"}
-cameraHandle = {handle --[[KonyCamera]], include="<todo>"}
-imagestripHandle = {handle --[[KonyImageStrip]], include="<todo>"}
-galleryHandle = {handle --[[KonyGallery]], include="<todo>"}
-mapHandle = {handle --[[KonyMap]], include="<todo>"}
-segmenteduiHandle = {handle --[[KonySegUI]], include="<todo>"}
-showloadingscreenHandle = {handle --[[todo]], include="<todo>"}
-sliderHandle = {handle --[[KonySlider]], include="<todo>"}
-advertisementHandle = {handle --[[todo]], include="<todo>"}
-rawbytesHandle={handle --[[KonyRaw]]}
+widgetHandle = {handle --[[Object]]}
+formHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+boxHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+tabHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+popupHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+buttonHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+calendarHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+checkboxgroupHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"} 
+comboboxHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"} 
+datagridHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+imageHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+labelHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+lineHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+linkHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+listboxHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+radiobuttongroupHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+richtextHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+textareaHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+textfieldHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+webHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+cameraHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+imagestripHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+galleryHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+mapHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+segmenteduiHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+showloadingscreenHandle = {handle --[[todo]], include="com.konylabs.nativecodegen.api.*"}
+sliderHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+advertisementHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
+rawbytesHandle={handle --[[void]]}
 
 --//<todo?> Do we need to create Handle for every widget specific data structures?
 --// for Ex:-  masterdata --[[checkboxMasterdataHandle]]  (or XXXHandle.handle) ?
@@ -103,7 +89,7 @@ advertisementPSPHandle = {handle --[[Object]]}
 --//<todo> setEnabled .. case sensitive?
 widget = {
 	f1 = setvisibility(id --[[widgetHandle.handle]], flag --[[boolean]]
-			) --void
+			) --voidHandle.handle
 	, f2 = setfocus(id --[[widgetHandle.handle]]) --voidHandle.handle
 	, f3 = setenabled(id --[[widgetHandle.handle]], flag --[[boolean]]
 			) --voidHandle.handle
@@ -113,161 +99,152 @@ widget = {
 --// Window namespace
 
 window = {
-	skn = Skin(id --[[String]]) --[[LuaTable]],
+	skn = Skin(id --[[String]]) --skinHandle.handle,
 
-	frm = Form(id --[[String]], skinvar --[[skinHandle]]
+	frm = Form(id --[[String]], skinvar --[[skinHandle.handle]]
 		, title --[[String]], orientation --[[String]]
-		, formmenu --[[Table]], masterdataload --[[closure]]
+		, formmenu --[[LuaTable]], masterdataload --[[closure]]
 		, transactionaldataload --[[closure]], addwidgets --[[closure]]
-		, menuskin --[[skinHandle]], menufocusskin --[[skinHandle]]
+		, menuskin --[[skinHandle.handle]], menufocusskin --[[skinHandle.handle]]
 		, platformspecificproperties --[[formPSPHandle]]
-		) --[[KonyForm]],
+		) --formHandle.handle,
 
-	box = Box(id --[[String]], skinvar --[[skinHandle]], orientation --[[String]]
+	box = Box(id --[[String]], skinvar --[[skinHandle.handle]], orientation --[[String]]
 		, spacing --[[int]], widgetdirection --[[int]], invisible --[[boolean]] 
 		, containerweight --[[int]], platformspecificproperties --[[boxPSPHandle]]
-		) --[[KonyBox]],
+		) --boxHandle.handle,
 
-	tab =  TabWidget(id --[[String]], activeskin --[[skinHandle]], inactiveskin --[[skinHandle]]
+	tab =  TabWidget(id --[[String]], activeskin --[[skinHandle.handle]], inactiveskin --[[skinHandle.handle]]
 		, isvisible --[[boolean]], platformspecificproperties --[[tabPSPHandle]]
 		) --tabHandle.handle,
 	
-	popup = Popup(id --[[String]], skinvar --[[skinHandle]], title --[[String]]
+	popup = Popup(id --[[String]], skinvar --[[skinHandle.handle]], title --[[String]]
 		, orientation --[[String]], addWidgets --[[closure]], containerweight --[[int]] 
 		, platformspecificproperties --[[popupPSPHandle]]
-		) --[[KonyPopup]],
+		) --popupHandle.handle,
 
-	btn = Button(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
+	btn = Button(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
 		, text --[[String]], image --[[String]], onclick --[[closure]], isvisible --[[boolean]]
 		, containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[buttonPSPHandle]]
-		) --[[KonyButton]],
+		) --buttonHandle.handle,
 
-	cal = Calendar(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
+	cal = Calendar(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
 		, format --[[String]], isvisible --[[boolean]], containerweight --[[int]], hexpand --[[boolean]]
 		, vexpand --[[boolean]], widgetalign --[[int]], platformspecificproperties --[[calendarPSPHandle]]
-		) --[[void]],
+		) --calendarHandle.handle,
 
-	dataGrid = DataGrid(id --[[String]], skinvar --[[skinHandle]], focusskin --[[skinHandle]]
-		, headerskin --[[skinHandle]], alternateskin --[[skinHandle]], columnmetainfo --[[Table]]
+	dataGrid = DataGrid(id --[[String]], skinvar --[[skinHandle.handle]], focusskin --[[skinHandle.handle]]
+		, headerskin --[[skinHandle.handle]], alternateskin --[[skinHandle.handle]], columnmetainfo --[[LuaTable]]
 		, showcolumnheaders --[[boolean]], rowclick --[[closure]], ismulticlick --[[boolean]]
 		, isvisible --[[boolean]], containerweight --[[int]]
 		, platformspecificproperties --[[datagridPSPHandle]]
-		) --[[datagridHandle.handle]],
+		) --datagridHandle.handle,
 
 	image = Image(id --[[String]], src --[[String]], isvisible --[[boolean]]
 		, containerweight --[[int]], hexapand --[[boolean]], vexpand --[[boolean]]
-		, platformspecificproperties --[[imagePSPHandle]]
-		) --[[KonyImage]],
+		, widgetalign --[[int]], platformspecificproperties --[[imagePSPHandle]]
+		) --imageHandle.handle,
 
-	lbl = Label(id --[[String]], skinvar --[[skinHandle]], text --[[String]]
+	lbl = Label(id --[[String]], skinvar --[[skinHandle.handle]], text --[[String]]
 		, invisible --[[boolean]], containerweight --[[int]], hexapand --[[boolean]]
-		, vexpand --[[boolean]], widgetalign --[[int]], platformspecificproperties --[[Table]]
-		) --[[KonyLabel]],
+		, vexpand --[[boolean]], widgetalign --[[int]], platformspecificproperties --[[LuaTable]]
+		) --labelHandle.handle,
 
 	line = Line(id --[[String]], thickness --[[int]], color --[[String]], orientation --[[String]]
 		, isvisible --[[boolean]], containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[linePSPHandle]]
-		) --[[KonyLine]] ,
+		) --lineHandle.handle ,
 
-	link = Link(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
+	link = Link(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
 		, text --[[String]], image --[[String]], onclick --[[closure]], isvisible --[[boolean]]
 		, containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[linkPSPHandle]]
-		) --[[linkHandle.handle]],
+		) --linkHandle.handle,
 
-	listBox = ListBox(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
-		, masterdata --[[Table]], multiple --[[boolean]], ondone --[[closure]], isvisible --[[boolean]]
+	listBox = ListBox(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
+		, masterdata --[[LuaTable]], multiple --[[boolean]], ondone --[[closure]], isvisible --[[boolean]]
 		, containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]], widgetalign --[[int]]
 		, platformspecificproperties --[[listboxPSPHandle]]
-		) --[[listboxHandle.handle]],
+		) --listboxHandle.handle ,
 
-	comboBox = ComboBox(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
-		, masterdata --[[Table]], ondone --[[closure]], isvisible --[[boolean]] 
+	comboBox = ComboBox(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
+		, masterdata --[[LuaTable]], ondone --[[closure]], isvisible --[[boolean]] 
 		, containerweight --[[int]], hexpand --[[boolean]], widgetalign --[[int]]
 		, platformspecificproperties --[[comboboxPSPHandle]]
-		) --[[comboboxHandle.handle]],
+		) --comboboxHandle.handle,
  
-	chkBoxGroup = CheckBoxGroup(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
-		, masterdata --[[Table]], orientation --[[String]], onselection --[[closure]]
+	chkBoxGroup = CheckBoxGroup(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
+		, masterdata --[[LuaTable]], orientation --[[String]], onselection --[[closure]]
 		, isvisible --[[boolean]], containerweight --[[int]], widgetalign --[[int]]
 		, platformspecificproperties --[[checkboxgroupPSPHandle]]
-		) --[[void]],
+		) --checkboxgroupHandle.handle,
 
-	radioBtnGroup = RadioButtonGroup(id --[[String]], skinvar --[[skinHandle]]
-		, onfocusskin --[[skinHandle]], masterdata --[[Table]], orientation --[[String]]
+	radioBtnGroup = RadioButtonGroup(id --[[String]], skinvar --[[skinHandle.handle]]
+		, onfocusskin --[[skinHandle.handle]], masterdata --[[LuaTable]], orientation --[[String]]
 		, onselection --[[closure]], containerweight --[[int]], widgetalign --[[int]] 
 		, platformspecificproperties --[[radiobuttongroupPSPHandle]]
-		) --[[radiobuttongroupHandle.handle]],
+		) --radiobuttongroupHandle.handle,
 
-	richText = RichText(id --[[String]], skinvar --[[skinHandle]], text --[[String]]
+	richText = RichText(id --[[String]], skinvar --[[skinHandle.handle]], text --[[String]]
 		, isvisible --[[boolean]], containerweight --[[int]], hexpand --[[boolean]]
 		, vexpand --[[boolean]], widgetalign --[[int]], onclick --[[closure]]
 		, platformspecificproperties --[[richtextPSPHandle]]
-		) --[[richtextHandle.handle]],
+		) --richtextHandle.handle,
 
-	txtArea = TextArea(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
+	txtArea = TextArea(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
 		, text --[[String]], length --[[int]], mode --[[String]], isvisible --[[boolean]]
 		, containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[textareaPSPHandle]]
-		) --textareaHandle.handle
-		,
+		) --textareaHandle.handle,
 
-	txtfld = TextField(id --[[String]], skinvar --[[skinHandle]], onfocusskin --[[skinHandle]]
+	txtfld = TextField(id --[[String]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
 		, text --[[String]], length --[[int]], mode --[[String]], invisible --[[boolean]]
 		, containerweight --[[int]], hexapod --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[textfieldPSPHandle]]
-		) --KonyTextBox
-		,
+		) --textfieldHandle.handle,
 
-	browser = Web(id --[[String]], url --[[String]], method --[[String]], data --[[Table]]
+	browser = Web(id --[[String]], url --[[String]], method --[[String]], data --[[LuaTable]]
 		, htmlstring --[[String]], onsuccess --[[closure]], onfailure --[[closure]]
 		, containerweight --[[int]], isvisible --[[boolean]]
 		, platformspeficproperties --[[webPSPHandle]]
-		) --webHandle.handle
-		,
+		) --webHandle.handle,
 
-	camera = Camera(id --[[String]], skinvar --[[skinHandle]], focusskin --[[skinHandle]]
+	camera = Camera(id --[[String]], skinvar --[[skinHandle.handle]], focusskin --[[skinHandle.handle]]
 		, text --[[String]], image --[[String]], customhandler --[[closure]]
 		, isvisible --[[boolean]], containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[cameraPSPHandle]]
-		) --void
-		,
+		) --cameraHandle.handle,
 
-	imagestrip = HorizontalImageStrip(id --[[String]], skinvar --[[skinHandle]]
-		, focusskin --[[skinHandle]], onclick --[[closure]], isvisible --[[boolean]]
+	imagestrip = HorizontalImageStrip(id --[[String]], skinvar --[[skinHandle.handle]]
+		, focusskin --[[skinHandle.handle]], onclick --[[closure]], isvisible --[[boolean]]
 		, containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[imagestripPSPHandle]]
-		) --imagestripHandle.handle
-		,
+		) --imagestripHandle.handle,
 
-	gallery = Gallery(id --[[String]], skinvar --[[skinHandle]], focusskin --[[skinHandle]]
-		, navigationSkin --[[skinHandle]], showstatus --[[boolean]], onclick --[[closure]]
+	gallery = Gallery(id --[[String]], skinvar --[[skinHandle.handle]], focusskin --[[skinHandle.handle]]
+		, navigationSkin --[[skinHandle.handle]], showstatus --[[boolean]], onclick --[[closure]]
 		, isvisible --[[boolean]], containerweight --[[int]], hexpand --[[boolean]]
 		, vexpand --[[boolean]], widgetalign --[[int]]
 		, platformspecificproperties --[[galleryPSPHandle]]
-		) --galleryHandle.handle
-		,
+		) --galleryHandle.handle,
 	
 	map = Map(id --[[String]], onselection --[[closure]], provider --[[String]]
 		, key --[[String]], defaultpinimage --[[String]], containerweight --[[int]]
 		, isvisible --[[boolean]], platformspecificproperties --[[mapPSPHandle]]
-		) --MapWidget
-		,
+		) --mapHandle.handle,
 
-	segment = SegmentedUI(id --[[String]], skinvar --[[skinHandle]], focusskin --[[skinHandle]]
-		, navigationskin --[[skinHandle]], template --[[boxHandle.handle]], showstatus --[[boolean]]
-		, onclick --[[closure]], menu --[[Table]], isvisible --[[boolean]]
+	segment = SegmentedUI(id --[[String]], skinvar --[[skinHandle.handle]], focusskin --[[skinHandle.handle]]
+		, navigationskin --[[skinHandle.handle]], template --[[boxHandle.handle]], showstatus --[[boolean]]
+		, onclick --[[closure]], menu --[[LuaTable]], isvisible --[[boolean]]
 		, containerweight --[[int]], platformspecificproperties --[[segmenteduiPSPHandle]]
-		) --id 
-		,
+		) --segmenteduiHandle.handle ,
 
 	--//<todo...> showloadingscreen  <casesensitive> ??
-	ldscreen = Showloadingscreen(skinvar --[[skinHandle]], text --[[String]], position --[[String]]
+	ldscreen = Showloadingscreen(skinvar --[[skinHandle.handle]], text --[[String]], position --[[String]]
 		, isBlocked --[[boolean]], showprogressindicator --[[boolean]] 
 		, platformspecificproperties --[[showloadingscreenPSPHandle]]
-		) --voidHandle.handle
-		,
+		) --voidHandle.handle,
 
 	
 	dismissloadingscreen = dismissloadingscreen() --voidHandle.handle,
@@ -276,28 +253,29 @@ window = {
 		, step --[[int]], onslidecallback --[[int]], onselectcallback --[[int]]
 		, isvisible --[[boolean]], containerweight --[[int]], widgetalign --[[int]]
 		, platformspecificproperties --[[sliderPSPHandle]]
-		) --sliderHandle.handle
-		,
+		) --sliderHandle.handle,
 
-	adwidget = Advertisement(id --[[String]], skinvar --[[skinHandle]], focusskin --[[skinHandle]]
+	adwidget = Advertisement(id --[[String]], skinvar --[[skinHandle.handle]], focusskin --[[skinHandle.handle]]
 		, imageontop --[[boolean]], adserviceurl --[[String]], frequency --[[int]]
 		, isvisible --[[boolean]], containerweight --[[int]]
 		, platformspecificproperties --[[advertisementPSPHandle]]
-		) --advertisementHandle.handle
-		,
+		) --advertisementHandle.handle,
 
 	alert = Alert(message --[[String]], alerthandler --[[closure]], alerttype --[[String]]
 		, yeslabel --[[String]], nolabel --[[String]], alerttitle --[[String]]
-		) --void
+		) --voidHandle.handle
 }
 
+--// Moved these to global in NonGUI
 --//app menu item
-menu={
-a=setappmenu(tab --[[LuaTable]]) --void
-, b=setappmenufocusindex(index --[[NSNumber]]) --voidHandle.handle
-, c= hideappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
-, d=showappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
-}
+--//menu={
+--//a=setappmenu(appmenu --[[LuaTable]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
+--//	) --voidHandle.handle
+--//, b=setappmenufocusindex(index --[[int]]) --voidHandle.handle
+--//, c= hideappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
+--//, d=showappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
+--//}
+
 --// tab pane
 --// Form namespace
 --//<todo> -check the syntax
@@ -306,23 +284,23 @@ form = {
 	, titleskin --[[skinHandle.handle]]
 	, menuskin --[[skinHandle.handle]]
 	, menufocusskin --[[skinHandle.handle]]
-	, f2 = show(id --[[KonyForm]]) --voidHandle.handle
+	, f1 = add( id --[[widgetHandle.handle]]) --voidHandle.handle
+	, f2 = show(id --[[formHandle.handle]]) --voidHandle.handle
 	, f3 = destroy() --voidHandle.handle
 	, f4 = getcurrentform() --voidHandle.handle
-	, f5 = add(handle --[[KonyForm]], arr --[[NSArray]]) --void
 }
 
 --// Box namespace
 box = {
 	skinvar --[[skinHandle.handle]]
 	, spacing = 1 --[[int]] 
-	, f = add(id --[[KonyBox]], arr --[[NSArray]]) --voidHandle.handle
+	, f = add(id --[[widgetHandle.handle]]) --voidHandle.handle
 }
 
 --// TabWidget namespace
 tabwidget = {
 	activetab --[[int]]
-	, activetabs --[[Table]]
+	, activetabs --[[LuaTable]]
 	, activeskin --[[skinHandle.handle]]
 	, activefocusskin --[[skinHandle.handle]]
 	, inactiveskin --[[skinHandle.handle]]
@@ -331,7 +309,7 @@ tabwidget = {
 	, collapsedimage --[[String]]
 	, imageposition --[[String]]
 	, f = add(tabwidgetid --[[tabHandle.handle]], tabname --[[String]], image --[[String]]
-			, box --[[boxHandle.handle]], masterdataload --[[closure]], menu --[[Table]]
+			, box --[[boxHandle.handle]], masterdataload --[[closure]], menu --[[LuaTable]]
 			) --voidHandle.handle
 }
 
@@ -343,12 +321,12 @@ popupContextTable = {
 }
 
 popup = {
-	skinvar --[[skinHandle.hasndle]]
-	, f1 = add(id --[[KonyPopup]], arr --[[NSArray]]) --voidHandle.handle
-	, f2 = dismiss(id --[[KonyPopup]])
-	, f3 = destroy(id --[[popupHandle.handle]])
-	, f4 = show(id --[[popupHandle.handle]])
-	, f5 = setcontext(id --[[popupHandle.handle]], context --[[popupContextTable]]) 
+	skinvar --[[skinHandle.handle]]
+	, f1 = add(id --[[widgetHandle.handle]]) --voidHandle.handle
+	, f2 = dismiss(id --[[popupHandle.handle]]) --voidHandle.handle
+	, f3 = destroy(id --[[popupHandle.handle]]) --voidHandle.handle
+	, f4 = show(id --[[popupHandle.handle]]) --voidHandle.handle
+	, f5 = setcontext(id --[[popupHandle.handle]], context --[[popupContextTable]]) --voidHandle.handle
 }
 
 --//Button attributes
@@ -367,7 +345,7 @@ button = {
 calendar = {
 	skinvar --[[skinHandle.handle]]
 	, focusskin --[[skinHandle.handle]]
-	, date --[[Table]]
+	, date --[[LuaTable]]
 	, day --[[int]]
 	, month --[[int]]
 	, year --[[int]]
@@ -381,17 +359,17 @@ datagrid = {
 	, alternateskin --[[skinHandle.handle]]
 	, rowcount --[[int]]
 	, selectedindices --[[int]]
-	, selecteditems --[[Table]]
+	, selecteditems --[[LuaTable]]
 	, focusedindex --[[int]]
-	, focuseditem --[[Table]]
-	, f1 = setdata(id --[[datagridHandle.handle]], Table --[[Table]]) --voidHandle.handle
-    , f2 = addall(id --[[datagridHandle.handle]], Table --[[Table]]) --voidHandle.handle
+	, focuseditem --[[LuaTable]]
+	, f1 = setdata(id --[[datagridHandle.handle]], tbl1 --[[LuaTable]]) --voidHandle.handle
+    , f2 = addall(id --[[datagridHandle.handle]], tbl2 --[[LuaTable]]) --voidHandle.handle
 	, f3 = setdataat(id --[[datagridHandle.handle]], index --[[int]]
-			, Table --[[Table]]) --voidHandle.handle
+			, tbl3 --[[LuaTable]]) --voidHandle.handle
 	, f4 = setcelldata(id --[[datagridHandle.handle]], rowindex --[[int]], columnid --[[int]]
 			, data --[[String]], data2 --[[String]]) --voidHandle.handle --//<todo, notclear> 
     , f5 = addat(id --[[datagridHandle.handle]], index --[[int]]             
-			, Table --[[Table]]) --voidHandle.handle
+			, tbl4 --[[LuaTable]]) --voidHandle.handle
     , f6 = removeall(id --[[datagridHandle.handle]]) --voidHandle.handle
     , f7 = removeat(id --[[datagridHandle.handle]], index --[[int]]) --voidHandle.handle
     , f8 = applycellskin(id --[[datagridHandle.handle]], rowindex --[[int]], columnid --[[int]]
@@ -429,10 +407,10 @@ link = {
 listbox = {
 	skinvar --[[skinHandle.handle]]
 	, focusskin --[[skinHandle.handle]]
-	, masterdata --[[Table]]
-	, masterdatamap --[[Table]]
-	, selectedkeyvalues --[[Table]]
-	, selectedkeys --[[Table]]
+	, masterdata --[[LuaTable]]
+	, masterdatamap --[[LuaTable]]
+	, selectedkeyvalues --[[LuaTable]]
+	, selectedkeys --[[LuaTable]]
 	, multiple --[[boolean]]
 	, ondone --[[closure]]
 }
@@ -441,10 +419,10 @@ listbox = {
 combobox = {
 	skinvar --[[skinHandle.handle]]
 	, focusskin --[[skinHandle.handle]]
-	, masterdata --[[Table]]
-	, masterdatamap --[[Table]]
-	, selectedkeyvalue --[[Table]]
-	, selectedkey --[[Table]]
+	, masterdata --[[LuaTable]]
+	, masterdatamap --[[LuaTable]]
+	, selectedkeyvalue --[[LuaTable]]
+	, selectedkey --[[LuaTable]]
 	, ondone --[[closure]]
 }
 
@@ -452,9 +430,9 @@ combobox = {
 checkboxgroup = {
 	skinvar --[[skinHandle.handle]]
 	, focusskin --[[skinHandle.handle]]
-	, masterdata --[[Table]]
-	, selectedkeyvalues --[[Table]]
-	, selectedkeys --[[Table]]
+	, masterdata --[[LuaTable]]
+	, selectedkeyvalues --[[LuaTable]]
+	, selectedkeys --[[LuaTable]]
 	, onselection --[[closure]]
 }
 
@@ -462,18 +440,18 @@ checkboxgroup = {
 radiobuttongroup = {
 	skinvar --[[skinHandle.handle]]
 	, focusskin --[[skinHandle.handle]]
-	, masterdata --[[Table]]
-	, selectedkeyvalue --[[Table]]
-	, selectedkey --[[Table]]
+	, masterdata --[[LuaTable]]
+	, selectedkeyvalue --[[LuaTable]]
+	, selectedkey --[[LuaTable]]
 	, onselection --[[closure]]
 }
 
 --//Richtext attributes
 richtext = {
-	skinvar --[[skinHandle]]
-	, linkskin --[[skinHandle]]
-	, linkfocusskin --[[skinHandle]]
-	, supskin --[[skinHandle]]
+	skinvar --[[skinHandle.handle]]
+	, linkskin --[[skinHandle.handle]]
+	, linkfocusskin --[[skinHandle.handle]]
+	, supskin --[[skinHandle.handle]]
 	, text --[[String]]
 }
 
@@ -501,17 +479,17 @@ camera = {
 
 --//HorizontalImageStrip namespace
 imagestrip = {
-	skinvar --[[skinHandle]]
-	, focusskin --[[skinHandle]]
-	, meta --[[Table]]
-	, focuseditem --[[Table]]
+	skinvar --[[skinHandle.handle]]
+	, focusskin --[[skinHandle.handle]]
+	, meta --[[LuaTable]]
+	, focuseditem --[[LuaTable]]
 	, focusedindex --[[int]]
 	, datasethandler --[[closure]]
-	, f1 = addall(id --[[imagestripHandle.handle]], data --[[Table]], imageproeprty --[[String]]
+	, f1 = addall(id --[[imagestripHandle.handle]], data --[[LuaTable]], imageproeprty --[[String]]
 			) --voidHandle.handle
-	, f2 = setdata(id --[[imagestripHandle.handle]], data --[[Table]], imageproeprty --[[String]]
+	, f2 = setdata(id --[[imagestripHandle.handle]], data --[[LuaTable]], imageproeprty --[[String]]
             ) --voidHandle.handle
-	, f3 = setdataat(id --[[imagestripHandle.handle]], data --[[Table]], index --[[int]]
+	, f3 = setdataat(id --[[imagestripHandle.handle]], data --[[LuaTable]], index --[[int]]
 			) --voidHandle.handle 
 	, f4 = removeall(id --[[imagestripHandle.handle]]) --voidHandle.handle
 	, f5 = removeat(id --[[imagestripHandle.handle]], index --[[int]]) --voidHandle.handle
@@ -520,17 +498,17 @@ imagestrip = {
 
 --//Gallery namespace
 gallery = {
-	skinvar --[[skinHandle]]
-	, focusskin --[[skinHandle]]
-	, meta --[[Table]]
-	, focuseditem --[[Table]]
+	skinvar --[[skinHandle.handle]]
+	, focusskin --[[skinHandle.handle]]
+	, meta --[[LuaTable]]
+	, focuseditem --[[LuaTable]]
 	, focusedindex --[[int]]
 	, datasethandler --[[closure]]
-	, f1 = addall(id --[[galleryHandle.handle]], objects --[[Table]], urlkey --[[String]]
+	, f1 = addall(id --[[galleryHandle.handle]], objects --[[LuaTable]], urlkey --[[String]]
 			) --voidHandle.handle
-	, f2 = setdata(id --[[galleryHandle.handle]], objects --[[Table]], urlkey --[[String]]
+	, f2 = setdata(id --[[galleryHandle.handle]], objects --[[LuaTable]], urlkey --[[String]]
             ) --voidHandle.handle
-	, f3 = setdataat(id --[[galleryHandle.handle]], objects --[[Table]], index --[[int]]
+	, f3 = setdataat(id --[[galleryHandle.handle]], objects --[[LuaTable]], index --[[int]]
 			) --voidHandle.handle 
 	, f4 = removeall(id --[[galleryHandle.handle]]) --voidHandle.handle
 	, f5 = removeat(id --[[galleryHandle.handle]], index --[[int]]) --voidHandle.handle
@@ -539,49 +517,49 @@ gallery = {
 
 --//Map namespace
 map = {
-	locationdata --[[Table]]
-	, address --[[Table]]
+	locationdata --[[LuaTable]]
+	, address --[[LuaTable]]
 	, zoom --[[int]]
 }
 
 --//SegmentedUI namespace
 segui = {
-	meta --[[Table]]
-	, focuseditem --[[Table]]
+	meta --[[LuaTable]]
+	, focuseditem --[[LuaTable]]
 	, focusedindex --[[int]]
-	, widgetdatamap --[[Table]]
+	, widgetdatamap --[[LuaTable]]
 	, datasethandler --[[closure]]
-	, skinvar --[[skinHandle]]
-	, focusskin --[[skinHandle]]
-	, sectionskin --[[skinHandle]]
-	, alternateskin --[[skinHandle]]
-	, pressedskin --[[skinHandle]]
+	, skinvar --[[skinHandle.handle]]
+	, focusskin --[[skinHandle.handle]]
+	, sectionskin --[[skinHandle.handle]]
+	, alternateskin --[[skinHandle.handle]]
+	, pressedskin --[[skinHandle.handle]]
 	, sepcolor --[[int]]
 	, septhickness --[[int]]
-	, askin --[[skinHandle]]
+	, askin --[[skinHandle.handle]]
 	, clickable --[[boolean]]
 	, editmode --[[String]]	
 	, oninsertclick --[[closure]] --//iPhone PSP
 	, ondeleteclick --[[closure]] --//iPhone PSP
 	, editable --[[boolean]] --//iPhone PSP
 	, editstyle --[[String]] --//iPhone PSP
-	, f1 = addall(id --[[segmenteduiHandle.handle]], arrayofdata --[[Table]]
+	, f1 = addall(id --[[segmenteduiHandle.handle]], arrayofdata --[[LuaTable]]
 			) --voidHandle.handle
-	, f2 = setdata(arrayofdata --[[NSArray]]
-			) --void
+	, f2 = setdata(id --[[segmenteduiHandle.handle]], arrayofdata --[[LuaTable]]
+			) --voidHandle.handle
 	, f3 = removeall(id --[[segmenteduiHandle.handle]]) --voidHandle.handle
 	, f4 = removeat(id --[[segmenteduiHandle.handle]], index --[[int]]) --voidHandle.handle
-	, f5 = setdataat(id --[[segmenteduiHandle.handle]], datamap --[[Table]], index--[[int]]
+	, f5 = setdataat(id --[[segmenteduiHandle.handle]], datamap --[[LuaTable]], index--[[int]]
 			) --voidHandle.handle
-	, f6 = addat(id --[[segmenteduiHandle.handle]], datamap --[[Table]],index --[[int]]
+	, f6 = addat(id --[[segmenteduiHandle.handle]], datamap --[[LuaTable]],index --[[int]]
 			) --voidHandle.handle
-	, f7 = setdatawithsections(id --[[segmenteduiHandle.handle]], arrayofdata --[[Table]]
+	, f7 = setdatawithsections(id --[[segmenteduiHandle.handle]], arrayofdata --[[LuaTable]]
 			) --voidHandle.handle 
 }
 
 --//Showloadingscreen namespace
 Showloadingscreen = {
-	skinvar --[[skinHandle]]
+	skinvar --[[skinHandle.handle]]
 	, text --[[String]]
 	, position --[[String]]
 	, isblocked --[[boolean]]
@@ -592,15 +570,15 @@ Showloadingscreen = {
 --//Slider namespace
 slider = {
 	selectedvalue --[[int]]
-	, leftskin --[[skinHandle]]
-	, rightskin --[[skinHandle]]
+	, leftskin --[[skinHandle.handle]]
+	, rightskin --[[skinHandle.handle]]
 	, thumbimage --[[String]]
 }
 
 --//adwidget namespace
 advertisement = {
-	skinvar --[[skinHandle]]
-	, focusskin --[[skinHandle]]
+	skinvar --[[skinHandle.handle]]
+	, focusskin --[[skinHandle.handle]]
 	, imageontop --[[boolean]]
 	, adserviceurl --[[String]]
 	, frequency --[[int]]

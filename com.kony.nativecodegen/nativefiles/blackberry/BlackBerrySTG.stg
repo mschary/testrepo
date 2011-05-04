@@ -80,14 +80,26 @@ javaAPIMap ::= [
   "table.get" : "TableLib.get",
   "table.insert" : "TableLib.insert",
 
-  "setappmenu" : "KonyForm.setAppMenu"  
+  "setappmenu" : "KonyForm.setAppMenu",
+
+  "phone.mylocation":"PhoneLib.mylocation",
+
+  "registerforidletimeout" : "StandardLib.registerforidletimeout",
+ 
+  "Time.schedule":"TimeLib.schedule",
+  "Time.cancel":"TimeLib.cancel",
+
+  "ds.save" : "KonyDataSource.save",
+  "ds.read" : "KonyDataSource.read",	
+  "ds.delete" : "KonyDataSource.delete"
+  
 ]
 
 global_tmpl(globalVars,globalFunctions) ::= <<
 
 package com.konylabs.api.nativecode;
 
-class Global {
+public class Global {
     <globalVars; separator="\n">
     <globalFunctions; separator="\n">
 }
@@ -98,12 +110,13 @@ package com.konylabs.api.nativecode;
 
 import com.konylabs.api.*;
 import com.konylabs.vm.*;
+import com.konylabs.api.ds.*;
 import com.konylabs.api.ui.calendar.*;
 import com.konylabs.api.ui.camera.*;
 import com.konylabs.api.ui.segui.*;
 import com.konylabs.api.ui.*;
 
-class <fileName> {
+public class <fileName> {
     <vars; separator="\n">
     <functions; separator="\n">
 }
@@ -136,20 +149,20 @@ comment1_tmpl(comment, stmt) ::= <<
 <stmt>
 >>
 
-var_tmpl(prefix, type, name, init, ptype) ::= <<
-<type> <name> = <if(init)><if(ptype)>(<ptype>) <endif><init><else><typeInitMap.(type)><endif>;
+var_tmpl(prefix, type, name, init, ptype, suffix) ::= <<
+<type> <name> = <if(init)><if(ptype)><if(suffix)>(<endif>(<ptype>) <endif><init><if(suffix)>).<suffix>()<endif><else><typeInitMap.(type)><endif>;
 >>
 
-varDecl_tmpl(isGlobal, prefix, type, name) ::= <<
-<if(isGlobal)>public static <else>private static <endif><type> <if(prefix)><prefix>.<name><else><name><endif> = <typeInitMap.(type)>;
+varDecl_tmpl(isGlobal, prefix, type, name, init) ::= <<
+<if(isGlobal)>public static <else>private static <endif><type> <if(prefix)><prefix>.<name><else><name><endif> = <if(init)><init><else><typeInitMap.(type)><endif>;
 >>
 
 varList_tmpl(vars) ::= <<
 <vars; separator="\n">
 >>
 
-assign_tmpl(isLocal, prefix, a, b, ptype) ::= <<
-<if(isLocal)><a> = <if(ptype)>(<ptype>) <endif><b><else><if(prefix)><prefix>.<endif><a> = <if(ptype)>(<ptype>) <endif><b><endif>;
+assign_tmpl(isLocal, prefix, a, b, ptype, suffix) ::= <<
+<if(isLocal)><a> = <if(ptype)><if(suffix)>(<endif>(<ptype>) <endif><b><if(suffix)>).<suffix>()<endif><else><if(prefix)><prefix>.<endif><a> = <if(ptype)><if(suffix)>(<endif>(<ptype>) <endif><b><if(suffix)>).<suffix>()<endif><endif>;
 >>
 
 pow_tmpl(a,b) ::= "Math.pow(<a>,<b>)"
@@ -166,12 +179,20 @@ uop_tmpl(op, a) ::= <<
 <op><a>
 >>
 
+double_equal_tmpl(a, b) ::= <<
+<a>.compareTo(<b>) == 0
+>>
+
+boolean_equal_tmpl(a, b) ::= <<
+<a>.equals(<b>)
+>>
+
 hash_tmpl(a) ::= "<a>.length()"
 
 expr_tmpl(expr) ::= "<expr>"
 
 arrAccess_tmpl(name,mem, tcast) ::= <<
-<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable(<name>)
+((LuaTable)(<mem>)).getTable(<name>)
 >>
 
 methodCallStmt_tmpl(call) ::= "<call>;"
@@ -209,20 +230,20 @@ exprList_tmpl(expr) ::= <<
 >>
 
 while_tmpl(cond, stmt) ::= <<
-while(<cond>)<stmt>
+while (<cond>) <stmt>
 >>
 
 doWhile_tmpl(cond, stmt) ::= <<
-do<stmt>while(<cond>);
+do <stmt> while (<cond>);
 >>
 
 return_tmpl(val) ::= "return <val>;"
 
 if_stmt(cond, stmt, elb) ::= <<
-if(<cond>)<stmt><if(elb)>else <elb><endif>
+if (<cond>) <stmt><if(elb)> else <elb><endif>
 >>
 
-if_stmt1(cond, stmt) ::= "if(<cond>)<stmt>"
+if_stmt1(cond, stmt) ::= "if (<cond>) <stmt>"
 
 ifelse_stmt(cond, stmt, elseb) ::= <<
 if(<cond>)<stmt><if(elseb)>else<elseb><endif>
@@ -253,7 +274,7 @@ Object arg
 >>
 
 methodDecl_tmpl(isLocal, type,name,params,bl) ::= <<
-<if(isLocal)>private <else>public static <endif><type> <name>(<params>)<bl>
+<if(isLocal)>private <else>public static <endif><type> <name>(<params>)<if(bl)><bl><else>{ }<endif>
 >>
 
 forInit_tmpl(type, var , init) ::= "<type> <var> = <init>"
@@ -265,22 +286,22 @@ forUpdater_tmpl(name, cond) ::= "<name><cond>"
 
 for_tmpl(init, cond, updt, stmt) ::= <<
 <if(updt)>
-for(<init>;<cond>;<updt>)<stmt>
+for (<init>;<cond>;<updt>) <stmt>
 <else>
-for(<init> ; <cond> ; <init.stmt.var>++)<stmt>
+for (<init> ; <cond> ; <init.stmt.var>++) <stmt>
 <endif>
 >>
 
-forIpair_tmpl(type, val, type1, val1, met, type2, var, bl) ::= <<
-for(<type> <val>=0; <val> \< <var>.size(); <val>++){
-  <type1> <val1> = (<type1>) <var>.get(i);
+forIpair_tmpl(val, val1, var, bl) ::= <<
+for (int <val>=1; (((Object) <var>) != LuaNil.nil) && <val> \< ((LuaTable) <var>).size(); <val>++) {
+  <val1> = ((LuaTable) <var>).getTable(new Double(i));
   <bl; separator="\n">
 } 
 >>
 
 forPair_tmpl(type, val, met, type1, var, bl) ::= <<
 java.util.Iterator _itr = <var>.iterator(); 
-for(int _idx = 0; _itr.hasNext(); _idx++){
+for (int _idx = 0; _itr.hasNext(); _idx++) {
   <type> <val> = (<type>) _itr.getNext();
   <bl; separator="\n">
 } 
@@ -290,8 +311,8 @@ break_tmpl() ::= "break;"
 
 tbl_param_tmpl(type, name) ::= "<type> <name>"
 
-table_init_tmpl(prefix, fname, params) ::= <<
-<if(prefix)><prefix>.<endif><fname>(<params; separator=",">)
+table_init_tmpl(tname) ::= <<
+<tname>
 >>
 
 table_func_tmpl(fname, tname, body, params) ::= <<
@@ -303,12 +324,18 @@ private static LuaTable <fname>(<params; separator=",">)
 }
 >>
 
+tableInline_tmpl(tname, body) ::= <<
+LuaTable <tname> = new LuaTable();
+<body>
+>>
+
 fieldList_tmpl(field) ::= <<
 <field; separator=";\n">
 >>
 
 tblFieldList_tmpl(field) ::= <<
 <field; separator="\n">
+
 >>
 
 field1_tmpl(tname, expr, indx) ::= <<

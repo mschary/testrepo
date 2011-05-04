@@ -20,6 +20,7 @@ getObjectMap ::= [
 
 typeMap ::= [
         "closure":"id",
+        "void":"id",
         "null":"id",
         "int":"int",
         "long":"long",
@@ -50,7 +51,7 @@ typeMap ::= [
   "KonyCalendar" : "KonyCalendar*",
   "KonyCheckboxGroup" : "KonyCheckboxGroup*",
   "KonyCombobox" : "KonyCombobox*",
-  "KonyDatagrid" : "KonyDatagrid*",
+  "DataGridWidget" : "DataGridWidget*",
   "KonyImage" : "KonyImage*",
   "KonyLabel" : "KonyLabel*",
   "KonyLine" : "KonyLine*",
@@ -64,7 +65,7 @@ typeMap ::= [
   "KonyCamera" : "KonyCamera*",
   "KonyImageStrip" : "KonyImageStrip*",
   "KonyGallery" : "KonyGallery*",
-  "KonyMap" : "KonyMap*",
+  "MapWidget" : "MapWidget*",
   "KonySegUI" : "KonySegUI*",
   "KonySlider" : "KonySlider*",
   "KonyRaw" : "KonyRaw*"
@@ -82,15 +83,18 @@ boolMap ::= [
   "false" : "@\"false\""
 ]
 
+boolConcat ::=[
+  "boolean" : "?@\"true\":@\"false\""
+]
 
 formatMap ::= [
         "int":"%d",
-        "long":"%l",
+        "long":"%ld",
         "float":"%f",
         "double":"%lf",
-        "boolean":"%s",
+        "boolean":"%@",
         "byte":"%d",
-        "short":"%d",
+        "short":"%hd",
         "char":"%c",
         default:"%@" // anything other than an atomic type
 ]
@@ -99,8 +103,9 @@ dictionaryMethodMap ::= [
 ]
 
 arrayMethodMap ::= [
+        "print":"print",
   "window.Box" : "createBox",
-  "window.image" : "createImage",
+  "window.Image" : "createImage",
   "window.Button":"createButton",
   "window.Form" : "createForm",
   "window.Label" : "createLabel",
@@ -111,20 +116,193 @@ arrayMethodMap ::= [
 "window.Calendar" : "createCalendarWidget",
 "window.Camera" : "createCamera",
 "window.Popup" : "createPopup",
-"window.SegementedUI" : "createSegmentedUI",
+"window.SegmentedUI" : "createSegmentedUI",
+"window.HorizontalImageStrip" : "createImageStrip",
+"window.Gallery" : "createImageGallery",
+"window.DataGrid" : "createDataGrid",
 "segui.addall" : "addAllToSUI",
+"segui.setdata" : "setDataInSUI",
 "widget.setvisibility" : "setVisibility",
-  "string.find" : "stringFind",
-  "string.len" : "stringLen",
-  "string.rep" : "stringRep",
-  "string.sub" : "stringSub",
+"string.find" : "stringFind",
+"string.len" : "stringLen",
+"string.rep" : "stringRep",
+"string.sub" : "stringSub",
   "table.append" : "tableAppend",
   "table.get" : "tableGet",
   "table.insert" : "tableInsert",
   "net.invokeservice" : "netInvokeService",
   "net.invokeserviceasync" : "netInvokeServiceAsync",
-  "window.Alert":"createAlert"
+  "window.Alert":"createAlert",
+  "registerforidletimeout" : "registerForIdletimeout",
+"window.PickerView" : "createPickerView",
+"setappmenu" : "setAppMenu",
+"ds.save":"dsSave",
+"appmiddlewaresecureinvoker" : "appmiddlewaresecureinvoker",
+"appmiddlewareinvoker" : "appmiddlewareinvoker",
+"appmiddlewaresecureinvokerasync" : "appmiddlewaresecureinvokerasync",
+"appmiddlewareinvokerasync" : "appmiddlewareinvokerasync",
+"crypto.newkey" : "getNewKey",
+"crypto.encrypt": "performEncryption",
+"crypto.decrypt": "performDecryption",
+"crypto.retrievepublickey": "retrievePublicKey",
+"crypto.createhash": "createHash",
+"crypto.savekey": "saveKey",
+"crypto.readkey": "readKey",
+"crypto.deletekey": "deleteKey",
+
+
+"imagestrip.setdata" : "setImageDataToImageStrip",
+"imagestrip.addall" : "addAllImageToImageStrip",
+"imagestrip.removeall" : "removeAllImageFromImageStrip",
+"imagestrip.removeat" : "removeImageAtImageStrip",
+"imagestrip.setdataat" : "setDataAtInKonyImageGallery",
+
+
+"gallery.setdata" : "setImageDataToGallery",
+"gallery.addall" : "addAllImageToGallery",
+"gallery.removeall" : "removeAllImageFromGallery",
+"gallery.removeat" : "removeImageAtGallery",
+"gallery.setdataat" : "setDataAtInKonyImageGallery",
+
+
+"datagrid.addall" : "addAllToDataGrid",
+"datagrid.setdata" : "setDataInDataGrid",
+"datagrid.setdataat" : "setDataAtInDataGrid",
+"datagrid.addat" : "addDataAtToDataGrid",
+"datagrid.removeall" : "removeAllInDataGrid",
+"datagrid.removeat" : "removeAtInDataGrid",
+"datagrid.applycellskin" : "applyCellSkinInDataGrid",
+"datagrid.selectall" : "selectAllInDataGrid",
+"datagrid.setcelldata" : "setCellDataAtInDataGrid",
+
+"i18n.setdefaultlocale" : "setDefaultLocale",
+"i18n.setresourcebundle" : "setResourceBundleInDB",
+"i18n.updateresourcebundle" : "updateResourceBundleInDB",
+"i18n.isresourcebundlepresent" : "isResourceBundlePresent",
+"i18n.getlocalizedstring" : "getLocalizedString",
+"i18n.deleteresourcebundle" : "deleteResourceBundleInDB",
+
+"contacts.add" : "addContact",
+"contacts.find" : "findContact",
+"contacts.delete" : "deleteContact"
+
 ]  
+
+cAPIMap ::= [
+"appmiddlewaresecureinvoker" : "appmiddlewaresecureinvoker",
+"appmiddlewareinvoker" : "appmiddlewareinvoker",
+"appmiddlewaresecureinvokerasync" : "appmiddlewaresecureinvokerasync",
+"appmiddlewareinvokerasync" : "appmiddlewareinvokerasync"
+]
+
+isCAPICheck(method) ::= <<
+<if(cAPIMap.(method))>true<endif>
+>>
+methodMap ::= [
+        "box.add" : "addWidgetsToBox",
+        "print":"print",
+	"appreset" : "appReset",
+        "math.sqrt":"sqrt",
+        "os.exit":"exit",
+        "exit":"exit",
+        "os.platform":"osPlatform",
+        "os.useragent":"osUserAgent",
+        "phone.dial":"dial",
+  "window.Map" : "createMapWidget",
+  "window.Skin" : "createSkin",
+  "window.Alert":"createAlert",
+  "window.Calendar" : "createCalendarWidget",
+  "window.Camera" : "createCamera",
+  "window.CheckBoxGroup" : "createCheckBoxGroup",
+  "window.Box" : "createBox",
+  "window.Button" : "createButton",
+  "window.Form" : "createForm",
+  "window.Image" : "createImage",
+  "window.Label" : "createLabel",
+  "window.Line" : "createLine",
+  "window.Popup" : "createPopup",
+  "window.SegmentedUI" : "createSegmentedUI",
+  "window.TextField" : "createTextField",
+  "window.Gallery" : "createImageGallery",
+  "window.DataGrid" : "createDataGrid",
+  "window.HorizontalImageStrip" : "createImageStrip",
+
+  "net.invokeservice" : "netInvokeService",
+  "net.invokeserviceasync" : "netInvokeServiceAsync",
+
+  "string.find" : "stringFind",
+  "string.len" : "stringLen",
+  "string.rep" : "stringRep",
+  "string.sub" : "stringSub",
+ 
+  "table.append" : "tableAppend",
+  "table.get" : "tableGet",
+  "table.insert" : "tableInsert",
+  "box.add" : "addWidgetsToBox",
+  "form.add" : "addWidgetsToForm",
+  "form.show" : "showForm",
+  "popup.dismiss": "dismissPopup",
+  "popup.add" : "addToPopup",
+  "segui.setdata" : "setDataInSUI",
+"widget.setvisibility" : "setVisibility",
+"setappmenu" : "setAppMenu",
+"setappmenufocusindex" :"setAppMenuFocusItem",
+"showappmenuitems" : "showAppMenuItems",
+"registerforidletimeout" : "registerForIdletimeout",
+  "unregisterforidletimeout" : "unregisterForIdletimeout",
+"hidappmenuitems" : "hideAppMenuItems",
+"phone.mylocation" : "location",
+"ds.save":"dsSave",
+"ds.read":"dsRead",
+"ds.delete":"dsDelete",
+
+"crypto.newkey" : "getNewKey",
+"crypto.encrypt": "performEncryption",
+"crypto.decrypt": "performDecryption",
+"crypto.retrievepublickey": "retrievePublicKey",
+"crypto.createhash": "createHash",
+"crypto.savekey": "saveKey",
+"crypto.readkey": "readKey",
+"crypto.deletekey": "deleteKey",
+
+
+"imagestrip.setdata" : "setImageDataToImageStrip",
+"imagestrip.addall" : "addAllImageToImageStrip",
+"imagestrip.removeall" : "removeAllImageFromImageStrip",
+"imagestrip.removeat" : "removeImageAtImageStrip",
+"imagestrip.setdataat" : "setDataAtInKonyImageGallery",
+
+
+"gallery.setdata" : "setImageDataToGallery",
+"gallery.addall" : "addAllImageToGallery",
+"gallery.removeall" : "removeAllImageFromGallery",
+"gallery.removeat" : "removeImageAtGallery",
+"gallery.setdataat" : "setDataAtInKonyImageGallery",
+
+"datagrid.addall" : "addAllToDataGrid",
+"datagrid.setdata" : "setDataInDataGrid",
+"datagrid.setdataat" : "setDataAtInDataGrid",
+"datagrid.addat" : "addDataAtToDataGrid",
+"datagrid.removeall" : "removeAllInDataGrid",
+"datagrid.removeat" : "removeAtInDataGrid",
+"datagrid.applycellskin" : "applyCellSkinInDataGrid",
+"datagrid.selectall" : "selectAllInDataGrid",
+"datagrid.setcelldata" : "setCellDataAtInDataGrid",
+
+"i18n.getcurrentlocale" : "getCurrentLocale",
+"i18n.setdefaultlocale" : "setDefaultLocale",
+"i18n.setresourcebundle" : "setResourceBundleInDB",
+"i18n.updateresourcebundle" : "updateResourceBundleInDB",
+"i18n.isresourcebundlepresent" : "isResourceBundlePresent",
+"i18n.getlocalizedstring" : "getLocalizedString",
+"i18n.deleteresourcebundle" : "deleteResourceBundleInDB",
+
+"contacts.add" : "addContact",
+"contacts.find" : "findContact",
+"contacts.delete" : "deleteContact"
+
+
+]
 
 widgetMethodMap ::= [
   "box.add" : "addWidgetsToBox",
@@ -132,6 +310,10 @@ widgetMethodMap ::= [
 ]
 isMethodCheck ::= [
   "Method":"true"
+] 
+
+isPairCheck ::= [
+  "pairs":"true"
 ] 
 
 checkDictionary(method) ::= <<
@@ -151,6 +333,10 @@ checkAbstractTypeMap(type) ::= <<
 >>
 nullMap ::= [
 "nil":"[NSNull null]"
+]
+
+releaseMap ::= [
+  "nil":"true"
 ]
 
 abstractTypes ::= [
@@ -176,7 +362,7 @@ abstractTypes ::= [
   "KonyCalendar" : "KonyCalendar*",
   "KonyCheckboxGroup" : "KonyCheckboxGroup*",
   "KonyCombobox" : "KonyCombobox*",
-  "KonyDatagrid" : "KonyDatagrid*",
+  "KonyDatagrid" : "DataGridWidget*",
   "KonyImage" : "KonyImage*",
   "KonyLabel" : "KonyLabel*",
   "KonyLine" : "KonyLine*",
@@ -190,11 +376,24 @@ abstractTypes ::= [
   "KonyCamera" : "KonyCamera*",
   "KonyImageStrip" : "KonyImageStrip*",
   "KonyGallery" : "KonyGallery*",
-  "KonyMap" : "KonyMap*",
+  "MapWidget" : "MapWidget*",
   "KonySegUI" : "KonySegUI*",
   "KonySlider" : "KonySlider*",
-  "KonyRaw" : "KonyRaw*"
+  "KonyRaw" : "KonyRaw*",
+  "NSArray" : "NSArray*"
 ]
+
+noClassCheck ::= [
+"appmiddlewaresecureinvoker" : "appmiddlewaresecureinvoker",
+"appmiddlewareinvoker" : "appmiddlewareinvoker",
+"appmiddlewaresecureinvokerasync" : "appmiddlewaresecureinvokerasync",
+"appmiddlewareinvokerasync" : "appmiddlewareinvokerasync"
+]
+
+isClassCheck(method) ::= <<
+<if(noClassCheck.(method))>true<endif>
+>>
+
 arrayMethod_tmpl(args) ::= <<
 [NSArray arrayWithObjects : <args; separator=",\n">,nil]
 >>
@@ -207,7 +406,7 @@ arrayArg_tmpl(arg, isMethod) ::= <<
 <if(nullMap.(arg))>[NSNull null]<else><if(isMethod)>@"<arg>:"<else><if(boolMap.(arg))><boolMap.(arg)><else><arg><endif><endif><endif>
 >>
 
-vararg_tmpl() ::= "id param"
+vararg_tmpl(type,name) ::= "<type> <name>"
 
 argType_tmpl(arg, type) ::= <<
 <if(boolMap.(arg))><boolMap.(arg)><else>
@@ -224,54 +423,7 @@ argType_tmpl(arg, type) ::= <<
 skinTemplate_tmpl(method) ::= <<
    <method>
 >>
-methodMap ::= [
-        "box.add" : "addWidgetsToBox",
-        "print":"NSLog",
-        "math.sqrt":"sqrt",
-        "os.exit":"exit",
-        "exit":"exit",
-        "os.platform":"osPlatform",
-        "os.useragent":"osUserAgent",
-        "phone.dial":"dial",
-  "window.Skin" : "createSkin",
-  "window.Alert":"createAlert",
-  "window.Calendar" : "createCalendar",
-  "window.Camera" : "createCamera",
-  "window.CheckBoxGroup" : "createCheckBoxGroup",
-  "window.Box" : "createBox",
-  "window.Button" : "createButton",
-  "window.Form" : "createForm",
-  "window.Image" : "createImage",
-  "window.Label" : "createLabel",
-  "window.Line" : "createLine",
-  "window.Map" : "createMap",
-  "window.Popup" : "createPopup",
-  "window.SegmentedUI" : "createSegmentedUI",
-  "window.TextField" : "createTextField",
 
-  "net.invokeservice" : "netInvokeService",
-  "net.invokeserviceasync" : "netInvokeServiceAsync",
-
-  "string.find" : "stringFind",
-  "string.len" : "stringLen",
-  "string.rep" : "stringRep",
-  "string.sub" : "stringSub",
- 
-  "table.append" : "tableAppend",
-  "table.get" : "tableGet",
-  "table.insert" : "tableInsert",
-  "box.add" : "addWidgetsToBox",
-  "form.add" : "addWidgetsToForm",
-  "form.show" : "showForm",
-  "popup.dismiss": "dismissPopup",
-  "popup.add" : "addToPopup",
-  "segui.setdata" : "setDataInSUI",
-"widget.setvisibility" : "setVisibility",
-"setappmenu" : "setAppMenu",
-"setappmenufocusindex" :"setAppMenuFocusItem",
-"showappmenuitems" : "showAppMenuItems",
-"hidappmenuitems" : "hideAppMenuItems"
-]
 
 globalHeaderFile_tmpl(globalVars, globalFunctionDefs) ::= <<
 /*
@@ -346,7 +498,7 @@ The changes in native code cannot be mapped back to lua code
 @end
 >>
 
-classFile_tmpl(fileName,imports, vars, gvars,functions,gfunctions) ::= <<
+classFile_tmpl(fileName,imports, filescopevars, vars, gvars,functions,gfunctions) ::= <<
 /*
 Generate by Kony Lua Source to Source Translator.
 Do not moify. Modifications if any are done to this file will make input lua and this source out of sync. 
@@ -365,6 +517,9 @@ The changes in native code cannot be mapped back to lua code
    <if(vars)><vars; separator="\n\n">
    
    <endif>
+   <if(filescopevars)><filescopevars; separator="\n\n">
+   <endif>
+   
    <if(functions)><functions; separator="\n\n"><endif>
     
     <if(gfunctions)><gfunctions; separator="\n\n">
@@ -403,7 +558,7 @@ comment1_tmpl(comment, stmt) ::= <<
 <stmt>
 >>
 
-var_tmpl(prefix, type, name, init) ::= <<
+var_tmpl(prefix, type, name, init, ptype) ::= <<
 <if(typeMap.(type))><typeMap.(type)><else><type><endif> <name> <if(init)>= <init><else><if(typeInitMap.(type))>= <typeInitMap.(type)><else>= nil<endif><endif>;
 >>
 
@@ -419,12 +574,14 @@ varList_tmpl(vars) ::= <<
 <vars; separator="\n">
 >>
 
-assign_tmpl(prefix, a, b) ::= <<
+
+
+assign_tmpl(prefix, a, b, isGlobal) ::= <<
 <if(prefix)>[ <prefix> <endif><a> = <b> <if(prefix)>]<endif>;
 >>
 
 concat_tmpl(a,aType, b, bType) ::= <<
-[NSString stringWithFormat:@"<formatMap.(aType)>, <formatMap.(bType)>", <a>, <b>]
+[NSString stringWithFormat:@"<formatMap.(aType)>, <formatMap.(bType)>", <if(boolConcat.(aType))><a><boolConcat.(aType)><else><a><endif>,<if(boolConcat.(bType))><b><boolConcat.(bType)><else><b><endif>]
 >>
 pow_tmpl(a,b) ::= "pow(<a>,<b>)"
 
@@ -436,6 +593,27 @@ bop_tmpl(op, a, b) ::= <<
 <a> <op> <b>
 >>
 
+bopEqualString_tmpl(op, a, b) ::= <<
+[<a> isEqualToString : <b>]
+>>
+
+bopNotEqualString_tmpl(op, a, b) ::= <<
+!([<a> isEqualToString : <b>])
+>>
+
+bopString_tmpl(op, a, b) ::= <<
+[<a> compare : <b>]
+>>
+
+bopPrimitve_tmpl(ltype,rtype, op, a, b) ::= <<
+<a> <op> <b>
+>>
+
+
+bop1_tmpl(ltype,rtype, op, a, b) ::= <<
+<if(convMap.(ltype))><convMap.(ltype)> <a> ] <else><a><endif> <op> <if(convMap.(rtype))><convMap.(rtype)> <b> ] <else><b><endif>
+>>
+
 uop_tmpl(op, a) ::= <<
 <op><a>
 >>
@@ -444,8 +622,8 @@ hash_tmpl(a) ::= "<a>.length()"
 
 expr_tmpl(expr) ::= "<expr>"
 
-arrAccess_tmpl(name,index, ptype) ::= <<
-getObject(<name>, <index>)
+arrAccess_tmpl(name,index, ptype, keyType) ::= <<
+getObject(<name>, <if(convMap.(keyType))><convMap.(keyType)> <index> ] <else><index><endif>)
 >>
 
 methodCallStmt_tmpl(call) ::= "<call>;"
@@ -485,22 +663,43 @@ return_tmpl(val) ::= "return <val>;"
 
 
 isNil(val) ::= <<
-<nullMap.(val)>
+<if(nullMap.(val))><else>true<endif>
 >>
+
 
 if_stmt(cond, stmt, elb) ::= <<
-<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif><if(elb)>else <elb><endif>
+if(<cond>)<stmt><if(elb)>else <elb><endif>
 >>
 
-if_stmt1(cond, stmt) ::= "<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif>"
+if_stmt_old(cond, stmt, elb) ::= <<
+if(compareValues(<if(nullMap.(cond.a))>[NSNull null]<else><if(convMap.(cond.ltype))><convMap.(cond.ltype)> <cond.a>]<else><cond.a><endif><endif>,<if(nullMap.(cond.b))>[NSNull null]<else><if(convMap.(cond.rtype))><convMap.(cond.rtype)> <cond.b>]<else><cond.b> <endif><endif>,@"<cond.op>"))<stmt><if(elb)>else <elb><endif>
+>>
 
+ifNull_stmt(cond, stmt, elb) ::= <<
+<if(nullMap.(cond.b))>if(<cond.a>)<stmt><else>    if(<cond>)<stmt><endif><if(elb)>else <elb><endif>
+>>
+
+if_stmt1_old(cond, stmt) ::= <<
+if(compareValues(<if(nullMap.(cond.a))>[NSNull null]<else><if(convMap.(cond.ltype))><convMap.(cond.ltype)> <cond.a>]<else><cond.a><endif><endif>,<if(nullMap.(cond.b))>[NSNull null]<else><if(convMap.(cond.rtype))><convMap.(cond.rtype)> <cond.b>]<else><cond.b><endif><endif>,@"<cond.op>"))<stmt>
+>>
+
+if_stmt1(cond, stmt) ::= "if(<cond>)<stmt>"
+
+ifNull_stmt1(cond, stmt) ::= "<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif>"
+
+ifelse_stmt_old(cond, stmt, elseb) ::= <<
+if(compareValues(<if(nullMap.(cond.a))>[NSNull null]<else><if(convMap.(cond.ltype))><convMap.(cond.ltype)> <cond.a>]<else><cond.a><endif><endif>,<if(nullMap.(cond.b))>[NSNull null]<else><if(convMap.(cond.rtype))><convMap.(cond.rtype)> <cond.b>]<else><cond.b><endif><endif>,@"<cond.op>"))<stmt><if(elseb)>else <elseb><endif>
+>>
 
 ifelse_stmt(cond, stmt, elseb) ::= <<
-<if(isNil(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif>else<elseb>
+if(<cond>)<stmt><if(elseb)>else <elseb><endif>
 >>
 
+ifelseNull_stmt(cond, stmt, elseb) ::= <<
+<if(nullMap.(cond.b))>if(<cond.a>)<stmt><else>if(<cond>)<stmt><endif><if(elseb)>else <elseb><endif>
+>>
 dotMember_tmpl(mem, name, cast) ::= <<
-getObject(<mem>,@"<name>")
+getObject(<mem>,@"<name>") 
 >>
 
 method_dotMember_tmpl(mem, name) ::= <<
@@ -526,8 +725,8 @@ paramList_tmpl(params) ::= <<
 >>
 
 methodDecl_tmpl(isLocal, type,name, params,bl) ::= <<
-+ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> <if(params)>: (<getArgType(type=first(params).stmt.type)>) <first(params).stmt.name> <rest(params); separator=" "><endif>
-<bl>
++ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> <if(params)><if(first(params).stmt.name)>: (<getArgType(type=first(params).stmt.type)>) <first(params).stmt.name> <rest(params); separator=" "><endif><endif>
+<if(bl)><bl><else>{}<endif>
 >>
 
 methodCallbackDecl_tmpl(isLocal, type,name, params,bl) ::= <<
@@ -544,7 +743,7 @@ callbackParams_tmpl(lName, param, index) ::= <<
 id <lName> = [params objectAtIndex:<index>];
 >>
 methodDeclGlobal_tmpl(type,name, params) ::= <<
-+ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> <if(params)>: (<getArgType(type=first(params).stmt.type)>) <first(params).stmt.name> <rest(params); separator=" "><endif>
++ (<if(typeMap.(type))><typeMap.(type)><else><type><endif>) <name> <if(params)><if(first(params).stmt.name)>: (<getArgType(type=first(params).stmt.type)>) <first(params).stmt.name> <rest(params); separator=" "><endif><endif>
 >>
 
 getType(type) ::= <<
@@ -572,37 +771,45 @@ for(<init> ; <cond> ; <init.stmt.var>++)
 
 >>
 
-forIpair_tmpl(type, val, type1, val1, met, type2, var, bl) ::= <<
-for(<if(typeMap.(type))><typeMap.(type)><else><type><endif> <val>=0; <val> \< <var>.size(); <val>++){
-  <type1> <val1> = (<type1>) <var>.get(i);
-  <bl; separator="\n">
-} 
+forInpair_tmpl(tName, tVal, met, key, bl) ::= <<
+	int count = [((LuaTable*)<tName>)->array count];
+<if(isPairCheck.(met))>{<endif>
+	for(int i=1; i\<= count; ++i){
+		<tVal> = [((LuaTable*)<tName>)->array objectAtIndex: i];
+		<bl; separator="\n">
+	}
+
+	<if(isPairCheck.(met))>
+	for(NSString* <key> in <tName>->allKeys){
+		<tVal> = [((LuaTable*)<tName>)->dict objectForKey: <key>];
+		<bl; separator="\n">
+	} 
+<if(isPairCheck.(met))>}<endif>
+<endif>
 
 >>
-
-
-forPair_tmpl(type, val, met, type1, var, bl) ::= <<
-for(<if(typeMap.(type))><typeMap.(type)><else><type><endif> <val> in <var>){
-  <bl; separator="\n">
-} 
-
->>
-
-
-
 
 break_tmpl() ::= "break;"
 
-tbl_param_tmpl(type, name) ::= "<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name>"
-
-table_init_tmpl(prefix, fname, params) ::= <<
-[self <fname> <params; separator=" ">]
+table_init1_tmpl(prefix, fname, params) ::= <<
+[self <fname> <if(params)>: <first(params).arg> <rest(params); separator=" "><endif>]
 >>
 
+table_init_tmpl(fname, code) ::= <<
+<fname>
+>>
+
+tableInline_tmpl(fname, tname, body, params) ::= <<
+LuaTable* <tname> = [LuaTable luaTableWithArraySize: 2 hashSize: 2];
+<body>
+
+>>
+
+
 table_func_tmpl(fname, tname, body, params) ::= <<
-+ (LuaTable*) <fname> <params; separator=" ">
++ (LuaTable*) <fname> <if(params)>: (<getArgType(type=first(params).type)>) <first(params).name> <rest(params); separator=" "><endif>
 {
-     LuaTable* <tname> = luaTableWithArraySize: 2 hashSize: 2;
+     LuaTable* <tname> = [LuaTable luaTableWithArraySize: 2 hashSize: 2];
      <body>
      return <tname>;
 }
@@ -619,13 +826,13 @@ tblFieldList_tmpl(field) ::= <<
 inlineTblFieldList_tmpl(field) ::= <<
 <field; separator=",">
 >>
-field1_tmpl(tname, expr) ::= <<
-[<tname>.array addObject: expr];
 
+getValid(type, arg) ::= <<
+<if(convMap.(type))><convMap.(type)><else><if(nullMap.(expr))>[NSNull null]<else><if(boolMap.(arg))><boolMap.(arg)><else><arg><endif><endif><endif>
 >>
 
-getValid(arg) ::= <<
-<if(convMap.(type))><convMap.(type)><else><if(nullMap.(expr))>[NSNull null]<else><if(boolMap.(arg))><boolMap.(arg)><else><arg><endif><endif><endif>
+field1_tmpl(tname, expr, type, key, isMethod) ::= <<
+[<tname> addObject: <if(isMethod)>@"<expr>:"<else><if(boolMap.(expr))><boolMap.(expr)><else><if(convMap.(type))><convMap.(type)> <expr> ] <else><expr><endif><endif><endif>];
 >>
 
 field2_tmpl(tname, fname, expr, type) ::= <<
@@ -636,8 +843,8 @@ field3_tmpl(tname, expr1, expr2, type) ::= <<
 <if(nullMap.(expr2))><else>[<tname> setObject: <expr1> key <if(boolMap.(expr2))><boolMap.(expr2)><else><if(convMap.(type))><convMap.(type)> <expr2> ] <else><expr2><endif><endif>];<endif>
 >>
 
-field4_tmpl(tname, fname, expr, type) ::= <<
-<if(nullMap.(expr))><else>setObject(<tname>, @"<fname>", <if(boolMap.(expr))><boolMap.(expr)><else><if(convMap.(type))><convMap.(type)> <expr> ] <else><expr><endif><endif>);<endif>
+field4_tmpl(tname, fname, expr, type, isMethod) ::= <<
+<if(nullMap.(expr))><else>setObject(<tname>, @"<fname>", <if(boolMap.(expr))><boolMap.(expr)><else><if(convMap.(type))><convMap.(type)> <expr> ] <else><if(isMethod)>@"<expr>:"<else><expr><endif><endif><endif>);<endif>
 >>
 
 field5_tmpl(tname, expr1, expr2, type) ::= <<

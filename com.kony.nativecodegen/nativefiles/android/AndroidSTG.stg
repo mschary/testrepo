@@ -1,0 +1,514 @@
+
+group Java;
+
+typeInitMap ::= [
+        "int":"0",
+        "long":"0",
+        "float":"0.0",
+        "double":"0.0",
+        "boolean":"false",
+        "byte":"0",
+        "short":"0",
+        "char":"0",
+        default:"null" // anything other than an atomic type
+]
+
+javaMethodMap ::= [
+  "math.pi" : "Math.pi",     
+  "os.platform" : "OS.platform",
+  "os.sysinfo" :  "OS.sysinfo",    
+  "os.useragent" :  "OS.userAgent",
+  "appreset" :  "Standard.appReset",   
+  "exit" :  "Standard.exit",    
+  "unregisterforidletimeout" :  "Standard.unregisterIdleTimeout"
+  
+]
+
+javaWidgetMap ::= [
+  "widget.widget" : "widget.widget"
+]
+
+javaAPIInstanceMap ::= [
+  "widget.widget" : "widget.widget"
+]
+
+javaAPIInstance0Map ::= [
+  "widget.widget" : "widget.widget"
+]
+
+javaAPIMap ::= [
+  
+  //Andriod dump as all are static
+  "app.headers" : "App.headers",
+	"app.footers" : "App.headers",
+	"setappmenu" : "AppMenu.setAppMenu",
+	"setappmenufocusindex" : "AppMenu.setAppMenuFocusIndex",
+	"hideappmenuitems" : "AppMenu.hideAppMenuItems",
+	"showappmenuitems" : "AppMenu.showAppMenuItems",
+	  
+	"box.add" : "Box.add",
+	"box.setvisibility" : "Box.setVisibility",
+	  
+	"calendar.clear" :  "Calendar.clear",
+	  
+	"camera.releaserawbytes" : "Camera.releaseRawBytes",
+	  
+	"contacts.add" :  "Contacts.add",
+	"contacts.find" : "Contacts.find",
+	"contacts.delete" : "Contacts.delete",
+	  
+	"crypto.newkey" : "Crypto.newKey",
+	"crypto.encrypt" : "Crypto.encrypt",
+	"crypto.decrypt" :  "Crypto.decrypt",
+	"crypto.retrievepublickey" :  "Crypto.retrievePublicKey",
+	"crypto.createhash" : "Crypto.createHash",
+	"crypto.savekey" :  "Crypto.saveKey",
+	"crypto.readkey" :  "Crypto.readKey",
+	"crypto.deletekey" :  "Crypto.deleteKey",
+	  
+	"datagrid.addall" : "Datagrid.addAll",
+	"datagrid.removeall" :  "Datagrid.removeAll",
+	"datagrid.removeat" : "Datagrid.removeAt",
+	"datagrid.setdataat" :  "Datagrid.setDataAt",
+	"datagrid.setdata" :  "Datagrid.setData",
+	"datagrid.addat" : "Datagrid.addAt",
+	"datagrid.applycellskin" :  "Datagrid.applyCellSkin",
+	"datagrid.setcelldata" :  "Datagrid.setCellData",
+	"datagrid.selectall" :  "Datagrid.selectAll",
+	  
+	"ds.save" : "DataStore.save",
+	"ds.read" : "DataSore.read",
+	"ds.delete" : "DataStore.delete",
+	  
+	"form.add" :  "Form.add",
+	"form.show" : "Form.show",
+	"form.destroy" :  "Form.destroy",
+	"form.getcurrentform" : "Form.getCurrentForm",
+	"form.getpreviousform" :  "Form.getPreviousForm",
+	  
+	"gallery.addall" :  "Gallery.addAll",
+	"gallery.removeall" : "Gallery.removeAll",
+	"gallery.removeat" :  "Gallery.removeAt",
+	"gallery.setdata" : "Gallery.setData",
+	  
+	"i18n.getcurrentlocale" : "I18n.getCurrentLocale",
+	"i18n.setdefaultlocale" : "I18n.setDefaultLocale",
+	"i18n.setresourcebundle" :  "I18n.setResourceBundle",
+	"i18n.updateresourcebundle" : "I18n.updateResourceBundle",
+	"i18n.isresourcebundlepresent" :  "I18n.isResourceBundlePresent",
+	"i18n.getlocalizedstring" : "I18n.getLocalizedString",
+	"i18n.deleteresourcebundle" : "I18n.deleteResourceBundle",
+	  
+	"imagestrip.addall" : "ImageStrip.addAll",
+	"imagestrip.setdata" :  "ImageStrip.setData",
+	"imagestrip.setdataat" :  "ImageStrip.setDataAt",
+	"imagestrip.removeall" :  "ImageStrip.removeAll",
+	"imagestrip.removeat" : "ImageStrip.removeAt",
+	  
+	"json.parse" :  "JSON.parse",
+	  
+	"math.tointeger" :  "Math.toInteger",
+	"math.pow" :  "Math.pow",
+	"math.min" :  "Math.min",
+	"math.max" :  "Math.max",
+	"math.sqrt" : "Math.sqrt",
+	"math.random" : "Math.random",
+	"math.randomseed" : "Math.randomSeed",
+	  
+	"net.invokeservice" : "Net.invokeService",
+	"net.invokeserviceasync" :  "Net.invokeServiceAsync",
+	"net.cancel" :  "Net.cancel",
+	  
+	"os.tonumber" : "OS.toNumber",
+	"os.date" : "OS.date",
+	"os.time" : "OS.time",
+	"os.diffdatetime" : "OS.diffDateTime",
+	"os.comparedates" : "OS.compareDates",
+	"os.addtodate" :  "OS.addToDate",
+	"os.isvaliddate" :  "OS.isValidDate",
+	"os.isleapyear" : "OS.isLeapYear",
+	"os.tocurrency" : "OS.toCurrency",
+	"os.freememory" : "OS.freeMemory",
+	"os.formatdate" : "OS.formatDate",
+	  
+	"phone.sendSMS" : "com.konylabs.nativecodegen.api.Phone.sendSMS",
+	"phone.dial" :  "com.konylabs.nativecodegen.api.Phone.dial",
+	"phone.mylocation" :  "com.konylabs.nativecodegen.api.Phone.myLocation",
+	"phone.openemail" : "com.konylabs.nativecodegen.api.Phone.openEmail",
+	"phone.openmediagallery" :  "com.konylabs.nativecodegen.api.Phone.openMediaGallery",
+	  
+	"popup.add" : "Popup.add",
+	"popup.dismiss" : "Popup.dismiss",
+	"popup.destroy" : "Popup.destroy",
+	"popup.show" :  "Popup.show",
+	"popup.setcontext" :  "Popup.setContext",
+	  
+	"assert" :  "Standard.assertOp",
+	"converttobase64" : "Standard.convertToBase64",
+	"executeJS" : "Standard.executeJS",
+	"getmetatable" :  "Standard.getMetaTable",
+	"performupgrade" :  "Standard.performUpgrade",
+	"print" : "Standard.print",
+	"readfrombase64" :  "Standard.readFromBase64",
+	"registerforidletimeout" :  "Standard.registerIdleTimeout",
+	"setmetatable" :  "Standard.setMetaTable",
+	"type" :  "Standard.type",
+	"unpack" :  "Standard.unpack",
+	  
+	"segui.addall" :  "Segui.addAll",
+	"segui.addat" : "Segui.addAt",
+	"segui.addatinsection" :  "Segui.addAtInSection",
+	"segui.removeall" : "Segui.removeAll",
+	"segui.removeat" :  "Segui.removeAt",
+	"segui.removeatinsection" : "Segui.removeAtInSection",
+	"segui.setdata" : "Segui.setData",
+	"segui.setdataat" : "Segui.setDataAt",
+	"segui.setdatawithsections" : "Segui.setDataWithSections",
+	  
+	"streaming.deregisterdatastream" :  "Streaming.deregisterDataStream",
+	"streaming.registerdatastream" :  "Streaming.registerDataStream",
+	"streaming.registerfordatastream" : "Streaming.registerForDataStream",
+	"streaming.setcallback" : "Streaming.setCallback",
+	"streaming.unregisterdatastream" :  "Streaming.unregisterDataStream",
+	  
+	"string.find" : "Strng.find",
+	"string.len" :  "Strng.len",
+	"string.split" :  "Strng.split",
+	"string.lower" :  "Strng.lower",
+	"string.upper" :  "Strng.upper",
+	"string.rep" :  "Strng.rep",
+	"string.reverse" :  "Strng.reverse",
+	"string.sub" :  "Strng.sub",
+	"string.replace" :  "Strng.replace",
+	"string.trim" : "Strng.trim",
+	"string.startswith" : "Strng.startsWith",
+	"string.endswith" : "Strng.endsWith",
+	"string.equalsignorecase" :  "Strng.equalsIgnoreCase",
+	"string.charat" : "Strng.charAt",
+	"string.compare" :  "Strng.compare",
+	"string.format" : "Strng.format",
+	"string.isasciialpha" : "Strng.isAsciiAlpha",
+	"string.isasciialphanumeric" :  "Strng.isAsciiAlphanumeric",
+	"string.containschars" :  "Strng.containsChars",
+	"string.containsonlygivenchars" : "Strng.containsOnlyGivenChars",
+	"string.isvalidemail" : "Strng.isStringValidEmail",
+	"string.isnumeric" :  "Strng.isNumeric",
+	"string.containsnogivenchars" : "Strng.containsNoGivenChars",
+	  
+	"table.append" :  "Table.append",
+	"table.concat" :  "Table.concat",
+	"table.contains" :  "Table.contains",
+	"table.filter" :  "Table.filter",
+	"table.get" : "Table.get",
+	"table.insert" :  "Table.insert",
+	"table.map" : "Table.map",
+	"table.mapnew" :  "Table.mapNew",
+	"table.remove" :  "Table.remove",
+	"table.removeall" : "Table.removeAll",
+	"table.sort" :  "Table.sort",
+	  
+	"timer.schedule" : "Timer.schedule",
+	"timer.cancel" :  "Timer.cancel",
+	"timer.setcallback" : "Timer.setCallback",
+	  
+	"tabwidget.add" : "Tabwidget.add",
+	  
+	"widget.setenabled" : "Widget.setEnable",
+	"widget.setfocus" : "Widget.setFocus",
+	"widget.setfontcolor" : "Widget.setFontColor",
+	"widget.setvisibility" :  "Widget.setVisibility",
+	  
+	"window.Alert" :  "Window.createAlert",
+	"window.Box" :  "Window.createBox",
+	"window.Button" : "Window.createButton",
+	"window.Form" : "Window.createForm",
+	"window.Calendar" : "Window.createCalendar",
+	"window.Camera" : "Window.createCamera",
+	"window.Chart" :  "Window.createChart",
+	"window.CheckBoxGroup" :  "Window.createCheckboxGroup",
+	"window.Skin" : "Window.createSkin",
+	"window.RadioButtonGroup" : "Window.createRadioGroup",
+	"window.Label" :  "Window.createLabel",
+	"window.TextField" :  "Window.createTextField",
+	"window.ListBox" :  "Window.createListBox",
+	"window.Image" :  "Window.createImage",
+	"window.Table" :  "Window.createTable",
+	"window.TabWidget" :  "Window.createTabWidget",
+	"window.Line" : "Window.createLine",
+	"window.ComboBox" : "Window.createComboBox",
+	"window.HorizontalImageStrip" : "Window.createHorizontalImageStrip",
+	"window.Gallery" :  "Window.createGallery",
+	"window.TextArea" : "Window.createTextArea",
+	"window.SegmentedUI" :  "Window.createSegUI",
+	"window.Link" : "Window.createLink",
+	"window.openurl" :  "Window.openUrl",
+	"window.openmediaurl" : "Window.openMediaUrl",
+	"window.Map" :  "Window.createMap",
+	"window.Web" :  "Window.createWeb",
+	"window.RichText" : "Window.createRichText",
+	"window.Popup" :  "Window.createPopUp",
+	"window.DataGrid" : "Window.createDataGrid",
+	"window.Slider" : "Window.createSlider",
+	"window.showloadingscreen" :  "Window.showLoadingScreen",
+	"window.dismissloadingscreen" : "Window.dismissLoadingScreen"
+  
+]
+
+global_tmpl(globalVars,globalFunctions) ::= <<
+
+package com.konylabs.NativeCodeApp;
+
+public class Global {
+    <globalVars; separator="\n">
+    <globalFunctions; separator="\n">
+}
+>>
+
+program_tmpl(fileName, vars,functions ) ::= <<
+package com.konylabs.NativeCodeApp;
+
+import com.konylabs.nativecodegen.api.*;
+import com.konylabs.vm.LuaTable;
+import com.konylabs.vm.Function;
+import com.konylabs.vm.LuaNil;
+
+public class <fileName> {
+    <vars; separator="\n">
+    <functions; separator="\n">
+}
+>>
+// START: file
+file(defs) ::= <<
+<defs; separator="\n">
+>>
+
+block_tmpl(stmt) ::= <<
+{
+  <stmt; separator="\n">
+}
+>>
+
+comment_tmpl(comment, stmt) ::= <<
+<stmt><if(comment)>/*<comment>*/<endif>
+>>
+blockComment_tmpl(comment, stmt) ::= <<
+<if(comment)>/*<comment>*/<endif>
+<stmt>
+>>
+comment2_tmpl(prevComment, stmt, postComment) ::= <<
+<if(prevComment)><prevComment><endif>
+<stmt><if(postComment)><postComment><endif>
+>>
+
+comment1_tmpl(comment, stmt) ::= <<
+/*<comment>*/
+<stmt>
+>>
+
+var_tmpl(prefix, type, name, init, ptype) ::= <<
+<type> <name> = <if(init)><if(ptype)>(<ptype>) <endif><init><else><typeInitMap.(type)><endif>;
+>>
+
+varDecl_tmpl(isGlobal, prefix, type, name, init, ptype) ::= <<
+<if(isGlobal)>public static <else>private static <endif><type> <if(prefix)><prefix>.<name><else><name><endif> = <if(init)><if(ptype)>(<ptype>) <endif><init><else><typeInitMap.(type)><endif>;
+>>
+
+varList_tmpl(vars) ::= <<
+<vars; separator="\n">
+>>
+
+assign_tmpl(isLocal, prefix, a, b, ptype) ::= <<
+<if(isLocal)><a> = <if(ptype)>(<ptype>) <endif><b><else><if(prefix)><prefix>.<endif><a> = <if(ptype)>(<ptype>) <endif><b><endif>;
+>>
+
+pow_tmpl(a,b) ::= "Math.pow(<a>,<b>)"
+
+expression_tmpl(expr) ::= <<
+<expr>
+>>
+
+bop_tmpl(op, a, b) ::= <<
+<a> <op> <b>
+>>
+
+uop_tmpl(op, a) ::= <<
+<op><a>
+>>
+
+double_equal_tmpl(a, b) ::= <<
+<a>.compareTo(<b>) == 0
+>>
+
+boolean_equal_tmpl(a, b) ::= <<
+<a>.equals(<b>)
+>>
+
+hash_tmpl(a) ::= "<a>.length()"
+
+expr_tmpl(expr) ::= "<expr>"
+
+arrAccess_tmpl(name,mem, tcast) ::= <<
+((LuaTable)(<mem>)).getTable(<name>)
+>>
+
+methodCallStmt_tmpl(call) ::= "<call>;"
+
+methodCall1_tmpl(prefix, name, args) ::= <<
+<if(javaMethodMap.(name))><javaMethodMap.(name)><else><if(prefix)><prefix>.<endif><name><endif>(<args; separator=",">)
+>>
+
+methodCall2_tmpl(cast, instance, name, args) ::= <<
+<if(instance)>((<cast>)<instance>).<endif><name>(new Object[] {<args; separator=",">})
+>>
+
+methodCall3_tmpl(cast, instance, name) ::= <<
+((<cast>)<instance>).<name>()
+>>
+
+javaapi_tmpl(name) ::= <<
+<if (javaAPIMap.(name))><javaAPIMap.(name)><else><name><endif>
+>>
+
+javaapiinstance_tmpl(name) ::= <<
+<if (javaAPIInstanceMap.(name))><javaAPIInstanceMap.(name)><else><name><endif>
+>>
+
+javaapiinstance0_tmpl(name) ::= <<
+<if (javaAPIInstance0Map.(name))><javaAPIInstance0Map.(name)><else><name><endif>
+>>
+
+javawidget_tmpl(name) ::= <<
+<if (javaWidgetMap.(name))><javaWidgetMap.(name)><else><name><endif>
+>>
+
+exprList_tmpl(expr) ::= <<
+<expr; separator=",">
+>>
+
+while_tmpl(cond, stmt) ::= <<
+while(<cond>)<stmt>
+>>
+
+doWhile_tmpl(cond, stmt) ::= <<
+do<stmt>while(<cond>);
+>>
+
+return_tmpl(val) ::= "return <val>;"
+
+if_stmt(cond, stmt, elb) ::= <<
+if(<cond>)<stmt><if(elb)>else <elb><endif>
+>>
+
+if_stmt1(cond, stmt) ::= "if(<cond>)<stmt>"
+
+ifelse_stmt(cond, stmt, elseb) ::= <<
+if(<cond>)<stmt><if(elseb)>else<elseb><endif>
+>>
+
+dotMember_tmpl(mem, name, cast, tcast) ::= <<
+<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")))<else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")<endif>
+>>
+
+method_dotMember_tmpl(mem, name) ::= <<
+<mem>.<name>
+>>
+
+ident_tmpl(name) ::= "<name>"
+
+dotList_tmpl(names) ::= <<
+<names; separator=".">
+>>
+
+param_tmpl(type, name) ::= "<type> <name>"
+
+paramList_tmpl(params) ::= <<
+<params; separator=",">
+>>
+
+vararg_tmpl() ::= <<
+Object arg
+>>
+
+methodDecl_tmpl(isLocal, type,name,params,bl) ::= <<
+<if(isLocal)>private <else>public static <endif><type> <name>(<params>)<if(bl)><bl><else>{ }<endif>
+>>
+
+forInit_tmpl(type, var , init) ::= "<type> <var> = <init>"
+forCondition_tmpl(name, cond) ::= <<
+<name> \< <cond>
+>> 
+
+forUpdater_tmpl(name, cond) ::= "<name><cond>" 
+
+for_tmpl(init, cond, updt, stmt) ::= <<
+<if(updt)>
+for(<init>;<cond>;<updt>)<stmt>
+<else>
+for(<init> ; <cond> ; <init.stmt.var>++)<stmt>
+<endif>
+>>
+
+forIpair_tmpl(val, val1, var, bl) ::= <<
+for(int <val>=1; (((Object) <var>) != LuaNil.nil) && <val> \< ((LuaTable) <var>).size(); <val>++){
+  <val1> = ((LuaTable) <var>).getTable(new Double(i));
+  <bl; separator="\n">
+} 
+>>
+
+forPair_tmpl(type, val, met, type1, var, bl) ::= <<
+java.util.Iterator _itr = <var>.iterator(); 
+for(int _idx = 0; _itr.hasNext(); _idx++){
+  <type> <val> = (<type>) _itr.getNext();
+  <bl; separator="\n">
+} 
+>>
+
+break_tmpl() ::= "break;"
+
+tbl_param_tmpl(type, name) ::= "<type> <name>"
+
+table_init_tmpl(tname) ::= <<
+<tname>
+>>
+
+table_func_tmpl(fname, tname, body, params) ::= <<
+private static LuaTable <fname>(<params; separator=",">)
+{
+     LuaTable <tname> = new LuaTable();
+     <body>
+     return <tname>;
+}
+>>
+
+tableInline_tmpl(tname, body) ::= <<
+LuaTable <tname> = new LuaTable();
+<body>
+>>
+
+fieldList_tmpl(field) ::= <<
+<field; separator=";\n">
+>>
+
+tblFieldList_tmpl(field) ::= <<
+<field; separator="\n">
+
+>>
+
+field1_tmpl(tname, expr, indx) ::= <<
+<tname>.setTable(new Double(<indx>), <expr>);
+>>
+
+field2_tmpl(tname, fname, expr, tcast) ::= <<
+<if(tcast)>((LuaTable)(<tname>))<else><tname><endif>.setTable("<fname>", <expr>);
+>>
+
+field3_tmpl(tname, expr1, expr2, tcast) ::= <<
+<if(tcast)>((LuaTable)(<tname>))<else><tname><endif>.setTable(<expr1>, <expr2>);
+>>
+
+field_tmpl(fields) ::= <<
+<fields; separator=",">
+>>
+
+qualifiedDecl_tmpl(prefix, mem) ::= "<if(prefix)><prefix>.<endif><mem>"
+

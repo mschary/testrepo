@@ -194,13 +194,13 @@ string = {
 table = {
 	str21 = concat(tbl1 --[[LuaTable]], sep --[[String]], num1 --[[int]], num2 --[[int]]) --[[String]]
 	, tbl21 = sort(tbl1 --[[LuaTable]], func --[[closure]]) --[[LuaTable]]
-	, tbl22 = insert(tbl1 --[[LuaTable]], pos --[[int]], value --[[String]]) --[[LuaTable]]
-	, value1 = remove(tbl1 --[[LuaTable]], pos --[[int]]) --[[todo]]	
+	, tbl22 = insert(tbl1 --[[LuaTable]], value --[[Object]]) --[[LuaTable]]
+	, value1 = remove(tbl1 --[[LuaTable]], pos --[[int]]) --[[Object]]	
 	, tbl23 = sort(tbl1 --[[LuaTable]], sortkey --[[String]]) --[[LuaTable]]
 	, tbl24 = filter(tbl1 --[[LuaTable]], criteria --[[closure]]) --[[LuaTable]]
 	, tbl25 = map(tbl1 --[[LuaTable]], func --[[closure]]) --[[LuaTable]]
 	, tbl26 = mapnew(tbl1 --[[LuaTable]], func --[[closure]]) --[[LuaTable]]
-	, value2 = get(tbl1 --[[LuaTable]], key --[[todo]]) --[[todo]]
+	, value2 = get(tbl1 --[[LuaTable]], key --[[String]]) --[[Object]]
 	, flag = contains(tbl1 --[[LuaTable]], key --[[todo]]) --[[boolean]]
 	, tbl31 = append(tbl1 --[[LuaTable]], tbl2 --[[LuaTable]]) --[[LuaTable]]
 	, v = removeall(id --[[String]]) --[[voidHandle.handle]] --//<<todo-crosscheck>>
@@ -265,25 +265,31 @@ os = {
 	
 }
 
-
 --//Global API's
 
 --//ipairs() 
 --//pairs()	 
 --//unpack(Table)
---//print(x,y,...) --todo
+--//print(x, y, ...) --[[todo]]
 --//[String] converttobase64([userdata]rawbytes)
 --//[userdata]rawbytes readfrombase64([userdata]rawbytes) 
 --//registerforidletimeout(timeout, function)
 --//unregisterforidletimeout()
 global = {
-a=ipairs() --todo
-,b=pairs()	 --todo
-,elem = unpack(tbl1 --[[LuaTable]]) --[[todo]]
-,c=print(x,y) --todo
-,str1 = converttobase64(rawbytes --[[todo]]) --[[String]]
-,rawbytes = readfrombase64(str1 --[[String]]) --[[todo]]
-,regtimeout = registerforidletimeout(timeout --[[int]], func --[[closure]]) --[[voidHandle.handle]]
-,tiout = unregisterforidletimeout() --[[voidHandle.handle]]
+_aasim_ipairs=ipairs() --[[voidHandle.handle]]
+,_aasim_pairs=pairs() --[[voidHandle.handle]]
+,_aasim_unpack = unpack(tbl1 --[[LuaTable]]) --[[todo]]
+,_aasim_print=print() --[[voidHandle.handle]]
+,_aasim_ctbase64 = converttobase64(rawbytes --[[todo]]) --[[String]]
+,_aasim_rfbase64 = readfrombase64(str1 --[[String]]) --[[todo]]
+,_aasim_rfitimeout = registerforidletimeout(timeout --[[int]], func --[[closure]]) --[[voidHandle.handle]]
+,_aasim_ufitimeout = unregisterforidletimeout() --[[voidHandle.handle]]
+,_aasim_samenu=setappmenu(appmenu --[[LuaTable]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]) --voidHandle.handle
+, _aasim_safindex=setappmenufocusindex(index --[[int]]) --voidHandle.handle
+, _aasim_hamitems= hideappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
+, _aasim_samitems=showappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
 }
+
+
+
 

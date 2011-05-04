@@ -1,7 +1,10 @@
 package com.kony.nativecodegen.actions;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -17,10 +20,12 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants;
 
 import com.kony.nativecodegen.NativeCodeGenPlugin;
 import com.kony.nativecodegen.ui.NativeCodePlatformSelectionDialog;
+import com.kony.nativecodegen.ui.VariableTypeSelectionDialog;
 import com.pat.tool.keditor.KEditorPlugin;
 import com.pat.tool.keditor.ant.AntRunner;
 import com.pat.tool.keditor.console.ConsoleDisplayManager;
@@ -43,6 +48,7 @@ import com.pat.tool.keditor.utils.ProjectProperties;
  */
 
 public class NativeCodeGenAction implements IObjectActionDelegate {
+
 
 
 	private IViewPart view;
@@ -71,7 +77,6 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 	private String httpPort = "80";
 	private String httpsPort = "443";
 	private String tcWebContext = KUtils.EMPTY_STRING;
-	private boolean isWinSelected = false;
 	
 	
 	private String pluginLoc;
@@ -92,8 +97,6 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 	private int jettyHttpsPortNum = 0;
 
 	private boolean bbBuildOption = true;
-	private boolean wmBuildOption = true;
-	private boolean wmsmoothScroll = true;
 	private boolean bbuseMDS = false;
 	private boolean removeComments = false;
 	private boolean enablei18n = false;
@@ -114,12 +117,18 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 	
 	long time;
 
-	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		view = (IViewPart) targetPart;
-	}
+    // ant constants
+	private static final String SOURCE_XML_DIR = "sourcexml.dir";
+	private static final String SOURCE_DIR = "source.dir";
+	private static final String BUILD_STATUS_FILE = "buildstatus.file";
+	private static final String TYPE_INFERENCE_FILE = "typeinfer.file";
+	private static final String DESTINATION_DIR = "destination.dir";
+	private static final String RESOURCE_DIR = "resource.dir";
+	private static final String CLASS_PATH = "classpath";
+	private static final String CLASS_NAME = "classname";
 
-	@Override
+
+	
 	public void run(IAction action) {
 		iphoneSelected = false;
 		androidSelected = false;
@@ -187,7 +196,7 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					antNativeProperties.put(Task.PLUGIN_LOC_KEY, pluginLoc);
 					
 					AntRunner nativeAnt = new AntRunner();
-					nativeAnt.setBuildFile(pluginLoc+"/nativefiles/nativebuild.xml");
+					nativeAnt.setBuildFile(pluginLoc + "nativefiles/nativebuild.xml");
 					nativeAnt.setTarget("all");
 					nativeAnt.setProps(antNativeProperties);
 					mainresult = nativeAnt.execute();
@@ -198,122 +207,99 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					
 					String serverLoc = tempLocation+"/build/server";
 					
-					String inputDir = serverLoc+"/iphonelua";
-					String outputDir = serverLoc+"/iphonenative";
-					
-					String apiDefLoc = pluginLoc+"/nativefiles/apiDef";
-					String javaSTG = pluginLoc+"/nativefiles/JavaSTG.stg";
-					
-					String andapiDefLoc = pluginLoc+"/nativefiles/andriodApiDef";
-					String andSTG = pluginLoc+"/nativefiles/AndriodSTG.stg";
-					
-					String resourcesDir = pluginLoc+"/nativefiles/iPhoneTrans/resources";
+					String srcDir = projLoc+"/luasrc";
+					String srcXmlDir = tempLocation + "/output";
+					String typeInferenceFile = tempLocation + "/typedef.properties";
+					String buildStatusFile = tempLocation + "/buildstatus.properties";
 					
 					HashMap<String, String> antRCProperties = getAntRCProperties();
+					antRCProperties.put(SOURCE_DIR, srcDir);
+					antRCProperties.put(SOURCE_XML_DIR, srcXmlDir);
+					antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
+					antRCProperties.put(BUILD_STATUS_FILE, buildStatusFile);
+
+					String resourceDir  = pluginLoc + "nativefiles/iphone";
+					String destDir = serverLoc+"/iphonenative";
+					String className = "com.konylabs.iphone.transformer.Transform";
+					String classpath = "iphone.classpath";
 					
-					String platform = "iphone";
+					antRCProperties.put(RESOURCE_DIR, resourceDir);
+					antRCProperties.put(DESTINATION_DIR, destDir);
+					antRCProperties.put(CLASS_NAME, className);
+					antRCProperties.put(CLASS_PATH, classpath);
+
+					//variable properties
 					
+					//com.konylabs.transformer.CodeGen.main(new String[] {inputDir, inputxml.dir, typedef.file, buildstatus.file, output.dir, platform, apidef.loc, stg.loc});
 					if(iphoneSelected) {
-						
-						//com.konylabs.iphone.transformer.Transform.main(new String[] {inputDir, outputDir, resourcesDir});
-						
-						AntRunner iphoneantRunner = new AntRunner();
-						iphoneantRunner.setBuildFile(pluginLoc+"/nativefiles/nativebuild.xml");
-						antRCProperties.put("input.dir", inputDir);
-						antRCProperties.put("output.dir", outputDir);
-						antRCProperties.put("resource.dir", resourcesDir);
-						iphoneantRunner.setProps(antRCProperties);
-						iphoneantRunner.setTarget("iphonerun");
-						boolean success = iphoneantRunner.execute();
-						
-						if (!success) {
+						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties)) {
+							//Handle KAR File, this may require restarting Jetty server
+							AntRunner antRunner = new AntRunner();
+							antRunner.setBuildFile(tempLocation+"/build/server/build.xml");
+							antRunner.setProps(antRCProperties);
+							antRunner.setTarget("nativeiphone");
+							antRunner.execute();
+							
+							TJetty jetty = new TJetty();
+							jetty.setClean(false);
+							jetty.execute();
+						} else {
 							errorStr += "iPhone";
-							Status status = new Status(Status.ERROR, KEditorPlugin.PLUGIN_ID, "Native code generation failed. See console for details");
-							return status;
 						}
-						
-						//Handle KAR File, this may require restarting Jetty server
-						
-						AntRunner antRunner = new AntRunner();
-						antRunner.setBuildFile(tempLocation+"/build/server/build.xml");
-						antRunner.setProps(antRCProperties);
-						antRunner.setTarget("nativeiphone");
-						antRunner.execute();
-						
-						TJetty jetty = new TJetty();
-						jetty.setClean(false);
-						jetty.execute();
-						
 					}
 					
 					if(bbSelected) {
-						platform = "bb";
-						inputDir = serverLoc+"/bblua";
-						outputDir = serverLoc+"/bbnative";
+						resourceDir  = pluginLoc + "nativefiles/blackberry";
+						destDir = serverLoc + "/bbnative";
+						className = "com.konylabs.transformer.Transform";
+						classpath = "bb.classpath";
+						antRCProperties.put(RESOURCE_DIR, resourceDir);
+						antRCProperties.put(DESTINATION_DIR, destDir);
+						antRCProperties.put(CLASS_NAME, className);
+						antRCProperties.put(CLASS_PATH, classpath);
 						
-						//com.konylabs.transformer.CodeGen.main(new String[] {inputDir, outputDir, platform, apiDefLoc, javaSTG});
-						AntRunner bbantRunner = new AntRunner();
-						bbantRunner.setBuildFile(pluginLoc+"/nativefiles/nativebuild.xml");
-						antRCProperties.put("input.dir", inputDir);
-						antRCProperties.put("output.dir", outputDir);
-						antRCProperties.put("platform", platform);
-						antRCProperties.put("apidef.loc", apiDefLoc);
-						antRCProperties.put("stg.loc", javaSTG);
-						bbantRunner.setProps(antRCProperties);
-						bbantRunner.setTarget("nativerun");
-						boolean success = bbantRunner.execute();
-						
-						if (!success) {
+						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties)) {
+							String rel =  KUtils.DEFAULT_BUILD_OPTION.equals(buildOption) ? "" : "-rel";
+							String bbrel =  bbBuildOption ? "" : "-lau";
+							bbrel = bbrel + rel;
+							antRCProperties.put("prefix", bbrel);
+							antRCProperties.put("usemds", bbuseMDS+"");
+							AntRunner antRunner = new AntRunner();
+							antRunner.setBuildFile(tempLocation+"/build/luaj2me/native/build.xml");
+							antRunner.setProps(antRCProperties);
+							antRunner.setTarget("copy");
+							antRunner.execute();
+						} else {
 							if(errorStr.length() > 0) errorStr += ", ";
 							errorStr += "Blackberry";
-							Status status = new Status(Status.ERROR, KEditorPlugin.PLUGIN_ID, "Native code generation failed. See console for details");
-							return status;
 						}
 						
-						
-						String rel =  KUtils.DEFAULT_BUILD_OPTION.equals(buildOption) ? "" : "-rel";
-						String bbrel =  bbBuildOption ? "" : "-lau";
-						bbrel = bbrel + rel;
-						antRCProperties.put("prefix", bbrel);
-						antRCProperties.put("usemds", bbuseMDS+"");
-						AntRunner antRunner = new AntRunner();
-						antRunner.setBuildFile(tempLocation+"/build/luaj2me/native/build.xml");
-						antRunner.setProps(antRCProperties);
-						antRunner.setTarget("copy");
-						antRunner.execute();
 					}
 					
 					if(androidSelected) {
-						platform = "andriod";
-						inputDir = serverLoc+"/androidlua";
-						outputDir = serverLoc+"/androidnative";
+						resourceDir  = pluginLoc + "nativefiles/android";
+						destDir = serverLoc+"/androidnative";
+						className = "com.konylabs.transformer.Transform";
+						classpath = "android.classpath";
+						antRCProperties.put(RESOURCE_DIR, resourceDir);
+						antRCProperties.put(DESTINATION_DIR, destDir);
+						antRCProperties.put(CLASS_NAME, className);
+						antRCProperties.put(CLASS_PATH, classpath);
 						
-						//com.konylabs.transformer.CodeGen.main(new String[] {inputDir, outputDir, platform, apiDefLoc, javaSTG});
-						AntRunner andantRunner = new AntRunner();
-						andantRunner.setBuildFile(pluginLoc+"/nativefiles/nativebuild.xml");
-						antRCProperties.put("input.dir", inputDir);
-						antRCProperties.put("output.dir", outputDir);
-						antRCProperties.put("platform", platform);
-						antRCProperties.put("apidef.loc", andapiDefLoc);
-						antRCProperties.put("stg.loc", andSTG);
-						andantRunner.setProps(antRCProperties);
-						andantRunner.setTarget("nativerun");
-						boolean success = andantRunner.execute();
-						if (!success) {
+						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties)) {
+							antRCProperties.put("nativecodegen", "true");
+							antRCProperties.put("android.nativedir", serverLoc+"/androidnative");
+							
+							TAndroidBuild androidBuild = new TAndroidBuild();
+							androidBuild.setProjectName(projectName);
+							androidBuild.setAndriodHome(androidHome);
+							androidBuild.setAntProperties(antRCProperties);
+							androidBuild.execute();
+						} else {
 							if(errorStr.length() > 0) errorStr += ", ";
 							errorStr += "Android";
-							Status status = new Status(Status.ERROR, KEditorPlugin.PLUGIN_ID, "Native code generation failed. See console for details");
-							return status;
 						}
-						
-						antRCProperties.put("nativecodegen", "true");
-						antRCProperties.put("android.nativedir", serverLoc+"/androidnative");
-						
-						TAndroidBuild androidBuild = new TAndroidBuild();
-						androidBuild.setProjectName(projectName);
-						androidBuild.setAndriodHome(androidHome);
-						androidBuild.setAntProperties(antRCProperties);
-						androidBuild.execute();
+
 					}
 					if (monitor.isCanceled()) {
             			this.cancel();
@@ -332,7 +318,7 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					} else if (!mainresult){
 						ConsoleDisplayManager.getDefault().println("Native code generation failed", ConsoleDisplayManager.MSG_ERROR);
 					} else {
-						ConsoleDisplayManager.getDefault().println("Native code generation is successfull", ConsoleDisplayManager.MSG_ERROR);
+						ConsoleDisplayManager.getDefault().println("Native code generation is successfull");
 					}
 	            	ConsoleDisplayManager.getDefault().println("Time taken for generating native code: "+(System.currentTimeMillis()-time));
 	            }
@@ -342,6 +328,55 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 	    job.setPriority(Job.BUILD);
 	    job.setUser(true);
 	    job.schedule();
+		}
+	}
+	
+	public static final String STATUS = "STATUS";
+	public static final String TYPE_INFERENCE_FAILURE = "2";
+	
+	private boolean executeNativeBuild(String typeDefFile, String buildStatusFile, Map<String, String> antRCProperties) {
+		boolean loop = true;
+		boolean success = false;
+		try {
+			if (new File(typeDefFile).exists()) {
+				promptTypeDefinitionDialog(typeDefFile);
+			}
+			while (loop) {
+				loop = false;
+				AntRunner antRunner = new AntRunner();
+				antRunner.setBuildFile(pluginLoc + "nativefiles/nativebuild.xml");
+				antRunner.setProps(antRCProperties);
+				antRunner.setTarget("nativerun");
+				success = antRunner.execute();
+				if (!success && new File(buildStatusFile).exists()) {
+					Properties properties = new Properties();
+					try {
+						properties.load(new FileReader(buildStatusFile));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					if (properties.get(STATUS).equals(TYPE_INFERENCE_FAILURE)) {
+						promptTypeDefinitionDialog(typeDefFile);
+						// try build with new values
+						loop = true;
+					}
+				}
+			}
+		} finally {
+			new File(buildStatusFile).delete();
+		}
+		return success;
+	}
+
+	public void promptTypeDefinitionDialog(String typeDefFile) {
+		Properties typeDefProperties = new Properties();
+		try {
+			typeDefProperties.load(new FileReader(typeDefFile));
+			VariableTypeSelectionDialog dialog = new VariableTypeSelectionDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), typeDefProperties);
+		    dialog.open();  
+		    typeDefProperties.store(new FileWriter(typeDefFile), null);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -453,27 +488,27 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 				}
 			}
 
-			if (projPropMap.containsKey(ProjectProperties.WIN_BUILD_OPTION_KEY)) {
-				String wmbuildStr = projPropMap.get(ProjectProperties.WIN_BUILD_OPTION_KEY);
-				if (wmbuildStr != null && wmbuildStr.trim().length() > 0 ) {
-					if("false".equals(wmbuildStr))  {
-						wmBuildOption = false;
-					} else {
-						wmBuildOption = true;
-					}					
-				}
-			}
-
-			if (projPropMap.containsKey(ProjectProperties.WIN_SMOOTH_SCROLL_KEY)) {
-				String wmsmoothStr = projPropMap.get(ProjectProperties.WIN_SMOOTH_SCROLL_KEY);
-				if (wmsmoothStr != null && wmsmoothStr.trim().length() > 0 ) {
-					if("false".equals(wmsmoothStr))  {
-						wmsmoothScroll = false;
-					} else {
-						wmsmoothScroll = true;
-					}					
-				}
-			}
+//			if (projPropMap.containsKey(ProjectProperties.WIN_BUILD_OPTION_KEY)) {
+//				String wmbuildStr = projPropMap.get(ProjectProperties.WIN_BUILD_OPTION_KEY);
+//				if (wmbuildStr != null && wmbuildStr.trim().length() > 0 ) {
+//					if("false".equals(wmbuildStr))  {
+//						wmBuildOption = false;
+//					} else {
+//						wmBuildOption = true;
+//					}					
+//				}
+//			}
+//
+//			if (projPropMap.containsKey(ProjectProperties.WIN_SMOOTH_SCROLL_KEY)) {
+//				String wmsmoothStr = projPropMap.get(ProjectProperties.WIN_SMOOTH_SCROLL_KEY);
+//				if (wmsmoothStr != null && wmsmoothStr.trim().length() > 0 ) {
+//					if("false".equals(wmsmoothStr))  {
+//						wmsmoothScroll = false;
+//					} else {
+//						wmsmoothScroll = true;
+//					}					
+//				}
+//			}
 
 			if (projPropMap.containsKey(ProjectProperties.COMMENT_MODULE_KEY)) {
 				String removeCommentStr = projPropMap.get(ProjectProperties.COMMENT_MODULE_KEY);
@@ -608,6 +643,10 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 		return valid;
 	}
 
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+		view = (IViewPart) targetPart;
+	}
+	
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
@@ -620,5 +659,4 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 			}
 		}
 	}
-
 }

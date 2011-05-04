@@ -23,27 +23,26 @@
     	   </classpath>
     	</taskdef>
     	
-        <path id="classpath">
-            <fileset dir="${plugin.loc}/lib" includes="*.jar"/>
+        <path id="iphone.classpath">
+            <fileset dir="${plugin.loc}/lib" includes="ioscodegen.jar,antlr-3.3-complete.jar"/>
         </path>
+        <path id="bb.classpath">
+            <fileset dir="${plugin.loc}/lib" includes="bbcodegen.jar,antlr-3.3-complete.jar"/>
+        </path>
+        <path id="android.classpath">
+            <fileset dir="${plugin.loc}/lib" includes = "droidcodegen.jar,antlr-3.3-complete.jar"/>
+        </path>
+    	
     </target>
 	
     
     <target name="createdir" depends="init">
-    	
     	<if>
     		<equals arg1="${iphone}" arg2="true"/>
     		<then>
     			<delete dir="${iphoneluadir}"/>
     			<delete dir="${iphonenativedir}"/>
-    			<mkdir dir="${iphoneluadir}"/>
     			<mkdir dir="${iphonenativedir}"/>
-    			
-    			<copy todir="${iphoneluadir}">
-    				<fileset dir ="${serverdir}/iphone" includes="*.lua"/>
-    				<fileset dir ="${serverdir}/iphone/scripts" includes="*.lua"/>
-    				<fileset dir ="${luadir}" includes="startup.lua,rcchannel.lua"/>
-    			</copy>
     		</then>
     	</if>
     	
@@ -52,14 +51,7 @@
     		<then>
     			<delete dir="${bbluadir}"/>
     			<delete dir="${bbnativedir}"/>
-    			<mkdir dir="${bbluadir}"/>
     			<mkdir dir="${bbnativedir}"/>
-    			
-    			<copy todir="${bbluadir}">
-    				<fileset dir ="${serverdir}/bb" includes="*.lua"/>
-    				<fileset dir ="${serverdir}/bb/scripts" includes="*.lua"/>
-    				<fileset dir ="${luadir}" includes="startup.lua,rcchannel.lua"/>
-    			</copy>
     			
     			<copy todir="${bbnativedir}">
     				<fileset dir ="${basedir}/blackberry" includes="*.java"/>
@@ -73,38 +65,22 @@
     		<then>
     			<delete dir="${androidluadir}"/>
     			<delete dir="${androidnativedir}"/>
-    			<mkdir dir="${androidluadir}"/>
     			<mkdir dir="${androidnativedir}"/>
-    			
-    			<copy todir="${androidluadir}">
-    				<fileset dir ="${serverdir}/android" includes="*.lua"/>
-    				<fileset dir ="${serverdir}/android/scripts" includes="*.lua"/>
-    				<fileset dir ="${luadir}" includes="startup.lua,rcchannel.lua"/>
-    			</copy>
     		</then>
     	</if>
     </target>
 	
-    <target name="iphonerun" depends="init">
-    	<java fork="true" classname="com.konylabs.iphone.transformer.Transform" failonerror="true">
-	    <arg value="${input.dir}"/>
-		<arg value="${output.dir}"/>
-		<arg value="${resource.dir}"/>
-    	<classpath>
-		    <path refid="classpath"/>
-		</classpath>
-   		</java>
-    </target>
-	
+	<!-- source.dir, sourcexml.dir, resource.dir, typeinfer.file, buildstatus.file, destination.dir -->
     <target name="nativerun" depends="init">
-    	<java fork="true" classname="com.konylabs.transformer.CodeGen">
-	    <arg value="${input.dir}"/>
-		<arg value="${output.dir}"/>
-		<arg value="${platform}"/>
-    	<arg value="${apidef.loc}"/>
-        <arg value="${stg.loc}"/>
+    	<java fork="true" classname = "${classname}">
+	    <arg value="${source.dir}"/>
+        <arg value="${sourcexml.dir}"/>
+    	<arg value="${resource.dir}"/>
+        <arg value="${typeinfer.file}"/>
+        <arg value="${buildstatus.file}"/>
+		<arg value="${destination.dir}"/>
     	<classpath>
-		    <path refid="classpath"/>
+		    <path refid="${classpath}"/>
 		</classpath>
    		</java>
     </target>
