@@ -207,22 +207,22 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					
 					String serverLoc = tempLocation+"/build/server";
 					
-					String srcDir = projLoc+"/luasrc";
 					String srcXmlDir = tempLocation + "/output";
 					String typeInferenceFile = tempLocation + "/typedef.properties";
 					String buildStatusFile = tempLocation + "/buildstatus.properties";
 					
 					HashMap<String, String> antRCProperties = getAntRCProperties();
-					antRCProperties.put(SOURCE_DIR, srcDir);
 					antRCProperties.put(SOURCE_XML_DIR, srcXmlDir);
 					antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 					antRCProperties.put(BUILD_STATUS_FILE, buildStatusFile);
 
+					String srcDir = projLoc+"/luasrc/iphone";
 					String resourceDir  = pluginLoc + "nativefiles/iphone";
 					String destDir = serverLoc+"/iphonenative";
 					String className = "com.konylabs.iphone.transformer.Transform";
 					String classpath = "iphone.classpath";
 					
+					antRCProperties.put(SOURCE_DIR, srcDir);
 					antRCProperties.put(RESOURCE_DIR, resourceDir);
 					antRCProperties.put(DESTINATION_DIR, destDir);
 					antRCProperties.put(CLASS_NAME, className);
@@ -249,10 +249,12 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					}
 					
 					if(bbSelected) {
+						srcDir = projLoc+"/luasrc/bb";
 						resourceDir  = pluginLoc + "nativefiles/blackberry";
 						destDir = serverLoc + "/bbnative";
 						className = "com.konylabs.transformer.Transform";
 						classpath = "bb.classpath";
+						antRCProperties.put(SOURCE_DIR, srcDir);
 						antRCProperties.put(RESOURCE_DIR, resourceDir);
 						antRCProperties.put(DESTINATION_DIR, destDir);
 						antRCProperties.put(CLASS_NAME, className);
@@ -277,10 +279,12 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					}
 					
 					if(androidSelected) {
+						srcDir = projLoc+"/luasrc/android";
 						resourceDir  = pluginLoc + "nativefiles/android";
 						destDir = serverLoc+"/androidnative";
 						className = "com.konylabs.transformer.Transform";
 						classpath = "android.classpath";
+						antRCProperties.put(SOURCE_DIR, srcDir);
 						antRCProperties.put(RESOURCE_DIR, resourceDir);
 						antRCProperties.put(DESTINATION_DIR, destDir);
 						antRCProperties.put(CLASS_NAME, className);
