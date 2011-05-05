@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="kony.dsl"
+      label="Kony DSL Editor Feature"
+      version="{pluginversion}"
+      provider-name="KonySolutions">
+
+   <description url="http://10.10.19.180/dashboard/{branch}/updatesite/{timestamp}/version{timestamp}.html">
+      Kony Labs Platform - Build:{build}  Version:{platformversion}
+   </description>
+
+   <copyright url="http://10.10.19.180/dashboard/{branch}/updatesite/{branch}/version{timestamp}.html">
+   	  Copyright 2008 KonySolutions. All rights reserved.
+   </copyright>
+
+   <license url="http://10.10.19.180/dashboard/{branch}/updatesite/{branch}/version{timestamp}.html">
+      [Need to place license here]
+   </license>
+
+   <url>
+      <update label="Kony Dev Studio Update" url="http://10.10.19.180/dashboard/{branch}/updatesite/"/>
+   </url>
+   
+   <plugin
+         id="kony.dsl"
+         download-size="0"
+         install-size="0"
+         version="{pluginversion}"
+         unpack="false"/>
+</feature>
