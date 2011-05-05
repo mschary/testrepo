@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://10.10.10.21/dashboard/{branch}/updatesite/">
+     Kony Solutions BlackBerry and J2ME Plugin - Build:{build} and Version:{platformversion}
+   </description>
+   <feature url="features/com.pat.j2me_{sitepluginjar}.jar" id="com.pat.j2me" version="{pluginversion}" patch="true">
+      <category name="KBlackBerry"/>
+   </feature>
+   
+   <category-def name="KBlackBerry" label="Kony BlackBerry and J2ME Plugin"/>
+</site>

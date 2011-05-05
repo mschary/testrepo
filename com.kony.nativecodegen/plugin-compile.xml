@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="compile" name="build">
+	<target name="init">
+		<property name="dist.dir" value="bin"/>
+		<mkdir dir="${dist.dir}"/>
+		
+		<property name="src.dir" value="src"/>
+		<property name="eclipse.dir" location="D:\\eclipse\\plugins"/>
+		<property name="devtools.dist.dir" location="../../devtools/trunk/guieditor/dist"/>
+		
+	</target>
+	
+	<target name="compile" depends="init, clean">
+		 <path id="base.path">
+			  <fileset dir="${devtools.dist.dir}">
+				<include name="**/*.jar"/>
+		      </fileset>
+		      <fileset dir="${eclipse.dir}">
+				<include name="**/*.jar"/>
+		      </fileset>			  
+		 </path>
+
+		<javac srcdir="${src.dir}" destdir="${dist.dir}"  classpathref="base.path"/>
+	</target>
+	
+	<target name="clean">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${dist.dir}" includes="**/*"/>
+		</delete>
+	</target>
+</project>

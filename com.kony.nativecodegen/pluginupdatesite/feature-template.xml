@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.kony.nativecodegen"
+      label="Kony BlackBerry Feature"
+      version="{pluginversion}"
+      provider-name="KonySolutions">
+
+   <description url="http://10.10.19.180/dashboard/{branch}/updatesite/{timestamp}/version{timestamp}.html">
+      Kony BlackBerry and J2ME Platform - Build:{build}  Version:{platformversion}
+   </description>
+
+   <copyright url="http://10.10.19.180/dashboard/{branch}/updatesite/version{timestamp}.html">
+   	  Copyright 2008 KonySolutions. All rights reserved.
+   </copyright>
+
+   <license url="http://10.10.19.180/dashboard/{branch}/updatesite/version{timestamp}.html">
+      [Need to place license here]
+   </license>
+
+   <url>
+      <update label="Kony Native Codegen plugin" url="http://10.10.19.180/dashboard/{branch}/updatesite/"/>
+   </url>
+
+   <plugin
+         id="com.kony.nativecodegen"
+         download-size="0"
+         install-size="0"
+         version="{pluginversion}"
+         unpack="false"/>
+</feature>

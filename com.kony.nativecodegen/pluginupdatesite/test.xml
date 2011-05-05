@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" basedir="." default="init">
+<target name="init">
+<jar destfile="features/com.pat.j2me_rc20_1.jar" basedir="features"/>
+</target>
+</project>
