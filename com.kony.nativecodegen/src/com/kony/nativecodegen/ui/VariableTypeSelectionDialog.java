@@ -24,14 +24,19 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.pat.tool.keditor.propertyDescriptor.TableLabelProvider;
+import com.pat.tool.keditor.utils.SWTResourceUtil;
 
 public class VariableTypeSelectionDialog extends Dialog {
 
@@ -43,26 +48,30 @@ public class VariableTypeSelectionDialog extends Dialog {
 	private Properties variablesMap;
 	private Map<Object, Object> backupMap = new HashMap<Object, Object>();
 	private TableViewer viewer;
+	private String message;
 	private static List<String> variableTypes = new ArrayList<String>();
 
 	static {
-		variableTypes.add("Number");
-		variableTypes.add("Boolean");
-		variableTypes.add("String");
-		variableTypes.add("LuaTable");
+		variableTypes.add("number");
+		variableTypes.add("boolean");
+		variableTypes.add("string");
+		variableTypes.add("luatable");
 	}
 
-	public VariableTypeSelectionDialog(Shell parentShell, Properties variablesMap) {
+	public VariableTypeSelectionDialog(Shell parentShell, Properties variablesMap, String message) {
 		super(parentShell);
-		setShellStyle(getShellStyle() | SWT.RESIZE);
+		setShellStyle(SWT.RESIZE | SWT.MODELESS);
 		this.variablesMap = variablesMap;
 		backupMap.putAll(variablesMap);
+		this.message = message;
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		getShell().setText("Variable Selection");
 		Composite container = new Composite(parent, SWT.NONE);
-		GridDataFactory.fillDefaults().grab(true, true).hint(450, 200).applyTo(container);
+		int heightHint = Math.min(variablesMap.size() * 25, Display.getDefault().getClientArea().height / 2);
+		GridDataFactory.fillDefaults().grab(true, true).hint(500, heightHint).applyTo(container);
 		viewer = new TableViewer(container, SWT.FULL_SELECTION);
 		Table table = viewer.getTable();
 		table.setHeaderVisible(true);
@@ -81,9 +90,9 @@ public class VariableTypeSelectionDialog extends Dialog {
 
 		TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		container.setLayout(tableColumnLayout);
-		tableColumnLayout.setColumnData(variableColumn, new ColumnWeightData(40, 150, true));
-		tableColumnLayout.setColumnData(dataTypeColumn, new ColumnWeightData(30, 100, true));
-		tableColumnLayout.setColumnData(usageColumn, new ColumnWeightData(30, 100, true));
+		tableColumnLayout.setColumnData(variableColumn, new ColumnWeightData(80, 300, true));
+		tableColumnLayout.setColumnData(dataTypeColumn, new ColumnWeightData(10, 100, true));
+		tableColumnLayout.setColumnData(usageColumn, new ColumnWeightData(10, 100, true));
 
 		viewer.setInput(variablesMap);
 
@@ -91,7 +100,13 @@ public class VariableTypeSelectionDialog extends Dialog {
 		viewer.setCellModifier(getCellModifier());
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(table), new ComboBoxCellEditor(table, variableTypes.toArray(new String[0])), new TextCellEditor(table) });
 		viewer.setSorter(new ViewerSorter());
-
+		Label messageLabel = new Label(parent, SWT.WRAP);
+		GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.CENTER).hint(500, SWT.DEFAULT).applyTo(messageLabel);
+		messageLabel.setText(message);
+		Color blueColor = new Color(Display.getDefault(), new RGB(0, 0, 255));
+		SWTResourceUtil.cleanupOnDispose(messageLabel, blueColor);
+		messageLabel.setForeground(blueColor);
+		
 		return container;
 	}
 
@@ -101,7 +116,11 @@ public class VariableTypeSelectionDialog extends Dialog {
 			@Override
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
-				String newValue = variableTypes.get((Integer) value) + DELIMITER + getUsageStatus(variablesMap.get(tableItem.getText()).toString());
+				Integer intValue = Integer.parseInt(value.toString());
+				if (intValue == -1) {
+					intValue++;
+				}
+				String newValue = variableTypes.get(intValue) + DELIMITER + getUsageStatus(variablesMap.get(tableItem.getText()).toString());
 				variablesMap.put(tableItem.getText(), newValue);
 				viewer.refresh();
 			}
@@ -195,18 +214,25 @@ public class VariableTypeSelectionDialog extends Dialog {
 	}
 
 	private String getUsageStatus(String value) {
+		if (value == null) {
+			return Boolean.TRUE.toString();
+		}
 		String[] split = value.split(DELIMITER);
 		return split.length == 2 ? value.split(DELIMITER)[1] : Boolean.TRUE.toString();
 	}
 
 	public static void main(String[] args) {
+		test();
+	}
+
+	public static void test() {
 		Properties properties = new Properties();
 		properties.put("Name", "String:true");
 		properties.put("Age", "String");
-		properties.put("Sex", "Boolean:false");
+		properties.put("Sex", "");
 		properties.put("Id", "Number:true");
 		properties.put("Address", "LuaTable:true");
-		VariableTypeSelectionDialog dialog = new VariableTypeSelectionDialog(null, properties);
+		VariableTypeSelectionDialog dialog = new VariableTypeSelectionDialog(new Shell(), properties, "Select type for the above variables");
 		dialog.open();
 		System.out.println(properties);
 	}

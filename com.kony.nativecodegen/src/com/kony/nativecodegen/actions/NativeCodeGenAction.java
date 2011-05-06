@@ -17,10 +17,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants;
 
 import com.kony.nativecodegen.NativeCodeGenPlugin;
@@ -49,8 +49,6 @@ import com.pat.tool.keditor.utils.ProjectProperties;
 
 public class NativeCodeGenAction implements IObjectActionDelegate {
 
-
-
 	private IViewPart view;
 
 	private ResourceLeaf selectedElement;
@@ -67,7 +65,6 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 	
 	private String imgMagicHome = KUtils.EMPTY_STRING;
 	private String androidHome = KUtils.EMPTY_STRING;
-	private String publishURL = KUtils.EMPTY_STRING;
 	private String buildOption = KUtils.DEFAULT_BUILD_OPTION;
 	private String appID =  KUtils.EMPTY_STRING;
 	private String appName =  KUtils.EMPTY_STRING;
@@ -127,6 +124,10 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 	private static final String CLASS_PATH = "classpath";
 	private static final String CLASS_NAME = "classname";
 
+	//update cleantempappfolder task of masterbuild.xml when below file names are modified
+	private static final String IPHONE_TYPE_INFERENCE_FILE = "/typeinference_iphone.properties";
+	private static final String ANDROID_TYPE_INFERENCE_FILE = "/typeinference_android.properties";
+	private static final String BB_TYPE_INFERENCE_FILE = "/typeinference_bb.properties";
 
 	
 	public void run(IAction action) {
@@ -208,22 +209,22 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					String serverLoc = tempLocation+"/build/server";
 					
 					String srcXmlDir = tempLocation + "/output";
-					String typeInferenceFile = tempLocation + "/typedef.properties";
 					String buildStatusFile = tempLocation + "/buildstatus.properties";
 					
 					HashMap<String, String> antRCProperties = getAntRCProperties();
 					antRCProperties.put(SOURCE_XML_DIR, srcXmlDir);
-					antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 					antRCProperties.put(BUILD_STATUS_FILE, buildStatusFile);
 
 					String srcDir = projLoc+"/luasrc/iphone";
 					String resourceDir  = pluginLoc + "nativefiles/iphone";
+					String typeInferenceFile = tempLocation + IPHONE_TYPE_INFERENCE_FILE;
 					String destDir = serverLoc+"/iphonenative";
 					String className = "com.konylabs.iphone.transformer.Transform";
 					String classpath = "iphone.classpath";
 					
 					antRCProperties.put(SOURCE_DIR, srcDir);
 					antRCProperties.put(RESOURCE_DIR, resourceDir);
+					antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 					antRCProperties.put(DESTINATION_DIR, destDir);
 					antRCProperties.put(CLASS_NAME, className);
 					antRCProperties.put(CLASS_PATH, classpath);
@@ -232,7 +233,7 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					
 					//com.konylabs.transformer.CodeGen.main(new String[] {inputDir, inputxml.dir, typedef.file, buildstatus.file, output.dir, platform, apidef.loc, stg.loc});
 					if(iphoneSelected) {
-						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties)) {
+						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties, "iPhone")) {
 							//Handle KAR File, this may require restarting Jetty server
 							AntRunner antRunner = new AntRunner();
 							antRunner.setBuildFile(tempLocation+"/build/server/build.xml");
@@ -251,16 +252,18 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					if(bbSelected) {
 						srcDir = projLoc+"/luasrc/bb";
 						resourceDir  = pluginLoc + "nativefiles/blackberry";
+						typeInferenceFile = tempLocation + BB_TYPE_INFERENCE_FILE;
 						destDir = serverLoc + "/bbnative";
 						className = "com.konylabs.transformer.Transform";
 						classpath = "bb.classpath";
 						antRCProperties.put(SOURCE_DIR, srcDir);
 						antRCProperties.put(RESOURCE_DIR, resourceDir);
+						antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 						antRCProperties.put(DESTINATION_DIR, destDir);
 						antRCProperties.put(CLASS_NAME, className);
 						antRCProperties.put(CLASS_PATH, classpath);
 						
-						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties)) {
+						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties, "Blackberry")) {
 							String rel =  KUtils.DEFAULT_BUILD_OPTION.equals(buildOption) ? "" : "-rel";
 							String bbrel =  bbBuildOption ? "" : "-lau";
 							bbrel = bbrel + rel;
@@ -281,16 +284,18 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					if(androidSelected) {
 						srcDir = projLoc+"/luasrc/android";
 						resourceDir  = pluginLoc + "nativefiles/android";
+						typeInferenceFile = tempLocation + ANDROID_TYPE_INFERENCE_FILE;
 						destDir = serverLoc+"/androidnative";
 						className = "com.konylabs.transformer.Transform";
 						classpath = "android.classpath";
 						antRCProperties.put(SOURCE_DIR, srcDir);
 						antRCProperties.put(RESOURCE_DIR, resourceDir);
+						antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 						antRCProperties.put(DESTINATION_DIR, destDir);
 						antRCProperties.put(CLASS_NAME, className);
 						antRCProperties.put(CLASS_PATH, classpath);
 						
-						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties)) {
+						if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties, "Android")) {
 							antRCProperties.put("nativecodegen", "true");
 							antRCProperties.put("android.nativedir", serverLoc+"/androidnative");
 							
@@ -335,15 +340,17 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 		}
 	}
 	
-	public static final String STATUS = "STATUS";
-	public static final String TYPE_INFERENCE_FAILURE = "2";
-	
-	private boolean executeNativeBuild(String typeDefFile, String buildStatusFile, Map<String, String> antRCProperties) {
+	private static final String STATUS_KEY = "Status";
+	private static final String STATUS_FAILED_TYPE_INFERENCE = "FAILED_TYPE_INFERENCE";
+	private static final String SELECT_TYPE_INFERENCE = "Please sepecify types for the above variables.";
+
+
+	private boolean executeNativeBuild(String typeInferenceFile, String buildStatusFile, Map<String, String> antRCProperties, String platform) {
 		boolean loop = true;
 		boolean success = false;
 		try {
-			if (new File(typeDefFile).exists()) {
-				promptTypeDefinitionDialog(typeDefFile);
+			if (new File(typeInferenceFile).exists()) {
+				promptTypeDefinitionDialog(typeInferenceFile, platform + ": " + SELECT_TYPE_INFERENCE);
 			}
 			while (loop) {
 				loop = false;
@@ -359,8 +366,8 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					if (properties.get(STATUS).equals(TYPE_INFERENCE_FAILURE)) {
-						promptTypeDefinitionDialog(typeDefFile);
+					if (properties.get(STATUS_KEY).equals(STATUS_FAILED_TYPE_INFERENCE)) {
+						promptTypeDefinitionDialog(typeInferenceFile, platform + ": " + SELECT_TYPE_INFERENCE);
 						// try build with new values
 						loop = true;
 					}
@@ -372,16 +379,21 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 		return success;
 	}
 
-	public void promptTypeDefinitionDialog(String typeDefFile) {
-		Properties typeDefProperties = new Properties();
-		try {
-			typeDefProperties.load(new FileReader(typeDefFile));
-			VariableTypeSelectionDialog dialog = new VariableTypeSelectionDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), typeDefProperties);
-		    dialog.open();  
-		    typeDefProperties.store(new FileWriter(typeDefFile), null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void promptTypeDefinitionDialog(final String typeDefFile, final String message) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Properties typeDefProperties = new Properties();
+					typeDefProperties.load(new FileReader(typeDefFile));
+					VariableTypeSelectionDialog dialog = new VariableTypeSelectionDialog(null, typeDefProperties, message);
+					dialog.open();
+					typeDefProperties.store(new FileWriter(typeDefFile), null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	private void loadProjProperties() {
