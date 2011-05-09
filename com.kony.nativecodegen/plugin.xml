@@ -22,5 +22,15 @@
          </visibility>
       </objectContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.kony.nativecodegen.ui.VariableTypeInferenceEditor"
+            default="false"
+            extensions="npf"
+            id="com.kony.nativecodegen.ui.VariableTypeInferenceEditor"
+            name="Type Inference Editor">
+      </editor>
+   </extension>
 
 </plugin>
