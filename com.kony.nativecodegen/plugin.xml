@@ -28,6 +28,7 @@
             class="com.kony.nativecodegen.ui.VariableTypeInferenceEditor"
             default="false"
             extensions="npf"
+            icon="icons/variables.png"
             id="com.kony.nativecodegen.ui.VariableTypeInferenceEditor"
             name="Type Inference Editor">
       </editor>

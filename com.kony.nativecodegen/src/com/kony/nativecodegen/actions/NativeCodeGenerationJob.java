@@ -9,7 +9,9 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -188,7 +190,7 @@ public class NativeCodeGenerationJob extends Job {
 
 			// com.konylabs.transformer.CodeGen.main(new String[] {source.dir, sourcexml.dir, resource.dir, typeinfer.file, buildstatus.file, destination.dir});
 			if (iphoneSelected) {
-				if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties, platform)) {
+				if (executeNativeBuild(buildStatusFile, antRCProperties, platform)) {
 					// Handle KAR File, this may require restarting Jetty server
 					AntRunner antRunner = new AntRunner();
 					antRunner.setBuildFile(tempLocation + "/build/server/build.xml");
@@ -220,7 +222,7 @@ public class NativeCodeGenerationJob extends Job {
 				antRCProperties.put(CLASS_NAME, className);
 				antRCProperties.put(CLASS_PATH, classpath);
 			
-				if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties, platform)) {
+				if (executeNativeBuild(buildStatusFile, antRCProperties, platform)) {
 					String rel = KUtils.DEFAULT_BUILD_OPTION.equals(buildOption) ? "" : "-rel";
 					String bbrel = bbBuildOption ? "" : "-lau";
 					bbrel = bbrel + rel;
@@ -252,7 +254,7 @@ public class NativeCodeGenerationJob extends Job {
 				antRCProperties.put(CLASS_NAME, className);
 				antRCProperties.put(CLASS_PATH, classpath);
 
-				if (executeNativeBuild(typeInferenceFile, buildStatusFile, antRCProperties, platform)) {
+				if (executeNativeBuild(buildStatusFile, antRCProperties, platform)) {
 					antRCProperties.put("nativecodegen", "true");
 					antRCProperties.put("android.nativedir", serverLoc + "/androidnative");
 
@@ -290,10 +292,9 @@ public class NativeCodeGenerationJob extends Job {
 	
 	private static final String STATUS_KEY = "Status";
 	private static final String STATUS_FAILED_TYPE_INFERENCE = "FAILED_TYPE_INFERENCE";
-	private static final String SELECT_TYPE_INFERENCE = "Please sepecify types for the above variables.";
 
 
-	private boolean executeNativeBuild(String typeInferenceFile, String buildStatusFile, Map<String, String> antRCProperties, String platform) {
+	private boolean executeNativeBuild(String buildStatusFile, Map<String, String> antRCProperties, String platform) {
 		boolean success = false;
 			AntRunner antRunner = new AntRunner();
 			antRunner.setBuildFile(pluginLoc + "nativefiles/nativebuild.xml");
@@ -318,14 +319,20 @@ public class NativeCodeGenerationJob extends Job {
 					}
 				}
 				if (properties.get(STATUS_KEY).equals(STATUS_FAILED_TYPE_INFERENCE)) {
-					openInferenceditor(typeInferenceFile, platform + ": " + SELECT_TYPE_INFERENCE);
+					try {
+						typeInferenceFile.refreshLocal(IResource.DEPTH_ZERO, null);
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+					openInferenceditor();
+					ConsoleDisplayManager.getDefault().println("Unable to resolve types for variables.", ConsoleDisplayManager.MSG_ERROR);
 					return false;
 				}
 			}
 		return success;
 	}
 
-	public void openInferenceditor(final String typeDefFile, final String message) {
+	public void openInferenceditor() {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {

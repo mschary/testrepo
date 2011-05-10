@@ -35,12 +35,9 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -54,7 +51,6 @@ import org.eclipse.ui.part.EditorPart;
 
 import com.kony.nativecodegen.actions.NativeCodeGenerationJob;
 import com.pat.tool.keditor.propertyDescriptor.TableLabelProvider;
-import com.pat.tool.keditor.utils.SWTResourceUtil;
 
 public class VariableTypeInferenceEditor extends EditorPart {
 
@@ -116,19 +112,19 @@ public class VariableTypeInferenceEditor extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-		Composite container = formToolkit.createComposite(parent, SWT.NONE);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(container);
-	    GridLayoutFactory.fillDefaults().numColumns(2).applyTo(container);
-		
-		final Section section = formToolkit.createSection(container, Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED);
-		section.setText("Unresolved Variables");
-		section.setDescription("Specify variable types for the below variables.");
+		final Section section = formToolkit.createSection(parent, Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED);
+		section.setText("Unresolved Variables for " + NativeCodeGenerationJob.getPlatformName(file.getName()));
+		section.setDescription("There is a conflict in resolving types for below variables. Please select appropriate types and click run to proceed for native code generation.");
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 	    GridLayoutFactory.fillDefaults().applyTo(section);
-	    Composite tableHolder = formToolkit.createComposite(section, SWT.BORDER);
-	    section.setClient(tableHolder);
-		createTable(tableHolder);
 		
+	    Composite container = formToolkit.createComposite(section, SWT.NONE);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(container);
+	    GridLayoutFactory.fillDefaults().margins(0, 5).numColumns(2).applyTo(container);
+	  
+	    Composite tableHolder = formToolkit.createComposite(container, SWT.BORDER);
+	    section.setClient(container);
+		createTable(tableHolder);
 		Composite buttonComposite =  formToolkit.createComposite(container, SWT.NONE);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.END).grab(false, false).applyTo(buttonComposite);
 	    GridLayoutFactory.fillDefaults().applyTo(buttonComposite);
@@ -151,6 +147,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 	    
 	    Button resetButton = formToolkit.createButton(buttonComposite, "Reset", SWT.NONE);
 	    GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(resetButton);
+	    resetButton.setToolTipText("Discard changes made after opening the editor.");
 		resetButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -162,8 +159,9 @@ public class VariableTypeInferenceEditor extends EditorPart {
 		});
 	    
 	    
-	    Button launchButton = formToolkit.createButton(buttonComposite, "Launch", SWT.NONE);
+	    Button launchButton = formToolkit.createButton(buttonComposite, "Run", SWT.NONE);
 	    GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.TOP).applyTo(launchButton);
+	    launchButton.setToolTipText("Generate native code for " + getPartName());
 		launchButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -192,14 +190,6 @@ public class VariableTypeInferenceEditor extends EditorPart {
 				}
 			}
 		});
-		
-		String message = "Note: Press launch button to generate the native code";
-		Label messageLabel = formToolkit.createLabel(container, message, SWT.WRAP);
-		GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.CENTER).span(2, 1).applyTo(messageLabel);
-		Color blueColor = new Color(Display.getDefault(), new RGB(0, 0, 255));
-		SWTResourceUtil.cleanupOnDispose(messageLabel, blueColor);
-		messageLabel.setForeground(blueColor);
-		
 	}
 
 	public void createTable(Composite tableHolder) {
