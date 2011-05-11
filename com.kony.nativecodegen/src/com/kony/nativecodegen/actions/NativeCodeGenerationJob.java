@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.graphics.RGB;
@@ -112,11 +114,16 @@ public class NativeCodeGenerationJob extends Job {
 	public static final String IPHONE_TYPE_INFERENCE_FILE = "typeinference_iphone.npf";
 	public static final String ANDROID_TYPE_INFERENCE_FILE = "typeinference_android.npf";
 	public static final String BB_TYPE_INFERENCE_FILE = "typeinference_bb.npf";
-	
 	private static final String IPHONE_STATUS_FILE = "iphone_buildstatus.properties";
 	private static final String ANDROID_STATUS_FILE = "android_buildstatus.properties";
 	private static final String BB_STATUS_FILE = "bb_buildstatus.properties";
 	private static final char FILE_SEPARATOR = '/';
+	private static final String LUASRC_ANDROID = "/luasrc/android";
+	private static final String LUASRC_BB = "/luasrc/bb";
+	private static final String LUASRC_IPHONE = "/luasrc/iphone";
+	private static final String GENERATED_FOLDER = "/generated";
+
+	
     private IFile typeInferenceFile;	
 	
 	public NativeCodeGenerationJob(String name, String projectName, String inferenceFileName) {
@@ -170,7 +177,7 @@ public class NativeCodeGenerationJob extends Job {
 			HashMap<String, String> antRCProperties = getAntRCProperties();
 			antRCProperties.put(SOURCE_XML_DIR, srcXmlDir);
 
-			String srcDir = projLoc + "/luasrc/iphone";
+			String srcDir = projLoc + LUASRC_IPHONE;
 			String resourceDir = pluginLoc + "nativefiles/iphone";
 			String typeInferenceFile = projLoc + FILE_SEPARATOR +  IPHONE_TYPE_INFERENCE_FILE;
 			String buildStatusFile = tempLocation + FILE_SEPARATOR + IPHONE_STATUS_FILE;
@@ -207,7 +214,7 @@ public class NativeCodeGenerationJob extends Job {
 			}
 
 			if (bbSelected) {
-				srcDir = projLoc + "/luasrc/bb";
+				srcDir = projLoc + LUASRC_BB;
 				resourceDir = pluginLoc + "nativefiles/blackberry";
 				typeInferenceFile = projLoc + FILE_SEPARATOR + BB_TYPE_INFERENCE_FILE;
 				buildStatusFile = tempLocation + FILE_SEPARATOR + BB_STATUS_FILE;
@@ -239,7 +246,7 @@ public class NativeCodeGenerationJob extends Job {
 			}
 
 			if (androidSelected) {
-				srcDir = projLoc + "/luasrc/android";
+				srcDir = projLoc + LUASRC_ANDROID;
 				resourceDir = pluginLoc + "nativefiles/android";
 				typeInferenceFile = projLoc + FILE_SEPARATOR + ANDROID_TYPE_INFERENCE_FILE;
 				buildStatusFile = tempLocation + FILE_SEPARATOR + ANDROID_STATUS_FILE;
@@ -625,6 +632,27 @@ public class NativeCodeGenerationJob extends Job {
 		} else {
 			return "Blackberry";
 		}
+	}
+	
+	
+	public static IFile getSourceFile(String fileName, String inferenceFileName, IProject project) throws CoreException {
+		String folderPath = null;
+		if (inferenceFileName.equals(IPHONE_TYPE_INFERENCE_FILE)) {
+			folderPath = LUASRC_IPHONE + GENERATED_FOLDER;
+		} else if (inferenceFileName.equals(ANDROID_TYPE_INFERENCE_FILE)) {
+			folderPath = LUASRC_ANDROID + GENERATED_FOLDER;
+		} else {
+			folderPath = LUASRC_BB + GENERATED_FOLDER;
+		}
+		IFolder genratedFolder = project.getFolder(new Path(folderPath));
+		for (IResource resource : genratedFolder.members()) {
+			if (resource.getType() == IResource.FILE) {
+				if (resource.getName().equalsIgnoreCase(fileName)) {
+					return genratedFolder.getFile(resource.getName());
+				}
+			}
+		}
+		return null;
 	}
 	
 }

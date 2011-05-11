@@ -13,17 +13,26 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.FindReplaceDocumentAdapter;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -42,12 +51,18 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.kony.nativecodegen.actions.NativeCodeGenerationJob;
 import com.pat.tool.keditor.propertyDescriptor.TableLabelProvider;
@@ -59,6 +74,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 	private static final String TYPE = "TYPE";
 	private static final String VARIABLE = "VARIABLE";
 	private static final String USAGE = "USAGE";
+	private static final String LUA_EXTENSION = ".lua";
 
 	private Properties variablesMap;
 	private Map<Object, Object> backupMap = new HashMap<Object, Object>();
@@ -190,6 +206,45 @@ public class VariableTypeInferenceEditor extends EditorPart {
 				}
 			}
 		});
+		
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				ISelection selection = event.getSelection();
+				@SuppressWarnings("unchecked")
+				Entry<String, String> entry = (Entry<String, String>) ((IStructuredSelection)selection).getFirstElement();
+                String key = entry.getKey();
+                String[] variableInfo = key.split(DELIMITER);
+                revealVariableLocation(variableInfo);
+			}
+		});
+	}
+
+	private void revealVariableLocation(String[] variableInfo) {
+        String fileName = variableInfo[0] + LUA_EXTENSION;
+        String variableName = variableInfo[variableInfo.length - 2];
+        String lineNumber = variableInfo[variableInfo.length - 1];
+		try {
+			IFile sourceFile = NativeCodeGenerationJob.getSourceFile(fileName, file.getName(), file.getProject());
+			if (sourceFile != null) {
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IEditorPart editor = IDE.openEditor(page, sourceFile);
+				if (editor instanceof ITextEditor) {
+					ITextEditor textEditor = (ITextEditor) editor;
+					IDocumentProvider provider = textEditor.getDocumentProvider();
+					IDocument document = provider.getDocument(editor.getEditorInput());
+					try {
+						int startOffset = document.getLineOffset(Integer.parseInt(lineNumber)- 1);
+						FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
+						IRegion iRegion = finder.find(startOffset, variableName, true, false, true, false);
+						textEditor.selectAndReveal(iRegion.getOffset(), iRegion.getLength());
+					} catch (BadLocationException e) {
+					}
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void createTable(Composite tableHolder) {
@@ -236,7 +291,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 		try {
 			fileWriter = new FileWriter(new File(file.getLocationURI()));
 		    variablesMap.store(fileWriter, null);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (fileWriter != null) {
@@ -246,6 +301,12 @@ public class VariableTypeInferenceEditor extends EditorPart {
 					//ignore
 				}
 			}
+		}
+		
+		try {
+			file.refreshLocal(IResource.DEPTH_ZERO, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 
 		dirty = false;
