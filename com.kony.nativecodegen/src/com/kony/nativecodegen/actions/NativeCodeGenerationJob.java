@@ -196,11 +196,11 @@ public class NativeCodeGenerationJob extends Job {
 					antRunner.setBuildFile(tempLocation + "/build/server/build.xml");
 					antRunner.setProps(antRCProperties);
 					antRunner.setTarget("nativeiphone");
-					antRunner.execute();
+					succeeded = antRunner.execute();
 
 					TJetty jetty = new TJetty();
 					jetty.setClean(false);
-					jetty.execute();
+					succeeded = jetty.execute();
 				} else {
 					succeeded = false;
 				}
@@ -232,7 +232,7 @@ public class NativeCodeGenerationJob extends Job {
 					antRunner.setBuildFile(tempLocation + "/build/luaj2me/native/build.xml");
 					antRunner.setProps(antRCProperties);
 					antRunner.setTarget("copy");
-					antRunner.execute();
+					succeeded = antRunner.execute();
 				}  else {
 					succeeded = false;
 				}
@@ -262,7 +262,7 @@ public class NativeCodeGenerationJob extends Job {
 					androidBuild.setProjectName(projectName);
 					androidBuild.setAndriodHome(androidHome);
 					androidBuild.setAntProperties(antRCProperties);
-					androidBuild.execute();
+					succeeded = androidBuild.execute();
 				} else {
 					succeeded = false;
 				}
@@ -274,6 +274,7 @@ public class NativeCodeGenerationJob extends Job {
 			}
 			return Status.OK_STATUS;
 		} catch (Exception e) {
+			succeeded = false;
 			ConsoleDisplayManager.getDefault().printException(e.getCause(), ConsoleDisplayManager.MSG_ERROR);
 			e.printStackTrace();
 			Status status = new Status(Status.ERROR, KEditorPlugin.PLUGIN_ID, "Native code generation is failed", e);
