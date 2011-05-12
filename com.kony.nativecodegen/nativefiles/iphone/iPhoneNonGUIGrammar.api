@@ -41,9 +41,9 @@ phone = {
 --//contact.delete()
 
 contact = {
-        reftable1 = add(contactinfo) --[[NSNumber*]]
+        reftable1 = add(contactinfo) --[[NSNumber]]
         , findtable = find(contactname) --[[Table]]
-        , reftable2 = delete(findtable) --[[NSNumber*]]
+        , reftable2 = delete(findtable) --[[NSNumber]]
 }
 
 --// Storage API's
@@ -53,9 +53,9 @@ contact = {
 
 dssavehashtable = {dsmode="cache/session/cookie" --[[String]]} 
 ds = {
-        ret = save(data --[[Table]], id --[[String]], metainfo --[[Table]]) --[[luaReturn]]
-        , data = read(id --[[String]], metainfo --[[Table]]) --[[Table]]
-        , ret = delete(id --[[String]], metainfo --[[Table]]) --[[boolean]]
+        ret = save(data) --[[voidHandle.handle]]
+        , data = read(tableId) --[[Table]]
+        , ret = delete(tableId) --[[boolean]]
 }
 
 --// Network API's
@@ -274,7 +274,7 @@ os = {
 	, date1 = date(format --[[String]]) --[[String]]
 	, flag1 = isvaliddate(date --[[String]], format --[[String]]) --[[boolean]]
 	, flag2 = isleapyear(date --[[String]], format --[[String]]) --[[boolean]]
-	, curr = tocurrency(value --[[float]]) --[[todo]]
+	, curr = tocurrency(value --[[float]]) --[[void]]
 	, mem  = freememory() --[[int]]
 	, agent = useragent() --[[String]]
 	, tbl1 = platform() --[[Table]]

@@ -288,7 +288,12 @@ window = {
 		, yeslabel --[[String]], nolabel --[[String]], alerttitle --[[String]]
 		) --void
 		,
-    asdf = PickerView(id--[[String]],skin--[[LuaTable]],onfocusskin--[[LuaTable]],masterdata--[[LuaTable]],ondone--[[closure]],isvisible --[[boolean]],container_weight--[[int]],hexpand--[[boolean]],widgetalign--[[int]], psp --[[NSDictionary]]) --[[KonyPickerView]]
+        asdf = PickerView(id--[[String]],skin--[[LuaTable]],onfocusskin--[[LuaTable]],masterdata--[[LuaTable]],ondone--[[closure]],isvisible --[[boolean]],container_weight--[[int]]
+               ,hexpand--[[boolean]],widgetalign--[[int]], psp --[[NSDictionary]]
+	       ) --[[KonyPickerView]]
+	       ,
+	openmurl = openmediaurl(url -- [[String]]) --voidHandle.handle
+		
 }
 
 formPSPHandle = {
@@ -321,9 +326,9 @@ form = {
 	, titleskin --[[skinHandle.handle]]
 	, menuskin --[[skinHandle.handle]]
 	, menufocusskin --[[skinHandle.handle]]
-	, f2 = show(id --[[KonyForm]]) --voidHandle.handle
-	, f3 = destroy() --voidHandle.handle
-	, f4 = getcurrentform() --voidHandle.handle
+	, f2 = show(id) --[[voidHandle.handle]]
+	, f3 = destroy(id) --[[voidHandle.handle]]
+	, f4 = getcurrentform() --[[KonyForm]]
 	, f5 = add(handle --[[KonyForm]], arr) --void
 }
 
@@ -359,7 +364,7 @@ popupContextTable = {
 
 
 popup = {
-	skinvar --[[skinHandle.hasndle]]
+	skinvar --[[skinHandle.handle]]
 	, f1 = add(id --[[KonyPopup]], arr --[[NSArray]]) --voidHandle.handle
 	, f2 = dismiss(id --[[KonyPopup]])
 	, f3 = destroy(id --[[popupHandle.handle]])
@@ -575,18 +580,20 @@ segui = {
 	, ondeleteclick --[[closure]] --//iPhone PSP
 	, editable --[[boolean]] --//iPhone PSP
 	, editstyle --[[String]] --//iPhone PSP
-	, f1 = addall(id --[[segmenteduiHandle.handle]], arrayofdata --[[Table]]
+	, f1 = addall(arrayofdata --[[NSArray]]
 			) --voidHandle.handle
 	, f2 = setdata(arrayofdata --[[NSArray]]
-			) --void
-	, f3 = removeall(id --[[segmenteduiHandle.handle]]) --voidHandle.handle
-	, f4 = removeat(id --[[segmenteduiHandle.handle]], index --[[int]]) --voidHandle.handle
-	, f5 = setdataat(id --[[segmenteduiHandle.handle]], datamap --[[Table]], index--[[int]]
 			) --voidHandle.handle
-	, f6 = addat(id --[[segmenteduiHandle.handle]], datamap --[[Table]],index --[[int]]
-			) --voidHandle.handle
-	, f7 = setdatawithsections(id --[[segmenteduiHandle.handle]], arrayofdata --[[Table]]
-			) --voidHandle.handle 
+    , f3 = removeall(arrayofdata --[[NSArray]]
+            ) --voidHandle.handle
+    , f4 = removeat(arrayofdata --[[NSArray]]
+            ) --voidHandle.handle
+    , f5 = setdataat(arrayofdata --[[NSArray]]
+            ) --voidHandle.handle
+    , f6 = addat(arrayofdata --[[NSArray]]
+            ) --voidHandle.handle
+    , f7 = setdatawithsections(arrayofdata --[[NSArray]]
+            ) --voidHandle.handle
 }
 
 --//Showloadingscreen namespace

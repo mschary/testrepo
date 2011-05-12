@@ -18,8 +18,12 @@ getObjectMap ::= [
   default:"objectForKey"
 ]
 
+checkBuildInType(name) ::= <<
+<if(typeMap.(name))>true<endif>
+>>
+
 typeMap ::= [
-        "closure":"id",
+        "closure":"void",
         "void":"id",
         "null":"id",
         "int":"int",
@@ -39,6 +43,8 @@ typeMap ::= [
         "KonyLabel" : "KonyLabel*",
         "NSDictionary" : "NSDictionary*",
         "NSString" : "NSString*",
+        "KonyRaw" : "KonyRaw*",
+        "NSNumber" : "NSNumber*",
         "NSMutableDictionary" : "NSMutableDictionary*",
         "id" : "id",
   "KonyTextBox" : "KonyTextBox*",
@@ -67,8 +73,7 @@ typeMap ::= [
   "KonyGallery" : "KonyGallery*",
   "MapWidget" : "MapWidget*",
   "KonySegUI" : "KonySegUI*",
-  "KonySlider" : "KonySlider*",
-  "KonyRaw" : "KonyRaw*"
+  "KonySlider" : "KonySlider*"
 ]
 
 convMap ::= [
@@ -96,8 +101,11 @@ formatMap ::= [
         "byte":"%d",
         "short":"%hd",
         "char":"%c",
-        default:"%@" // anything other than an atomic type
+	"String":"%@",
+        default:"%@" 
 ]
+
+
 dictionaryMethodMap ::= [
 "no*()~!@" : ""
 ]
@@ -120,8 +128,16 @@ arrayMethodMap ::= [
 "window.HorizontalImageStrip" : "createImageStrip",
 "window.Gallery" : "createImageGallery",
 "window.DataGrid" : "createDataGrid",
+"window.openmediaurl" : "openMediaURL",
+
 "segui.addall" : "addAllToSUI",
+"segui.addat" :	"insertDataAtInSUI",
+"segui.removeall" : "removeAllInSUI",
+"segui.removeat" : "removeAtInSUI",
 "segui.setdata" : "setDataInSUI",
+"segui.setdataat" : "setDataAtInSUI",
+"segui.setdatawithsections" : "setDataWithSectionsInSUI",
+
 "widget.setvisibility" : "setVisibility",
 "string.find" : "stringFind",
 "string.len" : "stringLen",
@@ -136,7 +152,6 @@ arrayMethodMap ::= [
   "registerforidletimeout" : "registerForIdletimeout",
 "window.PickerView" : "createPickerView",
 "setappmenu" : "setAppMenu",
-"ds.save":"dsSave",
 "appmiddlewaresecureinvoker" : "appmiddlewaresecureinvoker",
 "appmiddlewareinvoker" : "appmiddlewareinvoker",
 "appmiddlewaresecureinvokerasync" : "appmiddlewaresecureinvokerasync",
@@ -182,9 +197,16 @@ arrayMethodMap ::= [
 "i18n.getlocalizedstring" : "getLocalizedString",
 "i18n.deleteresourcebundle" : "deleteResourceBundleInDB",
 
-"contacts.add" : "addContact",
-"contacts.find" : "findContact",
-"contacts.delete" : "deleteContact"
+"contact.add" : "addContact",
+"contact.find" : "findContact",
+"contact.delete" : "deleteContact",
+
+"ds.save" : "dsSave",
+"ds.read" : "dsRead",
+"ds.delete" : "dsDelete",
+
+"form.show" : "showForm",
+"form.destroy" : "destroyForm"
 
 ]  
 
@@ -198,6 +220,9 @@ cAPIMap ::= [
 isCAPICheck(method) ::= <<
 <if(cAPIMap.(method))>true<endif>
 >>
+
+
+
 methodMap ::= [
         "box.add" : "addWidgetsToBox",
         "print":"print",
@@ -226,6 +251,15 @@ methodMap ::= [
   "window.Gallery" : "createImageGallery",
   "window.DataGrid" : "createDataGrid",
   "window.HorizontalImageStrip" : "createImageStrip",
+  "window.openmediaurl" : "openMediaURL",
+
+  "segui.addall" : "addAllToSUI",
+  "segui.setdata" : "setDataInSUI",
+  "segui.addat" :	"insertDataAtInSUI",
+  "segui.removeall" : "removeAllInSUI",
+  "segui.removeat" : "removeAtInSUI",
+  "segui.setdataat" : "setDataAtInSUI",
+  "segui.setdatawithsections" : "setDataWithSectionsInSUI",
 
   "net.invokeservice" : "netInvokeService",
   "net.invokeserviceasync" : "netInvokeServiceAsync",
@@ -239,11 +273,8 @@ methodMap ::= [
   "table.get" : "tableGet",
   "table.insert" : "tableInsert",
   "box.add" : "addWidgetsToBox",
-  "form.add" : "addWidgetsToForm",
-  "form.show" : "showForm",
   "popup.dismiss": "dismissPopup",
   "popup.add" : "addToPopup",
-  "segui.setdata" : "setDataInSUI",
 "widget.setvisibility" : "setVisibility",
 "setappmenu" : "setAppMenu",
 "setappmenufocusindex" :"setAppMenuFocusItem",
@@ -252,9 +283,6 @@ methodMap ::= [
   "unregisterforidletimeout" : "unregisterForIdletimeout",
 "hidappmenuitems" : "hideAppMenuItems",
 "phone.mylocation" : "location",
-"ds.save":"dsSave",
-"ds.read":"dsRead",
-"ds.delete":"dsDelete",
 
 "crypto.newkey" : "getNewKey",
 "crypto.encrypt": "performEncryption",
@@ -297,9 +325,20 @@ methodMap ::= [
 "i18n.getlocalizedstring" : "getLocalizedString",
 "i18n.deleteresourcebundle" : "deleteResourceBundleInDB",
 
-"contacts.add" : "addContact",
-"contacts.find" : "findContact",
-"contacts.delete" : "deleteContact"
+"contact.add" : "addContact",
+"contact.find" : "findContact",
+"contact.delete" : "deleteContact",
+
+"ds.save" : "dsSave",
+"ds.read":"dsRead",
+"ds.delete":"dsDelete",
+
+"form.show" :  "showForm",
+"form.getcurrentform" : "getCurrentForm",
+"form.getpreviousform" : "getPreviousForm",
+"form.destroy" : "destroyForm",
+"form.add" : "addWidgetsToForm"
+
 
 
 ]
@@ -558,16 +597,16 @@ comment1_tmpl(comment, stmt) ::= <<
 <stmt>
 >>
 
-var_tmpl(prefix, type, name, init, ptype) ::= <<
-<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name> <if(init)>= <init><else><if(typeInitMap.(type))>= <typeInitMap.(type)><else>= nil<endif><endif>;
+var_tmpl(prefix, type, name, init, ptype, isGlobal) ::= <<
+<if(typeMap.(type))><typeMap.(type)> <endif><name> <if(init)>= <init><else><if(typeInitMap.(type))>= <typeInitMap.(type)><else>= nil<endif><endif>;
 >>
 
 varGl_tmpl(prefix, type, name, init) ::= <<
-<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name> <if(init)>= <init><endif>;
+<if(typeMap.(type))><typeMap.(type)> <endif><name> <if(init)>= <init><endif>;
 >>
 
 varDecl_tmpl(isGlobal, prefix, type, name) ::= <<
-<if(typeMap.(type))><typeMap.(type)><else><type><endif> <name>;
+<if(typeMap.(type))><typeMap.(type)> <endif><name>;
 >>
 
 varList_tmpl(vars) ::= <<
@@ -576,12 +615,29 @@ varList_tmpl(vars) ::= <<
 
 
 
-assign_tmpl(prefix, a, b, isGlobal) ::= <<
-<if(prefix)>[ <prefix> <endif><a> = <b> <if(prefix)>]<endif>;
+assign_tmpl(prefix, a, b, type, isGlobal) ::= <<
+<if(releaseMap.(b))>
+  <if(convMap.(type))>
+<if(prefix)>[ <prefix> <endif><a> <if(b)>= <typeInitMap.(type)><endif> <if(prefix)>]<endif>;
+  <else>
+     <if(isGlobal)>
+if(<a> != nil){
+  [<a> release];
+  <a> = nil;
+}
+     <else>
+<if(prefix)>[ <prefix> <endif><a> <if(b)>= <b><else>= <typeInitMap.(type)><endif> <if(prefix)>]<endif>;
+     <endif>
+   <endif>
+<else>
+<if(prefix)>[ <prefix> <endif><a> <if(b)>= <b><else>= <typeInitMap.(type)><endif><if(prefix)>]<endif>;
+<endif>
 >>
-
+getFormatType(aType) ::= <<
+<if(aType)><aType><else>"String"<endif>
+>>
 concat_tmpl(a,aType, b, bType) ::= <<
-[NSString stringWithFormat:@"<formatMap.(aType)>, <formatMap.(bType)>", <if(boolConcat.(aType))><a><boolConcat.(aType)><else><a><endif>,<if(boolConcat.(bType))><b><boolConcat.(bType)><else><b><endif>]
+[NSString stringWithFormat:@"<formatMap.(getFormatType(aType))><formatMap.(getFormatType(bType))>", <if(boolConcat.(aType))><a><boolConcat.(aType)><else><a><endif>,<if(boolConcat.(bType))><b><boolConcat.(bType)><else><b><endif>]
 >>
 pow_tmpl(a,b) ::= "pow(<a>,<b>)"
 
@@ -618,7 +674,7 @@ uop_tmpl(op, a) ::= <<
 <op><a>
 >>
 
-hash_tmpl(a) ::= "<a>.length()"
+hash_tmpl(a) ::= "(([<a> isKindOfClass: [LuaTable class]])? ([((LuaTable*) <a>)->array count] - 1) : 0)"
 
 expr_tmpl(expr) ::= "<expr>"
 
@@ -772,21 +828,22 @@ for(<init> ; <cond> ; <init.stmt.var>++)
 >>
 
 forInpair_tmpl(tName, tVal, met, key, bl) ::= <<
-	int count = [((LuaTable*)<tName>)->array count];
-<if(isPairCheck.(met))>{<endif>
-	for(int i=1; i\<= count; ++i){
-		<tVal> = [((LuaTable*)<tName>)->array objectAtIndex: i];
+if (<tName>) {
+	int __count = [((LuaTable*)<tName>)->array count];
+	NSNumber* <key>;
+	id <tVal>;
+	for(int __idx =1; __idx \< __count; ++__idx){
+		<key> = [NSNumber numberWithInt:__idx];
+		<tVal> = [((LuaTable*)<tName>)->array objectAtIndex: __idx];
 		<bl; separator="\n">
 	}
-
 	<if(isPairCheck.(met))>
-	for(NSString* <key> in <tName>->allKeys){
-		<tVal> = [((LuaTable*)<tName>)->dict objectForKey: <key>];
+	for(NSString* <key> in ((LuaTable*)<tName>)->allKeys){
+		id <tVal> = [((LuaTable*)<tName>)->dict objectForKey: <key>];
 		<bl; separator="\n">
-	} 
-<if(isPairCheck.(met))>}<endif>
-<endif>
-
+	}
+	<endif>
+} 
 >>
 
 break_tmpl() ::= "break;"
@@ -799,8 +856,8 @@ table_init_tmpl(fname, code) ::= <<
 <fname>
 >>
 
-tableInline_tmpl(fname, tname, body, params) ::= <<
-LuaTable* <tname> = [LuaTable luaTableWithArraySize: 2 hashSize: 2];
+tableInline_tmpl(fname, tname, body, params, isGlobal) ::= <<
+LuaTable* <tname> = <if(isGlobal)>[<endif>[LuaTable luaTableWithArraySize: 2 hashSize: 2] <if(isGlobal)>retain] <endif>;
 <body>
 
 >>
