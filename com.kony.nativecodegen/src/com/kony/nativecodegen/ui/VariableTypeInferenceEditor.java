@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -91,6 +92,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 		variableTypes.add("boolean");
 		variableTypes.add("string");
 		variableTypes.add("luatable");
+		variableTypes.add("");
 	}
 	
 	@Override
@@ -130,7 +132,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 		FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 		final Section section = formToolkit.createSection(parent, Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED);
 		section.setText("Unresolved Variables for " + NativeCodeGenerationJob.getPlatformName(file.getName()));
-		section.setDescription("There is a conflict in resolving types for below variables. Please select appropriate types and click run to proceed for native code generation.");
+		section.setDescription("There is a conflict in resolving types for below variables. Please select appropriate types and click \"Run\" to proceed for native code generation.");
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 	    GridLayoutFactory.fillDefaults().applyTo(section);
 		
@@ -167,10 +169,13 @@ public class VariableTypeInferenceEditor extends EditorPart {
 		resetButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				variablesMap.clear();
-				variablesMap.putAll(backupMap);
-				viewer.refresh();
-				doSave(null);
+				String message = "Are you sure you want to discard all the changes made after opening the editor?";
+				if (MessageDialog.openQuestion(getSite().getShell(), "Discard Changes", message)) {
+					variablesMap.clear();
+					variablesMap.putAll(backupMap);
+					viewer.refresh();
+					doSave(null);
+				}
 			}
 		});
 	    
