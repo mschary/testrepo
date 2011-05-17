@@ -1,5 +1,6 @@
 package com.kony.nativecodegen.ui;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,12 +13,18 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -88,11 +95,11 @@ public class VariableTypeInferenceEditor extends EditorPart {
 
 
 	static {
-		variableTypes.add("number");
-		variableTypes.add("boolean");
-		variableTypes.add("string");
-		variableTypes.add("luatable");
 		variableTypes.add("");
+		variableTypes.add("boolean");
+		variableTypes.add("luatable");
+		variableTypes.add("number");
+		variableTypes.add("string");
 	}
 	
 	@Override
@@ -215,17 +222,108 @@ public class VariableTypeInferenceEditor extends EditorPart {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-				ISelection selection = event.getSelection();
-				@SuppressWarnings("unchecked")
-				Entry<String, String> entry = (Entry<String, String>) ((IStructuredSelection)selection).getFirstElement();
-                String key = entry.getKey();
-                String[] variableInfo = key.split(DELIMITER);
-                revealVariableLocation(variableInfo);
+				revealVariableLocation(event.getSelection());
 			}
 		});
+		
+		hookContextMenu();
 	}
 
-	private void revealVariableLocation(String[] variableInfo) {
+	private void hookContextMenu() {
+		final Action openNativeSrcAction = new Action("Open Native File") {
+			@Override
+			public void run() {
+				openNativeSource(viewer.getSelection(), false);
+			}
+		};	
+		
+		final Action openLocationAction = new Action("Open Native File Location") {
+			@Override
+			public void run() {
+				openNativeSource(viewer.getSelection(), true);
+			}
+		};
+		
+		final Action openLuaSrcAction = new Action("Open Lua File") {
+			@Override
+			public void run() {
+				revealVariableLocation(viewer.getSelection());
+			}
+		};
+		
+		
+		final MenuManager menuManager = new MenuManager();
+		menuManager.setRemoveAllWhenShown(true);
+		menuManager.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+				if (!selection.isEmpty()) {
+					menuManager.add(openNativeSrcAction);
+					menuManager.add(openLocationAction);
+					menuManager.add(openLuaSrcAction);
+				}
+			}
+		});
+		viewer.getControl().setMenu(menuManager.createContextMenu(viewer.getControl()));
+		
+	}
+	
+	private void openNativeSource(ISelection selection, boolean openLocation) {
+		@SuppressWarnings("unchecked")
+		Entry<String, String> entry = (Entry<String, String>) ((IStructuredSelection) selection).getFirstElement();
+		String key = entry.getKey();
+		String[] variableInfo = key.split(DELIMITER);
+		String fileName = variableInfo[0];
+		File nativeSourceFile = NativeCodeGenerationJob.getNativeSourceFile(fileName, file.getName(), file.getProject().getName());
+		if (nativeSourceFile != null) {
+			if (openLocation) {
+				try {
+					Desktop.getDesktop().browse(nativeSourceFile.getParentFile().toURI());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IFileStore fileStore;
+				try {
+					fileStore = EFS.getStore(nativeSourceFile.toURI());
+					IEditorPart editor = IDE.openInternalEditorOnFileStore(page, fileStore);
+					
+					if (editor instanceof ITextEditor) {
+						String methodName = variableInfo[1];
+						String variableName = variableInfo[variableInfo.length - 2];
+						ITextEditor textEditor = (ITextEditor) editor;
+						IDocumentProvider provider = textEditor.getDocumentProvider();
+						IDocument document = provider.getDocument(editor.getEditorInput());
+						try {
+							FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
+							// there is a comment above every method containing lua method signature 
+							IRegion commentRegion = finder.find(0, methodName, true, false, true, false);
+							if (commentRegion != null) {
+								IRegion methodRegion = finder.find(commentRegion.getOffset() + commentRegion.getLength(), methodName, true, false, true, false);
+								if (methodRegion == null) {
+									methodRegion = commentRegion;
+								}
+								IRegion variableRegion = finder.find(methodRegion.getOffset(), variableName, true, false, true, false);
+								if (variableRegion != null) {
+									textEditor.selectAndReveal(variableRegion.getOffset(), variableRegion.getLength());
+								}
+							}
+						} catch (BadLocationException e) {
+						}
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void revealVariableLocation(ISelection selection) {
+		@SuppressWarnings("unchecked")
+		Entry<String, String> entry = (Entry<String, String>) ((IStructuredSelection)selection).getFirstElement();
+        String key = entry.getKey();
+        String[] variableInfo = key.split(DELIMITER);
         String fileName = variableInfo[0] + LUA_EXTENSION;
         String variableName = variableInfo[variableInfo.length - 2];
         String lineNumber = variableInfo[variableInfo.length - 1];
@@ -242,11 +340,13 @@ public class VariableTypeInferenceEditor extends EditorPart {
 						int startOffset = document.getLineOffset(Integer.parseInt(lineNumber)- 1);
 						FindReplaceDocumentAdapter finder = new FindReplaceDocumentAdapter(document);
 						IRegion iRegion = finder.find(startOffset, variableName, true, false, true, false);
-						textEditor.selectAndReveal(iRegion.getOffset(), iRegion.getLength());
+						if (iRegion != null) { // if the code is modified region may not be available
+							textEditor.selectAndReveal(iRegion.getOffset(), iRegion.getLength());
+						}
 					} catch (BadLocationException e) {
 					}
 				}
-			}
+			} 
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -280,7 +380,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 
 		viewer.setColumnProperties(new String[] { VARIABLE, TYPE, USAGE });
 		viewer.setCellModifier(getCellModifier());
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(table), new ComboBoxCellEditor(table, variableTypes.toArray(new String[0])), new TextCellEditor(table) });
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(table), new ComboBoxCellEditor(table, variableTypes.toArray(new String[0]), SWT.READ_ONLY), new TextCellEditor(table) });
 		viewer.setSorter(new ViewerSorter());
 	}
 

@@ -5,21 +5,126 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
-            id="com.pat.tool.keditor.navigation.model.ResourceRootContribution"
+            id="com.pat.tool.keditor.navigation.model.ResourceRootMenuContribution"
             objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
-         <action
-               class="com.kony.nativecodegen.actions.NativeCodeGenAction"
-               enablesFor="1"
-               id="com.kony.nativecodegen.actions.NativeCodeGenAction"
-               label="Native Code"
-               menubarPath="buildmenu">
-         </action>
          <visibility>
             <objectState
                   name="isProject"
                   value="true">
             </objectState>
          </visibility>
+         <menu
+               id="nativeCodeMenu"
+               label="Native Code"
+               path="buildmenu">
+         </menu>
+         <action
+               class="com.kony.nativecodegen.actions.NativeCodeGenAction"
+               enablesFor="1"
+               id="com.kony.nativecodegen.actions.NativeCodeGenAction"
+               label="Generate"
+               menubarPath="nativeCodeMenu/additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="com.pat.tool.keditor.navigation.model.EditVariablesContribution"
+            objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
+         <visibility>
+            <and>
+               <objectState
+                     name="isProject"
+                     value="true">
+               </objectState>
+               <objectState
+                     name="isNativeVariablesEdit"
+                     value="true">
+               </objectState>
+            </and>
+         </visibility>
+         <menu
+               id="editVariablesMenu"
+               label="Edit Variables"
+               path="nativeCodeMenu/additions">
+         </menu>
+         <action
+               class="com.kony.nativecodegen.actions.OpenAllInferenceEditors"
+               id="com.kony.nativecodegen.actions.OpenAllInferenceEditors"
+               label="All "
+               menubarPath="nativeCodeMenu/editVariablesMenu/additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="com.pat.tool.keditor.navigation.model.EditIphoneVariablesContribution"
+            objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
+         <visibility>
+            <and>
+               <objectState
+                     name="isProject"
+                     value="true">
+               </objectState>
+               <objectState
+                     name="isNativeIphone"
+                     value="true">
+               </objectState>
+            </and>
+         </visibility>
+         <action
+               class="com.kony.nativecodegen.actions.OpenIphoneInferenceEditor"
+               icon="icons/iphone.png"
+               id="com.kony.nativecodegen.actions.OpenIphoneInferenceEditor"
+               label="iPhone"
+               menubarPath="nativeCodeMenu/editVariablesMenu/additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="com.pat.tool.keditor.navigation.model.EditAndroidVariablesContribution"
+            objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
+         <visibility>
+            <and>
+               <objectState
+                     name="isProject"
+                     value="true">
+               </objectState>
+               <objectState
+                     name="isNativeAndroid"
+                     value="true">
+               </objectState>
+            </and>
+         </visibility>
+         <action
+               class="com.kony.nativecodegen.actions.OpenAndroidInferenceEditor"
+               icon="icons/android.png"
+               id="com.kony.nativecodegen.actions.OpenAndroidInferenceEditor"
+               label="Android"
+               menubarPath="nativeCodeMenu/editVariablesMenu/additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="com.pat.tool.keditor.navigation.model.EditBBVariablesContribution"
+            objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
+         <visibility>
+            <and>
+               <objectState
+                     name="isProject"
+                     value="true">
+               </objectState>
+               <objectState
+                     name="isNativeBB"
+                     value="true">
+               </objectState>
+            </and>
+         </visibility>
+         <action
+               class="com.kony.nativecodegen.actions.OpenBBInferenceEditor"
+               icon="icons/blackberry.png"
+               id="com.kony.nativecodegen.actions.OpenBBInferenceEditor"
+               label="Blackberry"
+               menubarPath="nativeCodeMenu/editVariablesMenu/additions">
+         </action>
       </objectContribution>
    </extension>
    <extension

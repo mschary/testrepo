@@ -111,6 +111,7 @@ public class NativeCodeGenerationJob extends Job {
 	private static final String CLASS_PATH = "classpath";
 	private static final String CLASS_NAME = "classname";
 
+	// Update com.pat.tool.keditor.navigation.model.ResourceRoot.testAttribute(Object, String, String) when file names are modified
 	public static final String IPHONE_TYPE_INFERENCE_FILE = "typeinference_iphone.npf";
 	public static final String ANDROID_TYPE_INFERENCE_FILE = "typeinference_android.npf";
 	public static final String BB_TYPE_INFERENCE_FILE = "typeinference_bb.npf";
@@ -122,6 +123,11 @@ public class NativeCodeGenerationJob extends Job {
 	private static final String LUASRC_BB = "/luasrc/bb";
 	private static final String LUASRC_IPHONE = "/luasrc/iphone";
 	private static final String GENERATED_FOLDER = "/generated";
+	private static final String BUILD_SERVER_PATH = "/build/server";
+	private static final String IPHONE_NATIVE_PATH = "/iphonenative";
+	private static final String ANDROID_NATIVE_PATH = "/androidnative";
+	private static final String BB_NATIVE_PATH = "/bbnative";
+
 
 	
     private IFile typeInferenceFile;	
@@ -170,7 +176,7 @@ public class NativeCodeGenerationJob extends Job {
 				return status;
 			}
 
-			String serverLoc = tempLocation + "/build/server";
+			String serverLoc = tempLocation + BUILD_SERVER_PATH;
 
 			String srcXmlDir = tempLocation + "/output";
 
@@ -181,7 +187,7 @@ public class NativeCodeGenerationJob extends Job {
 			String resourceDir = pluginLoc + "nativefiles/iphone";
 			String typeInferenceFile = projLoc + FILE_SEPARATOR +  IPHONE_TYPE_INFERENCE_FILE;
 			String buildStatusFile = tempLocation + FILE_SEPARATOR + IPHONE_STATUS_FILE;
-			String destDir = serverLoc + "/iphonenative";
+			String destDir = serverLoc + IPHONE_NATIVE_PATH;
 			String className = "com.konylabs.iphone.transformer.Transform";
 			String classpath = "iphone.classpath";
 
@@ -218,7 +224,7 @@ public class NativeCodeGenerationJob extends Job {
 				resourceDir = pluginLoc + "nativefiles/blackberry";
 				typeInferenceFile = projLoc + FILE_SEPARATOR + BB_TYPE_INFERENCE_FILE;
 				buildStatusFile = tempLocation + FILE_SEPARATOR + BB_STATUS_FILE;
-				destDir = serverLoc + "/bbnative";
+				destDir = serverLoc + BB_NATIVE_PATH;
 				className = "com.konylabs.transformer.Transform";
 				classpath = "bb.classpath";
 				antRCProperties.put(SOURCE_DIR, srcDir);
@@ -250,7 +256,7 @@ public class NativeCodeGenerationJob extends Job {
 				resourceDir = pluginLoc + "nativefiles/android";
 				typeInferenceFile = projLoc + FILE_SEPARATOR + ANDROID_TYPE_INFERENCE_FILE;
 				buildStatusFile = tempLocation + FILE_SEPARATOR + ANDROID_STATUS_FILE;
-				destDir = serverLoc + "/androidnative";
+				destDir = serverLoc + ANDROID_NATIVE_PATH;
 				className = "com.konylabs.transformer.Transform";
 				classpath = "android.classpath";
 				antRCProperties.put(SOURCE_DIR, srcDir);
@@ -263,7 +269,7 @@ public class NativeCodeGenerationJob extends Job {
 
 				if (executeNativeBuild(buildStatusFile, antRCProperties, platform)) {
 					antRCProperties.put("nativecodegen", "true");
-					antRCProperties.put("android.nativedir", serverLoc + "/androidnative");
+					antRCProperties.put("android.nativedir", serverLoc + ANDROID_NATIVE_PATH);
 
 					TAndroidBuild androidBuild = new TAndroidBuild();
 					androidBuild.setProjectName(projectName);
@@ -654,5 +660,37 @@ public class NativeCodeGenerationJob extends Job {
 		}
 		return null;
 	}
+	
+	
+	private static final String JAVA_EXTENSION = ".java";
+	private static final String C_EXTENSION = ".m";
+	
+	public static File getNativeSourceFile(String fileName, String inferenceFileName, String project) {
+		String serverLoc = KUtils.getTempLocation(project) + BUILD_SERVER_PATH;
+		String folderPath = null;
+		if (inferenceFileName.equals(IPHONE_TYPE_INFERENCE_FILE)) {
+			folderPath = serverLoc + IPHONE_NATIVE_PATH;
+			fileName = fileName + C_EXTENSION;
+		} else if (inferenceFileName.equals(ANDROID_TYPE_INFERENCE_FILE)) {
+			folderPath = serverLoc + ANDROID_NATIVE_PATH;
+			fileName = fileName + JAVA_EXTENSION;
+		} else {
+			folderPath = serverLoc + BB_NATIVE_PATH;
+			fileName = fileName + JAVA_EXTENSION;
+		}
+		File dir = new File(folderPath);
+		for (File child : dir.listFiles()) {
+			if (child.isFile()) {
+				if (child.getName().equalsIgnoreCase(fileName)) {
+					return child;
+				}
+			}
+		}
+
+		return null;
+	}
+	
+	
+	
 	
 }

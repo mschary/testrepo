@@ -1,9 +1,11 @@
 package com.kony.nativecodegen.ui;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -57,25 +59,32 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 		label.setLayoutData(new GridData());
 		
 		GridData gridData = new GridData();
-		gridData.horizontalIndent = 9;
+		gridData.horizontalIndent = 5;
 		selectAllBtn = new Button(client,SWT.CHECK);
 		selectAllBtn.setText("Select &All");
 		selectAllBtn.setLayoutData(gridData);
 		
+		gridData = new GridData();
+		gridData.horizontalIndent = 25;
 		iphoneBtn = new Button(client,SWT.CHECK);
 		iphoneBtn.setText(RichClientChannel.IPHONE.getDisplayName());
 		iphoneBtn.setImage(RichClientChannel.IPHONE.getImage());
 		iphoneBtn.setLayoutData(gridData);
+		iphoneBtn.addSelectionListener(selectionListener);
 		
 		androidBtn = new Button(client,SWT.CHECK);
 		androidBtn.setText(RichClientChannel.ANDROID.getDisplayName());
 		androidBtn.setImage(RichClientChannel.ANDROID.getImage());
 		androidBtn.setLayoutData(gridData);
+		androidBtn.addSelectionListener(selectionListener);
+
 		
 		bBtn = new Button(client,SWT.CHECK);
 		bBtn.setText(RichClientChannel.BLACKBERRY.getDisplayName());
 		bBtn.setImage(RichClientChannel.BLACKBERRY.getImage());
 		bBtn.setLayoutData(gridData);
+		bBtn.addSelectionListener(selectionListener);
+
 		
 		/*windowsBtn = new Button(client,SWT.CHECK);
 		windowsBtn.setText(RichClientChannel.WINMOBILE.getDisplayName());
@@ -84,7 +93,7 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 		
 		Label lineLabel = new Label(client, SWT.NONE);
 		lineLabel.setText("____________________________________________________" +
-				"________________________________________");
+				"___________________________________________");
 		
 		Label noteLabel = new Label(client, SWT.NONE);
 		noteLabel.setText("Note: It is recommended to perform project build, before invoking native code generation.");
@@ -99,12 +108,20 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 				androidBtn.setSelection(selected);
 				bBtn.setSelection(selected);
 				//windowsBtn.setSelection(selected);
+				getButton(IDialogConstants.OK_ID).setEnabled(selected);
 			}
 		});
-
+		
 
 		return parent;
 	}
+	
+	private SelectionListener selectionListener = new SelectionAdapter() {
+		public void widgetSelected(SelectionEvent e) {
+		     selectAllBtn.setSelection(iphoneBtn.getSelection() && androidBtn.getSelection() && bBtn.getSelection());	
+			 getButton(IDialogConstants.OK_ID).setEnabled(iphoneBtn.getSelection() || androidBtn.getSelection() || bBtn.getSelection());
+		}
+	};
 	
 	public int getSelectedState(){
 		return selectionState;

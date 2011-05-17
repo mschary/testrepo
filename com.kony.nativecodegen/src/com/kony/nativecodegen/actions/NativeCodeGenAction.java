@@ -2,15 +2,9 @@ package com.kony.nativecodegen.actions;
 
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPart;
 
 import com.kony.nativecodegen.ui.NativeCodePlatformSelectionDialog;
-import com.pat.tool.keditor.navigation.model.ResourceLeaf;
 
 /**
  * Native code generation is supported only IPhone,Windows Phone, Android and BlackBerry. So for the first time allow to choose the platform from the dialog and create the respective folder under <code>nativecode</code> folder.
@@ -18,11 +12,7 @@ import com.pat.tool.keditor.navigation.model.ResourceLeaf;
  * @author Rakesh
  */
 
-public class NativeCodeGenAction implements IObjectActionDelegate {
-
-	private IViewPart view;
-
-	private ResourceLeaf selectedElement;
+public class NativeCodeGenAction extends AbstractNativeCodeGenAction {
 
 	private String projectName;
 
@@ -66,20 +56,4 @@ public class NativeCodeGenAction implements IObjectActionDelegate {
 		return job;
 	}
 
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		view = (IViewPart) targetPart;
-	}
-
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() == 1) {
-				Object firstElement = ssel.getFirstElement();
-				if (firstElement instanceof ResourceLeaf) {
-					selectedElement = (ResourceLeaf) ssel.getFirstElement();
-				}
-			}
-		}
-	}
 }
