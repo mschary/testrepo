@@ -530,10 +530,12 @@ public class NativeCodeGenerationJob extends Job {
 				buildOption = projPropMap.get(ProjectProperties.BUILD_OPTION_KEY);
 			}
 		}
-		
+		String webappsLoc = KEditorPlugin.getWorkspaceLoc()+"/webapps";
 		dlServerProp.put(Task.APP_FOLDER_KEY, tempLocation);
 		dlServerProp.put(Task.APP_ID_KEY, appID);
 		dlServerProp.put(Task.APP_NAME_KEY, appName);
+		dlServerProp.put(Task.PROJ_NAME_KEY, projectName);
+		dlServerProp.put(Task.WEB_APPS_LOC, webappsLoc);
 		dlServerProp.put("logo", appLogo);
 		dlServerProp.put("appversion", appVersion);
 		dlServerProp.put(Task.VENDOR_NAME_KEY, vendorName);
