@@ -287,7 +287,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 				IFileStore fileStore;
 				try {
 					fileStore = EFS.getStore(nativeSourceFile.toURI());
-					IEditorPart editor = IDE.openInternalEditorOnFileStore(page, fileStore);
+					IEditorPart editor = IDE.openEditorOnFileStore(page, fileStore);
 					
 					if (editor instanceof ITextEditor) {
 						String methodName = variableInfo[1];
