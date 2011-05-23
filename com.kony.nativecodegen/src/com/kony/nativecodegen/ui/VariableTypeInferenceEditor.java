@@ -316,6 +316,8 @@ public class VariableTypeInferenceEditor extends EditorPart {
 					e.printStackTrace();
 				}
 			}
+		} else {
+			MessageDialog.openInformation(getSite().getShell(), "File Not Found", "Could not find the native source file for the selected variable.");
 		}
 	}
 	
@@ -346,7 +348,9 @@ public class VariableTypeInferenceEditor extends EditorPart {
 					} catch (BadLocationException e) {
 					}
 				}
-			} 
+			} else {
+				MessageDialog.openInformation(getSite().getShell(), "File Not Found", "Could not find the source file for the selected variable.");
+			}
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}

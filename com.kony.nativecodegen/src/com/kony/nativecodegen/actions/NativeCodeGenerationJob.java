@@ -653,10 +653,12 @@ public class NativeCodeGenerationJob extends Job {
 			folderPath = LUASRC_BB + GENERATED_FOLDER;
 		}
 		IFolder genratedFolder = project.getFolder(new Path(folderPath));
-		for (IResource resource : genratedFolder.members()) {
-			if (resource.getType() == IResource.FILE) {
-				if (resource.getName().equalsIgnoreCase(fileName)) {
-					return genratedFolder.getFile(resource.getName());
+		if (genratedFolder.exists()) {
+			for (IResource resource : genratedFolder.members()) {
+				if (resource.getType() == IResource.FILE) {
+					if (resource.getName().equalsIgnoreCase(fileName)) {
+						return genratedFolder.getFile(resource.getName());
+					}
 				}
 			}
 		}
@@ -681,14 +683,15 @@ public class NativeCodeGenerationJob extends Job {
 			fileName = fileName + JAVA_EXTENSION;
 		}
 		File dir = new File(folderPath);
-		for (File child : dir.listFiles()) {
-			if (child.isFile()) {
-				if (child.getName().equalsIgnoreCase(fileName)) {
-					return child;
+		if (dir.exists()) {
+			for (File child : dir.listFiles()) {
+				if (child.isFile()) {
+					if (child.getName().equalsIgnoreCase(fileName)) {
+						return child;
+					}
 				}
 			}
 		}
-
 		return null;
 	}
 	
