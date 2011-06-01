@@ -555,7 +555,7 @@ public class NativeCodeGenerationJob extends Job {
 		if(locales != null && locales.trim().length()>0) {
 			dlServerProp.put("locales", locales);
 			String reslocale[] = locales.split(",");
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			for(int i=0; i< reslocale.length; i++) {
 				buf.append(reslocale[i]+"/*");
 				buf.append(",");
