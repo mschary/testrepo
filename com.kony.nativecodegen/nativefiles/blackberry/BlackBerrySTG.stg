@@ -13,86 +13,293 @@ typeInitMap ::= [
         default:"null" // anything other than an atomic type
 ]
 
-javaMethodMap ::= [
-        "print":"System.out.println",
-        "math.sqrt":"Math.sqrt",
-        "os.exit":"StandardLib.exit",
-        "exit":"StandardLib.exit",
-        "os.platform":"OSLib.platform",
-        "os.useragent":"OSLib.useragent",
-        "phone.dial":"PhoneLib.dial"
-]
-
 javaWidgetMap ::= [
   "box.add" : "KonyContainer",
-  "form.add" : "KonyForm",
-  "popup.add" : "KonyPopup",
-  "form.show" : "KonyForm",
-  "popup.dismiss" : "KonyPopup",
-  "popup.show" : "KonyPopup",
-  "popup.setcontext" : "KonyPopup",
+
+  "calendar.clear" : "KonyCalendar",
+  
+  "camera.releaserawbytes" : "KonyCamera",
+   
+  "datagrid.addall"       : "KonyDataGrid",
+  "datagrid.addat"        : "KonyDataGrid",
+  "datagrid.applycellskin": "KonyDataGrid",
+  "datagrid.removeall"    : "KonyDataGrid",
+  "datagrid.removeat"     : "KonyDataGrid",
+  "datagrid.setcelldata"  : "KonyDataGrid",
+  "datagrid.setdata"      : "KonyDataGrid",
+  "datagrid.setdataat"    : "KonyDataGrid",
+  "datagrid.selectall"    : "KonyDataGrid",
+ 
+  "form.add"            : "KonyForm", 
+  "form.destroy"        : "KonyForm",
+  "form.show"           : "KonyForm",
+  "form.getcurrentform" : "KonyForm",
+  "form.getpreviousform": "KonyForm",
+  
+  "gallery.addall"    : "KonyImageGallery", 
+  "gallery.removeall" : "KonyImageGallery", 
+  "gallery.removeat"  : "KonyImageGallery", 
+  "gallery.setdata"   : "KonyImageGallery", 
+  
+  "imagestrip.addall"     : "KonyHorizontalImageStrip", 
+  "imagestrip.removeall"  : "KonyHorizontalImageStrip",
+  "imagestrip.removeat"   : "KonyHorizontalImageStrip",
+  "imagestrip.setdata"    : "KonyHorizontalImageStrip",
+  "imagestrip.setdataat"  : "KonyHorizontalImageStrip",
+
+  "popup.add"         : "KonyPopup",
+  "popup.destroy"     : "KonyPopup",
+  "popup.dismiss"     : "KonyPopup",
+  "popup.setcontext"  : "KonyPopup",
+  "popup.show"        : "KonyPopup",
+
+  "segui.addat" : "KonySegmentedUI",
+  "segui.addall" : "KonySegmentedUI",
+  "segui.removeall" : "KonySegmentedUI",
+  "segui.removeat" : "KonySegmentedUI",
   "segui.setdata" : "KonySegmentedUI",
+  "segui.setdataat" : "KonySegmentedUI",
+  "segui.setdatawithsections" : "KonySegmentedUI",
+
+  "tabwidget.add"         : "KonyTabView",
+
+  "widget.setenabled" : "KonyWidget",
+  "widget.setfocus" : "KonyWidget",
+  "widget.setfontcolor" : "KonyWidget",
   "widget.setvisibility" : "KonyWidget"
 ]
 
 javaAPIInstanceMap ::= [
   "box.add" : "add",
+ 
   "form.add" : "add",
+  
+  "datagrid.addall"       : "addAll",
+  "datagrid.addat"        : "addAt",
+  "datagrid.applycellskin": "applyCellSkin",
+  "datagrid.removeat"     : "removeAt",
+  "datagrid.setcelldata"  : "setCellData",
+  "datagrid.setdata"      : "setData",
+  "datagrid.setdataat"    : "setDataAt",
+  "datagrid.selectall"    : "selectAll",
+   
+  "gallery.addall"    : "addAll", 
+  "gallery.removeat"  : "removeAt",
+  "gallery.setdata"   : "setData",
+  
+  "imagestrip.addall"     : "addAll", 
+  "imagestrip.removeall"  : "removeAll",
+  "imagestrip.removeat"   : "removeAt",
+  "imagestrip.setdata"    : "setData",
+  "imagestrip.setdataat"  : "setDataAt",
+   
   "popup.add" : "add",
   "popup.setcontext" : "setContext",
-  "segui.setdata" : "setdata",
+
+  "segui.addall" : "addAll",
+  "segui.addat" : "addAt",
+  "segui.removeall" : "removeAll",
+  "segui.removeat" : "removeAt",
+  "segui.setdata" : "setData",
+  "segui.setdataat" : "setDataAt",
+  "segui.setdatawithsections" : "setDataWithSections",
+
+  "tabwidget.add" : "add",
+
+  "widget.setenabled" : "setEnabled",	
+  "widget.setfocus" : "setFocus",
+  "widget.setfontcolor" : "setFGColor",
   "widget.setvisibility" : "setVisibility"
 ]
 
 javaAPIInstance0Map ::= [
+  "calendar.clear" : "clear",
+  
+  "camera.releaserawbytes" : "releaseRawBytes",
+  
+  "datagrid.removeall" : "removeAll",
+ 
+  "form.destroy" : "destroy",
+  "form.getcurrentform" : "getCurrentForm",
+  "form.getpreviousform" : "getPreviousForm",
   "form.show" : "show",
+  
+  "gallery.removeall" : "removeAll",
+  
+  "popup.destroy" : "destroy",
   "popup.dismiss" : "dismiss",
   "popup.show" : "show"
 ]
 
 javaAPIMap ::= [
+  
+  "assert" : "StandardLib.assertOp",
+
+  "contacts.add"    : "ContactsLib.add",
+  "contacts.delete" : "ContactsLib.delete",
+  "contacts.find"   : "ContactsLib.find",
+ 
+  "converttobase64" : "StandardLib.convertToBase64",
+
+  "crypto.createhash"         : "CryptoLib.createHash",
+  "crypto.decrypt"            : "CryptoLib.decrypt",  
+  "crypto.deletekey"          : "CryptoLib.deleteKey", 
+  "crypto.encrypt"            : "CryptoLib.encrypt",
+  "crypto.newkey"             : "CryptoLib.newKey",
+  "crypto.readkey"            : "CryptoLib.readKey",
+  "crypto.retrievepublickey"  : "CryptoLib.retrievePublicKey",
+  "crypto.savekey"            : "CryptoLib.saveKey",
+ 
+  "ds.delete" : "KonyDataSource.delete",
+  "ds.read" : "KonyDataSource.read",	
+  "ds.save" : "KonyDataSource.save",
+
+  "getmetatable" : "StandardLib.getMetaTable",
+
+  "i18n.deleteresourcebundle"   : "i18Lib.deleteResourceBundle",
+  "i18n.getcurrentlocale"       : "i18Lib.getCurrentLocale",
+  "i18n.getlocalizedstring"     : "i18Lib.getLocalizedString",
+  "i18n.isresourcebundlepresent": "i18Lib.isResourceBundlePresent",
+  "i18n.setdefaultlocale"       : "i18Lib.setDefaultLocale",
+  "i18n.setresourcebundle"      : "i18Lib.setResourceBundle",
+  "i18n.updateresourcebundle"   : "i18Lib.updateResourceBundle",
+     
+  "json.parse" : "JSONLib.parse",
+   
+  "math.max"        : "MathLib.max",
+  "math.min"        : "MathLib.min",
+  "math.pow"        : "MathLib.pow",
+  "math.random"     : "MathLib.random",
+  "math.randomseed" : "MathLib.randomSeed",
+  "math.sqrt"       : "MathLib.sqrt",
+  "math.tointeger"  : "MathLib.toInteger",
+
+  "net.cancel"              : "NetworkLib.cancel", 
+  "net.invokeservice"       : "NetworkLib.invokeService",
+  "net.invokeserviceasync"  : "NetworkLib.invokeServiceAsync",
+ 
+  "os.addtodate"    : "OSLib.addToDate",
+  "os.date"         : "OSLib.date",
+  "os.comparedates" : "OSLib.compareDate",
+  "os.diffdatetime" : "OSLib.diffDateTime",
+  "os.freememory"   : "OSLib.freeMemory", 
+  "os.formatdate"   : "OSLib.formatDate",
+  "os.isleapyear"   : "OSLib.isLeapYear", 
+  "os.isvaliddate"  : "OSLib.isValidDate",
+  "os.tocurrency"   : "OSLib.toCurrence",
+  "os.tonumber"     : "OSLib.toNumber",
+  "os.time"         : "OSLib.time",
+
+  "performupgrade" : "StandardLib.performUpgrade",
+
+  "phone.dial"              : "PhoneLib.dial",  
+  "phone.mylocation"        :"PhoneLib.mylocation",
+  "phone.openemail"         : "PhoneLib.sendEmail",
+  "phone.openmediagallery"  : "PhoneLib.openmediagallery",
+  "phone.sendSMS"           : "PhoneLib.sendSMS",
+ 
+  "print" : "StandardLib.print",
+
+  "readfrombase64" : "StandardLib.readFromBase64",
+  "registerforidletimeout" : "StandardLib.registerForIdleTimeout",
+  "setappmenu" : "KonyForm.setAppMenu",
+  "setmetatable" : "StandardLib.setMetaTable",
+
+  "streaming.deregisterdatastream" : "StreamingLib.deregisterDataStream",
+  "streaming.registerdatastream" : "StreamingLib.registerDataStream",
+  "streaming.setcallback" : "StreamingLib.setCallBack",
+
+  "string.compare" : "StringLib.compare",
+  "string.charat" : "StringLib.charAt",
+  "string.containsnogivenchars" : "StringLib.containsNoGivenChars",
+  "string.containsonlygivenchars" : "StringLib.containsOnlyGivenChars",
+  "string.containschars" : "StringLib.containsChars",
+  "string.endswith" : "StringLib.endsWith", 
+  "string.equalsignorecase" : "StringLib.equalIgnoreCase", 
+  "string.find" : "StringLib.find",
+  "string.format" : "StringLib.format",
+  "string.isasciialpha" : "StringLib.isAsciiAlpha", 
+  "string.isasciialphanumeric" : "StringLib.isAsciiAlphanumeric",
+  "string.isnumeric" : "StringLib.isNumeric",
+  "string.isvalidemail" : "StringLib.StringLib.isValidEmail",
+  "string.len" : "StringLib.len",
+  "string.lower" : "StringLib.lower",
+  "string.rep" : "StringLib.rep",
+  "string.replace" : "StringLib.replace",
+  "string.reverse" : "StringLib.reverse",
+  "string.split" : "StringLib.split", 
+  "string.startswith" : "StringLib.startsWith", 
+  "string.sub" : "StringLib.sub",
+  "string.trim" : "StringLib.trim",
+  "string.upper" : "StringLib.upper",
+ 
+  "table.append" : "TableLib.append",
+  "table.concat" : "TableLib.concat",
+  "table.contains" : "TableLib.contains",
+  "table.filter" : "TableLib.filter",
+  "table.get" : "TableLib.get",
+  "table.insert" : "TableLib.insert",
+  "table.map" : "TableLib.map",
+  "table.mapnew" : "TableLib.mapNew",
+  "table.remove" : "TableLib.remove",
+  "table.removeall" : "TableLib.removeAll",
+  "table.sort" : "TableLib.sort",
+
+  "timer.cancel":"TimerLib.cancel",
+  "timer.schedule":"TimerLib.schedule",
+  "timer.setcallback":"TimerLib.setCallBack",
+
+  "type" : "StandardLib.type",
+  "unpack" : "StandardLib.unpack", 
+
   "window.Alert":"KonyAlert.create",
   "window.Box" : "KonyContainer.create",
   "window.Button" : "KonyButton.create",
   "window.Calendar" : "KonyCalendar.create",
   "window.Camera" : "KonyCamera.create",
+  "window.Chart" : "KonyChart.create",
   "window.CheckBoxGroup" : "KonyCheckBoxGroup.create",
+  "window.ComboBox" : "KonyComboBox.createComboBox", 
+  "window.DataGrid" : "KonyDataGrid.create",
+  "window.dismissloadingscreen" : "WindowsLib:dismissLoadingScreen",
   "window.Form" : "KonyForm.create",
+  "window.Gallery" : "KonyImageGallery.createImageGallery",
+  "window.HorizontalImageStrip" : "KonyHorizontalImageStrip.create", 
   "window.Image" : "KonyImage.create",
   "window.Label" : "KonyLabel.create",
-  "window.Line" : "KonyLine.create",
+  "window.Line" : "KonyLine.createLine",
+  "window.Link" : "KonyLink.createLink", 
+  "window.ListBox" : "KonyListBox.createListBox",
   "window.Map" : "KonyMap.create",
+  "window.openurl" : "WindowsLib.openUrl", 
   "window.Popup" : "KonyPopup.create",
   "window.RadioButtonGroup" : "KonyRadioButtonGroup.create",
+  "window.RichText" : "KonyRichText.create",
   "window.SegmentedUI" : "KonySegmentedUI.create",
-  "window.Skin" : "new KonySkin",
+  "window.showloadingscreen" : "WindowsLib.showLoadingScreen",
+  "window.Skin" : "KonySkin.create",
+  "window.Slider" : "KonySlider.create",
+  "window.TabWidget" : "KonyTabView.create",
+  "window.TextArea" : "KonyTextArea.createTextArea", 
   "window.TextField" : "KonyTextField.create",
+  "window.Web" : "KonyWeb.create"
+]
 
-  "net.invokeservice" : "NetworkLib.invokeservice",
-  "net.invokeserviceasync" : "NetworkLib.invokeserviceasync",
-
-  "string.find" : "StringLib.find",
-  "string.len" : "StringLib.len",
-  "string.rep" : "StringLib.rep",
-  "string.sub" : "StringLib.sub",
- 
-  "table.append" : "TableLib.append",
-  "table.get" : "TableLib.get",
-  "table.insert" : "TableLib.insert",
-
-  "setappmenu" : "KonyForm.setAppMenu",
-
-  "phone.mylocation":"PhoneLib.mylocation",
-
-  "registerforidletimeout" : "StandardLib.registerforidletimeout",
- 
-  "Time.schedule":"TimeLib.schedule",
-  "Time.cancel":"TimeLib.cancel",
-
-  "ds.save" : "KonyDataSource.save",
-  "ds.read" : "KonyDataSource.read",	
-  "ds.delete" : "KonyDataSource.delete"
+javaAPI0Map ::= [
   
+  "appreset" : "StandardLib.appReset",
+  "exit":"StandardLib.exit",
+  "os.platform"     : "OSLib.platform",
+  "os.sysinfo"      : "OSLib.sysinfo",
+  "os.useragent"    : "OSLib.userAgent",
+  "unregisterforidletimeout" : "StandardLib.unRegisterForIdleTimeOut"
+
+]
+
+javaAPIDataMap ::= [
+  "math.pi" : "MathLib.pi",
+  "app.headers" : "AppLib.headers",
+  "app.footers" : "AppLib.footers"
 ]
 
 global_tmpl(globalVars,globalFunctions) ::= <<
@@ -113,7 +320,10 @@ import com.konylabs.vm.*;
 import com.konylabs.api.ds.*;
 import com.konylabs.api.ui.calendar.*;
 import com.konylabs.api.ui.camera.*;
+import com.konylabs.api.ui.imagestrip.*;
 import com.konylabs.api.ui.segui.*;
+import com.konylabs.api.ui.slider.*;
+import com.konylabs.api.ui.tab.*;
 import com.konylabs.api.ui.*;
 
 public class <fileName> {
@@ -191,26 +401,38 @@ hash_tmpl(a) ::= "<a>.length()"
 
 expr_tmpl(expr) ::= "<expr>"
 
-arrAccess_tmpl(name,mem, tcast) ::= <<
-((LuaTable)(<mem>)).getTable(<name>)
+arrAccess_tmpl(name, mem, tcast, cast, suffix) ::= <<
+<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable(<name>)))<if(suffix)>.<suffix>()<endif><else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable(<name>)<endif>
 >>
 
 methodCallStmt_tmpl(call) ::= "<call>;"
 
-methodCall1_tmpl(prefix, name, args) ::= <<
-<if(javaMethodMap.(name))><javaMethodMap.(name)><else><if(prefix)><prefix>.<endif><name><endif>(<args; separator=",">)
+methodCall1_tmpl(prefix, name, args, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif><if(prefix)><prefix>.<endif><name>(<args; separator=",">)<if(suffix)>).<suffix>()<endif>
 >>
 
-methodCall2_tmpl(cast, instance, name, args) ::= <<
-<if(instance)>((<cast>)<instance>).<endif><name>(new Object[] {<args; separator=",">})
+methodCall2_tmpl(cast, instance, name, args, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif><if(instance)>((<cast>)<instance>).<endif><name>(new Object[] {<args; separator=",">})<if(suffix)>).<suffix>()<endif>
 >>
 
-methodCall3_tmpl(cast, instance, name) ::= <<
-((<cast>)<instance>).<name>()
+methodCall3_tmpl(cast, instance, name, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif>((<cast>)<instance>).<name>()<if(suffix)>).<suffix>()<endif>
+>>
+
+methodCall4_tmpl(name, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif><name>()<if(suffix)>).<suffix>()<endif>
+>>
+
+typeinit_tmpl(type) ::= <<
+<if (typeInitMap.(type))><typeInitMap.(type)><else><type><endif>
 >>
 
 javaapi_tmpl(name) ::= <<
 <if (javaAPIMap.(name))><javaAPIMap.(name)><else><name><endif>
+>>
+
+javaapi0_tmpl(name) ::= <<
+<if (javaAPI0Map.(name))><javaAPI0Map.(name)><else><name><endif>
 >>
 
 javaapiinstance_tmpl(name) ::= <<
@@ -223,6 +445,10 @@ javaapiinstance0_tmpl(name) ::= <<
 
 javawidget_tmpl(name) ::= <<
 <if (javaWidgetMap.(name))><javaWidgetMap.(name)><else><name><endif>
+>>
+
+javaapidata_tmpl(name) ::= <<
+<if (javaAPIDataMap.(name))><javaAPIDataMap.(name)><else><name><endif>
 >>
 
 exprList_tmpl(expr) ::= <<
@@ -249,8 +475,8 @@ ifelse_stmt(cond, stmt, elseb) ::= <<
 if(<cond>)<stmt><if(elseb)>else<elseb><endif>
 >>
 
-dotMember_tmpl(mem, name, cast, tcast) ::= <<
-<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")))<else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")<endif>
+dotMember_tmpl(mem, name, cast, tcast, suffix) ::= <<
+<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")))<if(suffix)>.<suffix>()<endif><else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")<endif>
 >>
 
 method_dotMember_tmpl(mem, name) ::= <<
@@ -274,7 +500,7 @@ Object arg
 >>
 
 methodDecl_tmpl(isLocal, type,name,params,bl) ::= <<
-<if(isLocal)>private <else>public static <endif><type> <name>(<params>)<if(bl)><bl><else>{ }<endif>
+<if(isLocal)>private <else>public static <endif><type> <name>(<params>) <if(bl)><bl><else>{ }<endif>
 >>
 
 forInit_tmpl(type, var , init) ::= "<type> <var> = <init>"
@@ -294,7 +520,7 @@ for (<init> ; <cond> ; <init.stmt.var>++) <stmt>
 
 forIpair_tmpl(val, val1, var, bl) ::= <<
 for (int <val>=1; (((Object) <var>) != LuaNil.nil) && <val> \< ((LuaTable) <var>).size(); <val>++) {
-  <val1> = ((LuaTable) <var>).getTable(new Double(i));
+  <val1> = ((LuaTable) <var>).getTable(new Integer(i));
   <bl; separator="\n">
 } 
 >>
@@ -339,7 +565,7 @@ tblFieldList_tmpl(field) ::= <<
 >>
 
 field1_tmpl(tname, expr, indx) ::= <<
-<tname>.setTable(new Double(<indx>), <expr>);
+<tname>.setTable(new Integer(<indx>), <expr>);
 >>
 
 field2_tmpl(tname, fname, expr, tcast) ::= <<

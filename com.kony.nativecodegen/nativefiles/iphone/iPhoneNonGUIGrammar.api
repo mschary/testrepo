@@ -71,9 +71,9 @@ ds = {
 networkasynchandle = {handle  --[[Object]]}
 
 net = {
-	rettbl = invokeservice(url --[[String]], params --[[Table]], isblock --[[boolean]]) --[[LuaTable]]
-	, hndl = invokeserviceasync(url --[[String]], params --[[Table]], callbk --[[closure]]) --[[Object]]
-	, v = cancel(id --[[networkasynchandle]]) --[[voidHandle.handle]]
+	rettbl = invokeservice(url) --[[LuaTable]]
+	, hndl = invokeserviceasync(url) --[[doubleHandle.handle]]
+	, v = cancel(ide) --[[voidHandle.handle]]
 }
 
 --//Streaming API's
@@ -109,12 +109,12 @@ timer = {
 
 i18n = {
 	locale = getcurrentlocale(local --[[void]]) --[[String]]
-	, f1 = setdefaultlocale(locale --[[NSArray]]) --[[voidHandle.handle]]
-	, f2 = setresourcebundle(bundle --[[NSArray]]) --[[voidHandle.handle]]
-	, f3 = updateresourcebundle(bundle --[[NSArray]]) --[[voidHandle.handle]]
-	, flag = isresourcebundlepresent(locale --[[NSArray]]) --[[boolean]]
-	, value = getlocalizedstring(i18nkey --[[NSArray]]) --[[String]]
-	, f4 = deleteresourcebundle(locale --[[NSArray]]) --[[voidHandle.handle]]
+	, f1 = setdefaultlocale(locale ) --[[voidHandle.handle]]
+	, f2 = setresourcebundle(bundle ) --[[voidHandle.handle]]
+	, f3 = updateresourcebundle(bundle ) --[[voidHandle.handle]]
+	, flag = isresourcebundlepresent(locale ) --[[boolean]]
+	, value = getlocalizedstring(i18nkey ) --[[String]]
+	, f4 = deleteresourcebundle(locale ) --[[voidHandle.handle]]
 }
 
 --// Crypt API's todo
@@ -189,22 +189,22 @@ string = {
 --//Table.removeall(tableid)
 
 crypto = {
-a = newkey(parameters --[[NSArray]]) --[[NSArray*]],
-b = savekey(parameters --[[NSArray]]) --[[NSArray*]],
-c = encrypt(parameters --[[NSArray]]) --[[NSArray*]],
-d = decrypt(parameters --[[NSArray]]) --[[NSArray*]],
-e = retrievepublickey(parameters --[[NSArray]]) --[[NSArray*]],
-f = createhash(parameters --[[NSArray]]) --[[NSArray*]],
-g = deletekey(parameters --[[NSArray]]) --[[NSArray*]],
-h = readkey (parameters --[[NSArray]]) --[[NSArray*]]
+a = newkey(parameters ) --[[NSArray]],
+b = savekey(parameters ) --[[NSArray]],
+c = encrypt(parameters ) --[[NSArray]],
+d = decrypt(parameters ) --[[NSArray]],
+e = retrievepublickey(parameters ) --[[NSArray]],
+f = createhash(parameters ) --[[NSArray]],
+g = deletekey(parameters ) --[[NSArray]],
+h = readkey (parameters ) --[[NSArray]]
 }
 
 imagestrip = {
-a = createImageStrip(parameters --[[NSArray]]) --[[id]],
-b = setImageDataToImageStrip(parameters --[[NSArray]]) --[[voidHandle.handle]],
-c = addAllImageToImageStrip(parameters --[[NSArray]]) --[[voidHandle.handle]],
-d = removeAllImageFromImageStrip(parameters --[[NSArray]]) --[[voidHandle.handle]],
-e = removeImageAtImageStrip(parameters --[[NSArray]]) --[[voidHandle.handle]]
+a = createImageStrip(parameters ) --[[id]],
+b = setImageDataToImageStrip(parameters ) --[[voidHandle.handle]],
+c = addAllImageToImageStrip(parameters ) --[[voidHandle.handle]],
+d = removeAllImageFromImageStrip(parameters ) --[[voidHandle.handle]],
+e = removeImageAtImageStrip(parameters ) --[[voidHandle.handle]]
 }
 
 
@@ -264,8 +264,8 @@ math = {
 
 
 os = {
-	num11 = tonumber(data1 --[[String]]) --[[int]]
-	, num12 = tonumber(data1 --[[int]]) --[[int]]
+	--//num11 = tonumber(data1 --[[String]]) --[[int]]
+	num12 = tonumber(data1) --[[NSNumber]]
 	, str12 = date() --[[String]]
 	, str13 = time() --[[String]]
 	, diff11 = diffdatetime(str1 --[[String]], str2 --[[String]]) --[[int]]
@@ -274,7 +274,7 @@ os = {
 	, date1 = date(format --[[String]]) --[[String]]
 	, flag1 = isvaliddate(date --[[String]], format --[[String]]) --[[boolean]]
 	, flag2 = isleapyear(date --[[String]], format --[[String]]) --[[boolean]]
-	, curr = tocurrency(value --[[float]]) --[[void]]
+	, curr = tocurrency(value) --[[void]]
 	, mem  = freememory() --[[int]]
 	, agent = useragent() --[[String]]
 	, tbl1 = platform() --[[Table]]
@@ -306,8 +306,8 @@ x = appreset() --[[void]],
 
 a1 = appmiddlewaresecureinvoker(inputParamTab --[[table]], isBlocking --[[boolean]], indicator --[[boolean]], datasetID --[[String]])--[[void]] ,
 a2 = appmiddlewareinvoker(inputParamTab --[[table]], isBlocking --[[boolean]], indicator --[[boolean]], datasetID --[[String]])--[[LuaTable]] ,
-a3 = appmiddlewaresecureinvokerasync(inputParamTab --[[table]], callback --[[closure]])--[[id]],
-a4 = appmiddlewareinvokerasync(inputParamTab --[[table]], callback --[[closure]])--[[void]],
+a3 = appmiddlewaresecureinvokerasync(inputParamTab --[[table]], callback --[[closure]])--[[doubleHandle.handle]],
+a4 = appmiddlewareinvokerasync(inputParamTab --[[table]], callback --[[closure]])--[[doubleHandle.handle]],
 a5 = displayError(code --[[String]],  msg --[[String]]) --[[void]],
 a6 = displayMWError() --[[void]],
 

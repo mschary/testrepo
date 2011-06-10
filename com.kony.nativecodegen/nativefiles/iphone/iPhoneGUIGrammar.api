@@ -2,11 +2,11 @@
 --// Function Syntax :  <ret_val> = <function_name>(<parameter_name> --[[<data_type]] â) --<return_data_type>
 
 iPhone = {
-KonyFormHandle = createForm( parameters --[[NSArray]]) --[[KonyForm]],
+KonyFormHandle = createForm( parameters ) --[[KonyForm]],
 NSDictionaryHandle  = createSkin( skinParameters --[[NSDictionary]]) --[[NSDictionary]],
-KonyButtonHandle  = createButton( parameters --[[NSArray]]) --[[KonyButton]],
-KonyBoxHandle  = createBox( parameters --[[NSArray]]) --[[KonyBox]],
-KonyLabelHandle  = createLabel( parameters --[[NSArray]]) --[[KonyLabel]],
+KonyButtonHandle  = createButton( parameters ) --[[KonyButton]],
+KonyBoxHandle  = createBox( parameters ) --[[KonyBox]],
+KonyLabelHandle  = createLabel( parameters ) --[[KonyLabel]],
 voidHandle  = addWidgetsToBox( box --[[KonyBox]],  widgets --[[NSArray]]) ,
 voidHandle  = addWidgetsToForm ( form --[[KonyForm]],  widgets --[[NSArray]]) ,
 voidHandle   = showForm(  form --[[KonyForm]]) ,
@@ -35,7 +35,7 @@ skin = {
 
 skinHandle = {handle --[[LuaTable]]}
 voidHandle = {handle --[[void]]}
-widgetHandle = {handle --[[KonyWidget]]}
+widgetHandle = {handle --[[id]]}
 formHandle = {handle --[[KonyForm]], include="KonyForm.h"}
 boxHandle = {handle --[[KonyBox]], include="<todo>"}
 tabHandle = {handle --[[KonyTab]], include="<todo>"}
@@ -43,7 +43,7 @@ popupHandle = {handle --[[KonyPopup]], include="<todo>"}
 buttonHandle = {handle --[[KonyButton]], include="<todo>"}
 calendarHandle = {handle --[[KonyCalendar]], include="<todo>"}
 checkboxgroupHandle = {handle --[[KonyCheckboxGroup]], include="<todo>"} 
-comboboxHandle = {handle --[[KonyCombobox]], include="<todo>"} 
+comboboxHandle = {handle --[[id]], include="<todo>"} 
 datagridHandle = {handle --[[DataGridWidget]], include="<todo>"}
 imageHandle = {handle --[[KonyImage]], include="<todo>"}
 labelHandle = {handle --[[KonyLabel]], include="<todo>"}
@@ -54,7 +54,7 @@ radiobuttongroupHandle = {handle --[[KonyRadioButton]], include="<todo>"}
 richtextHandle = {handle --[[KonyRichText]], include="<todo>"}
 textareaHandle = {handle --[[KonyTextArea]], include="<todo>"}
 textfieldHandle = {handle --[[KonyTextField]], include="<todo>"}
-webHandle = {handle --[[KonyWeb]], include="<todo>"}
+webHandle = {handle --[[KonyWebControl]], include="<todo>"}
 cameraHandle = {handle --[[id]], include="<todo>"}
 imagestripHandle = {handle --[[KonyImageStrip]], include="<todo>"}
 galleryHandle = {handle --[[KonyGallery]], include="<todo>"}
@@ -63,8 +63,9 @@ segmenteduiHandle = {handle --[[KonySegUI]], include="<todo>"}
 showloadingscreenHandle = {handle --[[todo]], include="<todo>"}
 sliderHandle = {handle --[[KonySlider]], include="<todo>"}
 advertisementHandle = {handle --[[todo]], include="<todo>"}
-rawbytesHandle={handle --[[KonyRaw]]}
+rawbytesHandle={handle --[[id]]}
 mapHandle = {handle --[[KonyMap]], include="<todo>"}
+doubleHandle={handle --[[doubleType]]}
 
 --//<todo?> Do we need to create Handle for every widget specific data structures?
 --// for Ex:-  masterdata --[[checkboxMasterdataHandle]]  (or XXXHandle.handle) ?
@@ -231,7 +232,7 @@ window = {
 		, text --[[String]], image --[[String]], customhandler --[[closure]]
 		, isvisible --[[boolean]], containerweight --[[int]], hexpand --[[boolean]], vexpand --[[boolean]]
 		, widgetalign --[[int]], platformspecificproperties --[[cameraPSPHandle]]
-		) --id
+		) --KonyCameraController
 		,
 
 	imagestrip = HorizontalImageStrip(id --[[String]], skinvar --[[skinHandle]]

@@ -298,7 +298,7 @@ public class NativeCodeGenerationJob extends Job {
 			} else if (!mainresult) {
 				ConsoleDisplayManager.getDefault().println("Native code generation failed", ConsoleDisplayManager.MSG_ERROR);
 			} else {
-				ConsoleDisplayManager.getDefault().println("Native code generation is successfull for " + platform, ConsoleDisplayManager.MSG_WARNING);
+				ConsoleDisplayManager.getDefault().println("Native code generation is successfull for " + platform, ConsoleDisplayManager.MSG_SUCCESS);
 			}
 			ConsoleDisplayManager.getDefault().println("Time taken for generating native code: " + (System.currentTimeMillis() - time));
 		}
@@ -306,43 +306,47 @@ public class NativeCodeGenerationJob extends Job {
 	
 	private static final String STATUS_KEY = "Status";
 	private static final String STATUS_FAILED_TYPE_INFERENCE = "FAILED_TYPE_INFERENCE";
+	private static final String STATUS_SUCCEEDED = "SUCCEEDED";
+	public static final String STATUS_FAILED_GENERAL = "FAILED_GENERAL";
+	public static final String STATUS_FAILED_CRASHED = "FAILED_CRASHED";
 
 
 	private boolean executeNativeBuild(String buildStatusFile, Map<String, String> antRCProperties, String platform) {
 		boolean success = false;
-			AntRunner antRunner = new AntRunner();
-			antRunner.setBuildFile(pluginLoc + "nativefiles/nativebuild.xml");
-			antRunner.setProps(antRCProperties);
-			antRunner.setTarget("nativerun");
-			success = antRunner.execute();
-			if (new File(buildStatusFile).exists()) {
-				Properties properties = new Properties();
-				FileReader reader = null;
-				try {
-					reader = new FileReader(buildStatusFile);
-					properties.load(reader);
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					if (reader != null) {
-						try {
-							reader.close();
-						} catch (IOException e) {
-							//ignore
-						}
-					}
-				}
-				if (properties.get(STATUS_KEY).equals(STATUS_FAILED_TYPE_INFERENCE)) {
+		AntRunner antRunner = new AntRunner();
+		antRunner.setBuildFile(pluginLoc + "nativefiles/nativebuild.xml");
+		antRunner.setProps(antRCProperties);
+		antRunner.setTarget("nativerun");
+		success = antRunner.execute();
+		if (new File(buildStatusFile).exists()) {
+			Properties properties = new Properties();
+			FileReader reader = null;
+			try {
+				reader = new FileReader(buildStatusFile);
+				properties.load(reader);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (reader != null) {
 					try {
-						typeInferenceFile.refreshLocal(IResource.DEPTH_ZERO, null);
-					} catch (CoreException e) {
-						e.printStackTrace();
+						reader.close();
+					} catch (IOException e) {
+						// ignore
 					}
-					openInferenceditor();
-					ConsoleDisplayManager.getDefault().println("Unable to resolve types for variables.", ConsoleDisplayManager.MSG_ERROR);
-					return false;
 				}
 			}
+			Object status = properties.get(STATUS_KEY);
+			if (status.equals(STATUS_FAILED_TYPE_INFERENCE)) {
+				try {
+					typeInferenceFile.refreshLocal(IResource.DEPTH_ZERO, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+				openInferenceditor();
+				ConsoleDisplayManager.getDefault().println("Unable to resolve types for variables.", ConsoleDisplayManager.MSG_ERROR);
+			}
+			return status.equals(STATUS_SUCCEEDED);
+		}
 		return success;
 	}
 

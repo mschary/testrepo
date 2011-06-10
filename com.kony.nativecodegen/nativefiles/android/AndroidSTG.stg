@@ -13,17 +13,6 @@ typeInitMap ::= [
         default:"null" // anything other than an atomic type
 ]
 
-javaMethodMap ::= [
-  "math.pi" : "Math.pi",     
-  "os.platform" : "OS.platform",
-  "os.sysinfo" :  "OS.sysinfo",    
-  "os.useragent" :  "OS.userAgent",
-  "appreset" :  "Standard.appReset",   
-  "exit" :  "Standard.exit",    
-  "unregisterforidletimeout" :  "Standard.unregisterIdleTimeout"
-  
-]
-
 javaWidgetMap ::= [
   "widget.widget" : "widget.widget"
 ]
@@ -38,10 +27,7 @@ javaAPIInstance0Map ::= [
 
 javaAPIMap ::= [
   
-  //Andriod dump as all are static
-  "app.headers" : "App.headers",
-	"app.footers" : "App.headers",
-	"setappmenu" : "AppMenu.setAppMenu",
+	"setappmenu" : "AppMenu.setAppMenu",  
 	"setappmenufocusindex" : "AppMenu.setAppMenuFocusIndex",
 	"hideappmenuitems" : "AppMenu.hideAppMenuItems",
 	"showappmenuitems" : "AppMenu.showAppMenuItems",
@@ -50,7 +36,6 @@ javaAPIMap ::= [
 	"box.setvisibility" : "Box.setVisibility",
 	  
 	"calendar.clear" :  "Calendar.clear",
-	  
 	"camera.releaserawbytes" : "Camera.releaseRawBytes",
 	  
 	"contacts.add" :  "Contacts.add",
@@ -120,7 +105,7 @@ javaAPIMap ::= [
 	"net.cancel" :  "Net.cancel",
 	  
 	"os.tonumber" : "OS.toNumber",
-	"os.date" : "OS.date",
+	"os.date" : "OS.date", //TODO: recheck os.date(format)
 	"os.time" : "OS.time",
 	"os.diffdatetime" : "OS.diffDateTime",
 	"os.comparedates" : "OS.compareDates",
@@ -130,12 +115,24 @@ javaAPIMap ::= [
 	"os.tocurrency" : "OS.toCurrency",
 	"os.freememory" : "OS.freeMemory",
 	"os.formatdate" : "OS.formatDate",
+	
+	"os.startbump" : "OS.startBump",
+  "os.sendbumpdata" : "OS.sendBumpData",
+  "os.loadlibrary" : "OS.loadLibrary",
+  "os.registerforremotenotifications" : "OS.registerRemoteNotifications",
+  "os.setpushnotificationcallbacks" : "OS.setPushnotificationCallbacks",
+  "os.deregisterremotenotifications" : "OS.deregisterRemoteNotifications",
+  "os.getcurrenttimeinmillis" : "OS.getCurrenTimeInMillis",
+  "os.log" : "OS.Log",
 	  
 	"phone.sendSMS" : "com.konylabs.nativecodegen.api.Phone.sendSMS",
 	"phone.dial" :  "com.konylabs.nativecodegen.api.Phone.dial",
 	"phone.mylocation" :  "com.konylabs.nativecodegen.api.Phone.myLocation",
 	"phone.openemail" : "com.konylabs.nativecodegen.api.Phone.openEmail",
 	"phone.openmediagallery" :  "com.konylabs.nativecodegen.api.Phone.openMediaGallery",
+	  
+	"pickerview.setcomponentdata" :  "PickerView.setComponentData",
+  "pickeview.setselectedkeyincomponent" : "PickerView.setSelectedKeyInComponent",
 	  
 	"popup.add" : "Popup.add",
 	"popup.dismiss" : "Popup.dismiss",
@@ -171,29 +168,29 @@ javaAPIMap ::= [
 	"streaming.setcallback" : "Streaming.setCallback",
 	"streaming.unregisterdatastream" :  "Streaming.unregisterDataStream",
 	  
-	"string.find" : "Strng.find",
-	"string.len" :  "Strng.len",
-	"string.split" :  "Strng.split",
-	"string.lower" :  "Strng.lower",
-	"string.upper" :  "Strng.upper",
-	"string.rep" :  "Strng.rep",
-	"string.reverse" :  "Strng.reverse",
-	"string.sub" :  "Strng.sub",
-	"string.replace" :  "Strng.replace",
-	"string.trim" : "Strng.trim",
-	"string.startswith" : "Strng.startsWith",
-	"string.endswith" : "Strng.endsWith",
-	"string.equalsignorecase" :  "Strng.equalsIgnoreCase",
-	"string.charat" : "Strng.charAt",
-	"string.compare" :  "Strng.compare",
-	"string.format" : "Strng.format",
-	"string.isasciialpha" : "Strng.isAsciiAlpha",
-	"string.isasciialphanumeric" :  "Strng.isAsciiAlphanumeric",
-	"string.containschars" :  "Strng.containsChars",
-	"string.containsonlygivenchars" : "Strng.containsOnlyGivenChars",
-	"string.isvalidemail" : "Strng.isStringValidEmail",
-	"string.isnumeric" :  "Strng.isNumeric",
-	"string.containsnogivenchars" : "Strng.containsNoGivenChars",
+	"string.find" : "StringLib.find",
+	"string.len" :  "StringLib.len",
+	"string.split" :  "StringLib.split",
+	"string.lower" :  "StringLib.lower",
+	"string.upper" :  "StringLib.upper",
+	"string.rep" :  "StringLib.rep",
+	"string.reverse" :  "StringLib.reverse",
+	"string.sub" :  "StringLib.sub",
+	"string.replace" :  "StringLib.replace",
+	"string.trim" : "StringLib.trim",
+	"string.startswith" : "StringLib.startsWith",
+	"string.endswith" : "StringLib.endsWith",
+	"string.equalsignorecase" :  "StringLib.equalsIgnoreCase",
+	"string.charat" : "StringLib.charAt",
+	"string.compare" :  "StringLib.compare",
+	"string.format" : "StringLib.format",
+	"string.isasciialpha" : "StringLib.isAsciiAlpha",
+	"string.isasciialphanumeric" :  "StringLib.isAsciiAlphanumeric",
+	"string.containschars" :  "StringLib.containsChars",
+	"string.containsonlygivenchars" : "StringLib.containsOnlyGivenChars",
+	"string.isvalidemail" : "StringLib.isStringValidEmail",
+	"string.isnumeric" :  "StringLib.isNumeric",
+	"string.containsnogivenchars" : "StringLib.containsNoGivenChars",
 	  
 	"table.append" :  "Table.append",
 	"table.concat" :  "Table.concat",
@@ -212,6 +209,10 @@ javaAPIMap ::= [
 	"timer.setcallback" : "Timer.setCallback",
 	  
 	"tabwidget.add" : "Tabwidget.add",
+
+  "webwidget.goforward" : "WebWidget.goForward",
+  "webwidget.reload" :  "WebWidget.reload",
+  "webwidget.goback" :  "WebWidget.goBack",
 	  
 	"widget.setenabled" : "Widget.setEnable",
 	"widget.setfocus" : "Widget.setFocus",
@@ -250,8 +251,28 @@ javaAPIMap ::= [
 	"window.DataGrid" : "Window.createDataGrid",
 	"window.Slider" : "Window.createSlider",
 	"window.showloadingscreen" :  "Window.showLoadingScreen",
-	"window.dismissloadingscreen" : "Window.dismissLoadingScreen"
+	"window.dismissloadingscreen" : "Window.dismissLoadingScreen",
+  "window.PickerView" : "Window.createPickerView"
   
+]
+
+
+javaAPI0Map ::= [
+  "os.platform" : "OS.platform",   
+  "os.sysinfo" :  "OS.sysinfo",    
+  "os.useragent" :  "OS.userAgent", 
+  "os.disconnectbump" : "OS.disconnectBump",
+  "appreset" :  "Standard.appReset",   
+  "exit" :  "Standard.exit",    
+  "unregisterforidletimeout" :  "Standard.unregisterIdleTimeout"
+  
+]
+
+javaAPIDataMap ::= [
+  //Andriod dump as all are static
+  "math.pi" : "Math.pi",
+  "app.headers" : "App.headers",
+  "app.footers" : "App.headers"
 ]
 
 global_tmpl(globalVars,globalFunctions) ::= <<
@@ -305,20 +326,20 @@ comment1_tmpl(comment, stmt) ::= <<
 <stmt>
 >>
 
-var_tmpl(prefix, type, name, init, ptype) ::= <<
-<type> <name> = <if(init)><if(ptype)>(<ptype>) <endif><init><else><typeInitMap.(type)><endif>;
+var_tmpl(prefix, type, name, init, ptype, suffix) ::= <<
+<type> <name> = <if(init)><if(ptype)><if(suffix)>(<endif>(<ptype>) <endif><init><if(suffix)>).<suffix>()<endif><else><typeInitMap.(type)><endif>;
 >>
 
-varDecl_tmpl(isGlobal, prefix, type, name, init, ptype) ::= <<
-<if(isGlobal)>public static <else>private static <endif><type> <if(prefix)><prefix>.<name><else><name><endif> = <if(init)><if(ptype)>(<ptype>) <endif><init><else><typeInitMap.(type)><endif>;
+varDecl_tmpl(isGlobal, prefix, type, name, init) ::= <<
+<if(isGlobal)>public static <else>private static <endif><type> <if(prefix)><prefix>.<name><else><name><endif> = <if(init)><init><else><typeInitMap.(type)><endif>;
 >>
 
 varList_tmpl(vars) ::= <<
 <vars; separator="\n">
 >>
 
-assign_tmpl(isLocal, prefix, a, b, ptype) ::= <<
-<if(isLocal)><a> = <if(ptype)>(<ptype>) <endif><b><else><if(prefix)><prefix>.<endif><a> = <if(ptype)>(<ptype>) <endif><b><endif>;
+assign_tmpl(isLocal, prefix, a, b, ptype, suffix) ::= <<
+<if(isLocal)><a> = <if(ptype)><if(suffix)>(<endif>(<ptype>) <endif><b><if(suffix)>).<suffix>()<endif><else><if(prefix)><prefix>.<endif><a> = <if(ptype)><if(suffix)>(<endif>(<ptype>) <endif><b><if(suffix)>).<suffix>()<endif><endif>;
 >>
 
 pow_tmpl(a,b) ::= "Math.pow(<a>,<b>)"
@@ -347,26 +368,38 @@ hash_tmpl(a) ::= "<a>.length()"
 
 expr_tmpl(expr) ::= "<expr>"
 
-arrAccess_tmpl(name,mem, tcast) ::= <<
-((LuaTable)(<mem>)).getTable(<name>)
+arrAccess_tmpl(name, mem, tcast, cast, suffix) ::= <<
+<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable(<name>)))<if(suffix)>.<suffix>()<endif><else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable(<name>)<endif>
 >>
 
 methodCallStmt_tmpl(call) ::= "<call>;"
 
-methodCall1_tmpl(prefix, name, args) ::= <<
-<if(javaMethodMap.(name))><javaMethodMap.(name)><else><if(prefix)><prefix>.<endif><name><endif>(<args; separator=",">)
+methodCall1_tmpl(prefix, name, args, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif><if(prefix)><prefix>.<endif><name>(<args; separator=",">)<if(suffix)>).<suffix>()<endif>
 >>
 
-methodCall2_tmpl(cast, instance, name, args) ::= <<
-<if(instance)>((<cast>)<instance>).<endif><name>(new Object[] {<args; separator=",">})
+methodCall2_tmpl(cast, instance, name, args, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif><if(instance)>((<cast>)<instance>).<endif><name>(new Object[] {<args; separator=",">})<if(suffix)>).<suffix>()<endif>
 >>
 
-methodCall3_tmpl(cast, instance, name) ::= <<
-((<cast>)<instance>).<name>()
+methodCall3_tmpl(cast, instance, name, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif>((<cast>)<instance>).<name>()<if(suffix)>).<suffix>()<endif>
+>>
+
+methodCall4_tmpl(name, rcast, suffix) ::= <<
+<if(rcast)><if(suffix)>(<endif>(<rcast>) <endif><name>()<if(suffix)>).<suffix>()<endif>
+>>
+
+typeinit_tmpl(type) ::= <<
+<if (typeInitMap.(type))><typeInitMap.(type)><else><type><endif>
 >>
 
 javaapi_tmpl(name) ::= <<
 <if (javaAPIMap.(name))><javaAPIMap.(name)><else><name><endif>
+>>
+
+javaapi0_tmpl(name) ::= <<
+<if (javaAPI0Map.(name))><javaAPI0Map.(name)><else><name><endif>
 >>
 
 javaapiinstance_tmpl(name) ::= <<
@@ -381,32 +414,36 @@ javawidget_tmpl(name) ::= <<
 <if (javaWidgetMap.(name))><javaWidgetMap.(name)><else><name><endif>
 >>
 
+javaapidata_tmpl(name) ::= <<
+<if (javaAPIDataMap.(name))><javaAPIDataMap.(name)><else><name><endif>
+>>
+
 exprList_tmpl(expr) ::= <<
 <expr; separator=",">
 >>
 
 while_tmpl(cond, stmt) ::= <<
-while(<cond>)<stmt>
+while (<cond>) <stmt>
 >>
 
 doWhile_tmpl(cond, stmt) ::= <<
-do<stmt>while(<cond>);
+do <stmt> while (<cond>);
 >>
 
 return_tmpl(val) ::= "return <val>;"
 
 if_stmt(cond, stmt, elb) ::= <<
-if(<cond>)<stmt><if(elb)>else <elb><endif>
+if (<cond>) <stmt><if(elb)> else <elb><endif>
 >>
 
-if_stmt1(cond, stmt) ::= "if(<cond>)<stmt>"
+if_stmt1(cond, stmt) ::= "if (<cond>) <stmt>"
 
 ifelse_stmt(cond, stmt, elseb) ::= <<
 if(<cond>)<stmt><if(elseb)>else<elseb><endif>
 >>
 
-dotMember_tmpl(mem, name, cast, tcast) ::= <<
-<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")))<else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")<endif>
+dotMember_tmpl(mem, name, cast, tcast, suffix) ::= <<
+<if(cast)>((<cast>)(<if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")))<if(suffix)>.<suffix>()<endif><else><if(tcast)>((LuaTable)(<mem>))<else><mem><endif>.getTable("<name>")<endif>
 >>
 
 method_dotMember_tmpl(mem, name) ::= <<
@@ -430,7 +467,7 @@ Object arg
 >>
 
 methodDecl_tmpl(isLocal, type,name,params,bl) ::= <<
-<if(isLocal)>private <else>public static <endif><type> <name>(<params>)<if(bl)><bl><else>{ }<endif>
+<if(isLocal)>private <else>public static <endif><type> <name>(<params>) <if(bl)><bl><else>{ }<endif>
 >>
 
 forInit_tmpl(type, var , init) ::= "<type> <var> = <init>"
@@ -442,22 +479,22 @@ forUpdater_tmpl(name, cond) ::= "<name><cond>"
 
 for_tmpl(init, cond, updt, stmt) ::= <<
 <if(updt)>
-for(<init>;<cond>;<updt>)<stmt>
+for (<init>;<cond>;<updt>) <stmt>
 <else>
-for(<init> ; <cond> ; <init.stmt.var>++)<stmt>
+for (<init> ; <cond> ; <init.stmt.var>++) <stmt>
 <endif>
 >>
 
 forIpair_tmpl(val, val1, var, bl) ::= <<
-for(int <val>=1; (((Object) <var>) != LuaNil.nil) && <val> \< ((LuaTable) <var>).size(); <val>++){
-  <val1> = ((LuaTable) <var>).getTable(new Double(i));
+for (int <val>=1; (((Object) <var>) != LuaNil.nil) && <val> \< ((LuaTable) <var>).size(); <val>++) {
+  <val1> = ((LuaTable) <var>).getTable(new Integer(i));
   <bl; separator="\n">
 } 
 >>
 
 forPair_tmpl(type, val, met, type1, var, bl) ::= <<
 java.util.Iterator _itr = <var>.iterator(); 
-for(int _idx = 0; _itr.hasNext(); _idx++){
+for (int _idx = 0; _itr.hasNext(); _idx++) {
   <type> <val> = (<type>) _itr.getNext();
   <bl; separator="\n">
 } 
@@ -495,7 +532,7 @@ tblFieldList_tmpl(field) ::= <<
 >>
 
 field1_tmpl(tname, expr, indx) ::= <<
-<tname>.setTable(new Double(<indx>), <expr>);
+<tname>.setTable(new Integer(<indx>), <expr>);
 >>
 
 field2_tmpl(tname, fname, expr, tcast) ::= <<

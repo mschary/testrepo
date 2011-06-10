@@ -24,7 +24,7 @@ voidHandle = {handle --[[void]]}
 widgetHandle = {handle --[[Object]]}
 formHandle = {handle --[[LuaTable]]}
 boxHandle = {handle --[[KonyContainer]]}
-tabHandle = {handle --[[KonyTab]]}
+tabHandle = {handle --[[KonyTabView]]}
 popupHandle = {handle --[[LuaTable]]}
 buttonHandle = {handle --[[Object]]}
 calendarHandle = {handle --[[KonyCalendar]]}
@@ -42,8 +42,8 @@ textareaHandle = {handle --[[KonyTextArea]]}
 textfieldHandle = {handle --[[KonyTextField]]}
 webHandle = {handle --[[KonyWeb]]}
 cameraHandle = {handle --[[KonyCamera]]}
-imagestripHandle = {handle --[[KonyImageStrip]]}
-galleryHandle = {handle --[[KonyGalery]]}
+imagestripHandle = {handle --[[KonyHorizontalImageStrip]]}
+galleryHandle = {handle --[[KonyImageGallery]]}
 mapHandle = {handle --[[KonyMap]]}
 segmenteduiHandle = {handle --[[LuaTable]]}
 showloadingscreenHandle = {handle --[[LoadingScreen]]}
@@ -56,7 +56,7 @@ mapHandle = {handle --[[KonyMap]]}
 --// for Ex:-  masterdata --[[checkboxMasterdataHandle]]  (or XXXHandle.handle) ?
 
 
---//widget specific PSP(Platform Specific Proerty
+--//widget specific PSP(Platform Specific Property
 --//like we have created skin structure, we may create one for this
 formPSPHandle = {handle --[[Object]]}
 boxPSPHandle = {handle --[[Object]]}
@@ -183,7 +183,7 @@ window = {
 
 	radioBtnGroup = RadioButtonGroup(id --[[String]], skinvar --[[skinHandle.handle]]
 		, onfocusskin --[[skinHandle.handle]], masterdata --[[LuaTable]], orientation --[[String]]
-		, onselection --[[closure]], containerweight --[[int]], widgetalign --[[int]] 
+		, onselection --[[closure]], isvisible --[[boolean]], containerweight --[[int]], widgetalign --[[int]] 
 		, platformspecificproperties --[[radiobuttongroupPSPHandle]]
 		) --radiobuttongroupHandle.handle,
 

@@ -73,7 +73,7 @@ networksynchandle = {handle  --[[Object]]}
 networkasynchandle = {handle  --[[Object]]}
 
 net = {
-	rettbl = invokeservice(url --[[String]], params --[[LuaTable]], isblock --[[boolean]]) --[[networkasynchandle.handle]]
+	rettbl = invokeservice(url --[[String]], params --[[LuaTable]], isblock --[[boolean]]) --[[networksynchandle.handle]]
 	, hndl = invokeserviceasync(url --[[String]], params --[[LuaTable]], callbk --[[closure]]) --[[networkasynchandle.handle]]
 	, v = cancel(id --[[networkasynchandle]]) --[[voidHandle.handle]]
 }
@@ -257,7 +257,7 @@ os = {
 	, date1 = date(format --[[String]]) --[[String]]
 	, flag1 = isvaliddate(date --[[String]], format --[[String]]) --[[boolean]]
 	, flag2 = isleapyear(date --[[String]], format --[[String]]) --[[boolean]]
-	, curr = tocurrency(value --[[float]]) --[[todo]]
+	, curr = tocurrency(value --[[float]]) --[[String]]
 	, mem  = freememory() --[[int]]
 	, agent = useragent() --[[String]]
 	, tbl1 = platform() --[[LuaTable]]
@@ -271,6 +271,7 @@ os = {
 --//pairs()	 
 --//unpack(Table)
 --//print(x, y, ...) --[[todo]]
+--//exit() --[[todo]]
 --//[String] converttobase64([userdata]rawbytes)
 --//[userdata]rawbytes readfrombase64([userdata]rawbytes) 
 --//registerforidletimeout(timeout, function)
@@ -280,6 +281,7 @@ _aasim_ipairs=ipairs() --[[voidHandle.handle]]
 ,_aasim_pairs=pairs() --[[voidHandle.handle]]
 ,_aasim_unpack = unpack(tbl1 --[[LuaTable]]) --[[todo]]
 ,_aasim_print=print() --[[voidHandle.handle]]
+,_aasim_exit=exit() --[[voidHandle.handle]]
 ,_aasim_ctbase64 = converttobase64(rawbytes --[[todo]]) --[[String]]
 ,_aasim_rfbase64 = readfrombase64(str1 --[[String]]) --[[todo]]
 ,_aasim_rfitimeout = registerforidletimeout(timeout --[[int]], func --[[closure]]) --[[voidHandle.handle]]

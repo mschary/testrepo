@@ -29,6 +29,7 @@ typeMap ::= [
         "int":"int",
         "long":"long",
         "float":"float",
+        "doubleType":"double",
         "double":"double",
         "boolean":"bool",
         "byte":"unsigned char",
@@ -56,7 +57,6 @@ typeMap ::= [
   "KonyButton" : "KonyButton*",
   "KonyCalendar" : "KonyCalendar*",
   "KonyCheckboxGroup" : "KonyCheckboxGroup*",
-  "KonyCombobox" : "KonyCombobox*",
   "DataGridWidget" : "DataGridWidget*",
   "KonyImage" : "KonyImage*",
   "KonyLabel" : "KonyLabel*",
@@ -73,13 +73,16 @@ typeMap ::= [
   "KonyGallery" : "KonyGallery*",
   "MapWidget" : "MapWidget*",
   "KonySegUI" : "KonySegUI*",
-  "KonySlider" : "KonySlider*"
+  "KonySlider" : "KonySlider*",
+  "KonyCameraController" : "KonyCameraController*",
+  "CallbackPtr" : "id" 
 ]
 
 convMap ::= [
   "int" : "[NSNumber numberWithInt:",
   "float" : "[NSNumber numberWithFloat:",
-  "double" : "[NSNumber numberWithDouble:",
+"doubleType" : "[NSNumber numberWithDouble:",
+"double" : "[NSNumber numberWithDouble:",
   "boolean" : "[NSNumber numberWithInt:"
 ]
 
@@ -97,6 +100,7 @@ formatMap ::= [
         "long":"%ld",
         "float":"%f",
         "double":"%lf",
+"doubleType":"%lf",
         "boolean":"%@",
         "byte":"%d",
         "short":"%hd",
@@ -128,7 +132,19 @@ arrayMethodMap ::= [
 "window.HorizontalImageStrip" : "createImageStrip",
 "window.Gallery" : "createImageGallery",
 "window.DataGrid" : "createDataGrid",
+
+"window.RadioButtonGroup" : "createRadioButtonGroup",
+"window.ListBox" : "createListBox",
+"window.TabWidget" : "createTabBar",
+"window.ComboBox" : "createComboBox",
+"window.Link" : "createLink",
+"window.Web" : "createWebWidget",
+"window.RichText" : "createRichTextWidget",
+
 "window.openmediaurl" : "openMediaURL",
+
+"phone.sendSMS" : "sendSMS",
+"phone.openmediagallery" : "openMediaGallery",
 
 "segui.addall" : "addAllToSUI",
 "segui.addat" :	"insertDataAtInSUI",
@@ -143,19 +159,58 @@ arrayMethodMap ::= [
 "string.len" : "stringLen",
 "string.rep" : "stringRep",
 "string.sub" : "stringSub",
+"string.split" : "stringSplit",
+"string.lower" : "stringLower",
+"string.upper" : "stringUpper",
+"string.startswith" : "stringStartsWith",
+"string.endswith" : "stringEndsWith",
+"string.reverse" : "stringReverse",
+"string.replace" : "stringReplace",
+"string.equalsignorecase" : "stringEqualsIgnoreCase",
+"string.charat" : "stringCharAt",
+"string.compare" : "stringCompare",
+"string.isasciialpha" : "stringIsAsciiAlpha",
+"string.isaciiaplhanumeric" : "stringIsAsciiAlphaNumeric",
+"string.isnumeric" : "stringIsNumeric",
+"string.isvalidemail" : "stringIsValidEmail",
+"string.containschars" : "stringContainsChars",
+"string.containsonlygivenchars" : "stringContainsOnlyGivenChars",
+"string.containsnogivenchars" : "stringContainsNoGivenChars",
+
+"math.min" : "mathMin",
+"math.max" : "mathMax",
+"math.pow" : "mathPow",
+"math.pi"  : "mathPI",
+"math.random" : "mathRandom",
+"math.randomseed" : "mathRandomSeed",
+
   "table.append" : "tableAppend",
   "table.get" : "tableGet",
   "table.insert" : "tableInsert",
-  "net.invokeservice" : "netInvokeService",
-  "net.invokeserviceasync" : "netInvokeServiceAsync",
-  "window.Alert":"createAlert",
-  "registerforidletimeout" : "registerForIdletimeout",
+  "table.concat" : "tableConcat",
+  "table.contains" : "tableContains",
+  "table.remove" : "tableRemove",
+  "table.removeAll" : "tableRemoveAll",
+  "table.filter" : "tableFilter",
+  "table.mapnew" : "tableMapNew",
+  "table.map" : "tableMap",
+  "table.sort" : "tableSort",
+  "table.unpack" : "tableUnpack",
+
+"net.invokeservice" : "netInvokeService",
+"net.invokeserviceasync" : "netInvokeServiceAsync",
+"net.cancel" : "cancelAsync",
+
+"window.Alert":"showAlert",
+"registerforidletimeout" : "registerForIdletimeout",
 "window.PickerView" : "createPickerView",
 "setappmenu" : "setAppMenu",
+
 "appmiddlewaresecureinvoker" : "appmiddlewaresecureinvoker",
 "appmiddlewareinvoker" : "appmiddlewareinvoker",
 "appmiddlewaresecureinvokerasync" : "appmiddlewaresecureinvokerasync",
 "appmiddlewareinvokerasync" : "appmiddlewareinvokerasync",
+
 "crypto.newkey" : "getNewKey",
 "crypto.encrypt": "performEncryption",
 "crypto.decrypt": "performDecryption",
@@ -206,7 +261,22 @@ arrayMethodMap ::= [
 "ds.delete" : "dsDelete",
 
 "form.show" : "showForm",
-"form.destroy" : "destroyForm"
+"form.destroy" : "destroyForm",
+
+"os.tocurrency" : "osToCurrency",
+"os.tonumber" : "tonumber",
+"os.date" : "osDate",
+"os.time" : "osTime",
+"os.diffdatetime" : "osDiffTime",
+"os.comparedates" : "osCompareDates",
+"os.addtodate" : "osAddToDate",
+"os.isvaliddate" : "osIsValidDate",
+"os.isleapyear" : "osIsLeapYear",
+"os.freememory" : "osFreeMemory",
+"os.useragent" : "osUserAgent",
+"os.platform" : "osPlatform",
+
+"converttobase64" : "converttobase64"
 
 ]  
 
@@ -227,7 +297,13 @@ methodMap ::= [
         "box.add" : "addWidgetsToBox",
         "print":"print",
 	"appreset" : "appReset",
-        "math.sqrt":"sqrt",
+       "math.sqrt": "mathSqrt",
+	"math.min" : "mathMin",
+	"math.max" : "mathMax",
+	"math.pow" : "mathPow",
+	"math.pi"  : "mathPI",
+	"math.random" : "mathRandom",
+	"math.randomseed" : "mathRandomSeed",
         "os.exit":"exit",
         "exit":"exit",
         "os.platform":"osPlatform",
@@ -235,7 +311,7 @@ methodMap ::= [
         "phone.dial":"dial",
   "window.Map" : "createMapWidget",
   "window.Skin" : "createSkin",
-  "window.Alert":"createAlert",
+  "window.Alert":"showAlert",
   "window.Calendar" : "createCalendarWidget",
   "window.Camera" : "createCamera",
   "window.CheckBoxGroup" : "createCheckBoxGroup",
@@ -250,6 +326,15 @@ methodMap ::= [
   "window.TextField" : "createTextField",
   "window.Gallery" : "createImageGallery",
   "window.DataGrid" : "createDataGrid",
+  
+"window.RadioButtonGroup" : "createRadioButtonGroup",
+"window.ListBox" : "createListBox",
+"window.TabWidget" : "createTabBar",
+"window.ComboBox" : "createComboBox",
+"window.Link" : "createLink",
+"window.Web" : "createWebWidget",
+"window.RichText" : "createRichTextWidget",
+
   "window.HorizontalImageStrip" : "createImageStrip",
   "window.openmediaurl" : "openMediaURL",
 
@@ -263,26 +348,56 @@ methodMap ::= [
 
   "net.invokeservice" : "netInvokeService",
   "net.invokeserviceasync" : "netInvokeServiceAsync",
+  "net.cancel" : "cancelAsync",
 
   "string.find" : "stringFind",
   "string.len" : "stringLen",
   "string.rep" : "stringRep",
   "string.sub" : "stringSub",
- 
+  "string.split" : "stringSplit",
+  "string.lower" : "stringLower",
+  "string.upper" : "stringUpper",
+  "string.startswith" : "stringStartsWith",
+  "string.endswith" : "stringEndsWith",
+  "string.reverse" : "stringReverse",
+  "string.replace" : "stringReplace",
+  "string.equalsignorecase" : "stringEqualsIgnoreCase",
+  "string.charat" : "stringCharAt",
+  "string.compare" : "stringCompare",
+  "string.isasciialpha" : "stringIsAsciiAlpha",
+  "string.isaciiaplhanumeric" : "stringIsAsciiAlphaNumeric",
+  "string.isnumeric" : "stringIsNumeric",
+  "string.isvalidemail" : "stringIsValidEmail",
+  "string.containschars" : "stringContainsChars",
+  "string.containsonlygivenchars" : "stringContainsOnlyGivenChars",
+  "string.containsnogivenchars" : "stringContainsNoGivenChars",
+	
   "table.append" : "tableAppend",
   "table.get" : "tableGet",
   "table.insert" : "tableInsert",
+  "table.concat" : "tableConcat",
+  "table.contains" : "tableContains",
+  "table.remove" : "tableRemove",
+  "table.removeAll" : "tableRemoveAll",
+  "table.filter" : "tableFilter",
+  "table.mapnew" : "tableMapNew",
+  "table.map" : "tableMap",
+  "table.sort" : "tableSort",
+  "table.unpack" : "tableUnpack",
+
   "box.add" : "addWidgetsToBox",
   "popup.dismiss": "dismissPopup",
-  "popup.add" : "addToPopup",
+  "popup.add" : "addWidgetsToPopup",
 "widget.setvisibility" : "setVisibility",
 "setappmenu" : "setAppMenu",
 "setappmenufocusindex" :"setAppMenuFocusItem",
 "showappmenuitems" : "showAppMenuItems",
 "registerforidletimeout" : "registerForIdletimeout",
   "unregisterforidletimeout" : "unregisterForIdletimeout",
-"hidappmenuitems" : "hideAppMenuItems",
+"hideappmenuitems" : "hideAppMenuItems",
 "phone.mylocation" : "location",
+"phone.sendSMS" : "sendSMS",
+"phone.openmediagallery" : "openMediaGallery",
 
 "crypto.newkey" : "getNewKey",
 "crypto.encrypt": "performEncryption",
@@ -337,10 +452,22 @@ methodMap ::= [
 "form.getcurrentform" : "getCurrentForm",
 "form.getpreviousform" : "getPreviousForm",
 "form.destroy" : "destroyForm",
-"form.add" : "addWidgetsToForm"
+"form.add" : "addWidgetsToForm",
 
+"os.tocurrency" : "osToCurrency",
+"os.tonumber" : "tonumber",
+"os.date" : "osDate",
+"os.time" : "osTime",
+"os.diffdatetime" : "osDiffTime",
+"os.comparedates" : "osCompareDates",
+"os.addtodate" : "osAddToDate",
+"os.isvaliddate" : "osIsValidDate",
+"os.isleapyear" : "osIsLeapYear",
+"os.freememory" : "osFreeMemory",
+"os.useragent" : "osUserAgent",
+"os.platform" : "osPlatform",
 
-
+"converttobase64" : "converttobase64"
 ]
 
 widgetMethodMap ::= [
@@ -383,7 +510,7 @@ abstractTypes ::= [
   "String" : "NSString*",
   "Object" : "id",
   "Table" : "LuaTable*",
-        "table" : "LuaTable*",
+  "table" : "LuaTable*",
   "LuaTable" : "LuaTable*",
   "skinTable" : "LuaTable*",
   "KonyLabel" : "KonyLabel*",
@@ -400,7 +527,6 @@ abstractTypes ::= [
   "KonyButton" : "KonyButton*",
   "KonyCalendar" : "KonyCalendar*",
   "KonyCheckboxGroup" : "KonyCheckboxGroup*",
-  "KonyCombobox" : "KonyCombobox*",
   "KonyDatagrid" : "DataGridWidget*",
   "KonyImage" : "KonyImage*",
   "KonyLabel" : "KonyLabel*",
@@ -439,7 +565,7 @@ arrayMethod_tmpl(args) ::= <<
 
 widgetMethod_tmpl(args) ::= <<
 <first(args)>, 
-[NSArray arrayWithObjects : <rest(args); separator=",\n">,nil]
+[NSArray arrayWithObjects : <if(rest(args))><rest(args); separator=",\n">,<endif>nil]
 >>
 arrayArg_tmpl(arg, isMethod) ::= <<
 <if(nullMap.(arg))>[NSNull null]<else><if(isMethod)>@"<arg>:"<else><if(boolMap.(arg))><boolMap.(arg)><else><arg><endif><endif><endif>
@@ -488,6 +614,7 @@ The changes in native code cannot be mapped back to lua code
 #import "KonyPopup.h"
 
 LuaTable* appMetaData;
+LuaTable* km;
 
 extern <globalVars; separator="\nextern ">
 
@@ -772,9 +899,9 @@ dotList_tmpl(names) ::= <<
 <names; separator=".">
 >>
 
-param_tmpl(type, name) ::= "<name>: (<if(typeMap.(type))><typeMap.(type)><else>id<endif>) <name>"
+param_tmpl(type, name) ::= "<name>: (<getArgType(type)>) <name>"
 
-fparam_tmpl(type, name) ::= "(<if(typeMap.(type))><typeMap.(type)><else>id<endif>) <name>"
+fparam_tmpl(type, name) ::= "(<getArgType(type)>) <name>"
 
 paramList_tmpl(params) ::= <<
 <params; separator=",">
@@ -806,8 +933,12 @@ getType(type) ::= <<
 <if(typeMap.(type))><typeMap.(type)><else><type><endif>
 >>
 
+
+isClosure ::=[
+  "closure" : "true"
+]
 getArgType(type) ::= <<
-<if(typeMap.(type))><typeMap.(type)><else>id<endif>
+<if(isClosure.(type))>id<else><if(typeMap.(type))><typeMap.(type)><else>id<endif><endif>
 >>
 forInit_tmpl(type, var , init) ::= "<if(typeMap.(type))><typeMap.(type)><else><type><endif> <var> = <init>"
 forCondition_tmpl(name, cond) ::= <<
@@ -829,12 +960,12 @@ for(<init> ; <cond> ; <init.stmt.var>++)
 
 forInpair_tmpl(tName, tVal, met, key, bl) ::= <<
 if (<tName>) {
+  id <tVal>;
+  int <key>;
 	int __count = [((LuaTable*)<tName>)->array count];
-	NSNumber* <key>;
-	id <tVal>;
 	for(int __idx =1; __idx \< __count; ++__idx){
-		<key> = [NSNumber numberWithInt:__idx];
-		<tVal> = [((LuaTable*)<tName>)->array objectAtIndex: __idx];
+		<key> = __idx;
+		<tVal> = [((LuaTable*)<tName>)->array objectAtIndex: <key>];
 		<bl; separator="\n">
 	}
 	<if(isPairCheck.(met))>
@@ -913,4 +1044,3 @@ field_tmpl(fields) ::= <<
 >>
 
 qualifiedDecl_tmpl(prefix, mem) ::= "<if(prefix)><prefix>.<endif><mem>"
-

@@ -15,7 +15,7 @@ skin = {
 	,  background_style = "normal" -- String
 	,  border_style = "normal" -- String
 	,  background_image = "default.png" -- String 
-} -- includes="<todo>"
+}
 
 --// Declaration of handles as return types from platform API code
 
@@ -50,12 +50,13 @@ showloadingscreenHandle = {handle --[[todo]], include="com.konylabs.nativecodege
 sliderHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
 advertisementHandle = {handle --[[LuaTable]], include="com.konylabs.nativecodegen.api.*"}
 rawbytesHandle={handle --[[void]]}
+mapHandle = {handle -- [[LuaTable]]}
 
 --//<todo?> Do we need to create Handle for every widget specific data structures?
 --// for Ex:-  masterdata --[[checkboxMasterdataHandle]]  (or XXXHandle.handle) ?
 
 
---//widget specific PSP(Platform Specific Proerty
+--//widget specific PSP(Platform Specific Property
 --//like we have created skin structure, we may create one for this
 formPSPHandle = {handle --[[Object]]}
 boxPSPHandle = {handle --[[Object]]}
@@ -182,7 +183,7 @@ window = {
 
 	radioBtnGroup = RadioButtonGroup(id --[[String]], skinvar --[[skinHandle.handle]]
 		, onfocusskin --[[skinHandle.handle]], masterdata --[[LuaTable]], orientation --[[String]]
-		, onselection --[[closure]], containerweight --[[int]], widgetalign --[[int]] 
+		, onselection --[[closure]], isvisible --[[boolean]], containerweight --[[int]], widgetalign --[[int]] 
 		, platformspecificproperties --[[radiobuttongroupPSPHandle]]
 		) --radiobuttongroupHandle.handle,
 
@@ -263,18 +264,33 @@ window = {
 
 	alert = Alert(message --[[String]], alerthandler --[[closure]], alerttype --[[String]]
 		, yeslabel --[[String]], nolabel --[[String]], alerttitle --[[String]]
-		) --voidHandle.handle
+		) --voidHandle.handle,
+
+	asdf = PickerView(id--[[String]],skin--[[LuaTable]],onfocusskin--[[LuaTable]],masterdata--[[LuaTable]],ondone--[[closure]],isvisible --[[boolean]],container_weight--[[int]],hexpand--[[boolean]],widgetalign--[[int]], psp --[[LuaTable]]) --[[KonyPickerView]]
 }
 
---// Moved these to global in NonGUI
---//app menu item
---//menu={
---//a=setappmenu(appmenu --[[LuaTable]], skinvar --[[skinHandle.handle]], onfocusskin --[[skinHandle.handle]]
---//	) --voidHandle.handle
---//, b=setappmenufocusindex(index --[[int]]) --voidHandle.handle
---//, c= hideappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
---//, d=showappmenuitems(listofmenuids --[[LuaTable]]) --voidHandle.handle
---//}
+formPSPHandle = {
+	a=needAppLevelMenu--[[String]],
+	b=menuRenderer--[[String]],
+	c=needAppLevelMenu--[[String]],
+	d=transitionDirection--[[String]],
+	e=transitionEffect--[[String]],
+	f=orientationmode--[[int]],
+	g=NeedsIndicatorDuringPostShow--[[boolean]],
+	h=FormTransparencyDuringPostShow--[[int]],
+	i=enabledforidletimeout--[[boolean]],
+	j=titleBar--[[String]],
+	k=titleBarBackgroundImage--[[String]],
+	l=preshow--[[closure]]
+}
+
+boxPSPHandle = {
+	a=FixedHeightRow--[[String]],
+	b=requiredparallelexecution--[[String]],
+	c=onfocusskin--[[LuaTable]],
+	d=percent--[[String]],
+	e=onclick--[[closure]]
+}
 
 --// tab pane
 --// Form namespace
@@ -380,7 +396,7 @@ datagrid = {
 --//image attributes
 image = {
 	src --[[String]]
-	, base64 --[[String]]  --//<todo>
+	, base64 --[[String]]
 	, rawbytes --[[rawbytesHandle.handle]]
 	, imagewhendownloading --[[String]]
 	, imagewhenfailed --[[String]]
