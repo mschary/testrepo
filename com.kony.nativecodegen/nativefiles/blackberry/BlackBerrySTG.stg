@@ -520,7 +520,7 @@ for (<init> ; <cond> ; <init.stmt.var>++) <stmt>
 
 forIpair_tmpl(val, val1, var, bl) ::= <<
 for (int <val>=1; (((Object) <var>) != LuaNil.nil) && <val> \< ((LuaTable) <var>).size(); <val>++) {
-  <val1> = ((LuaTable) <var>).getTable(new Integer(i));
+  <val1> = ((LuaTable) <var>).getTable(new Double(i));
   <bl; separator="\n">
 } 
 >>
@@ -565,7 +565,7 @@ tblFieldList_tmpl(field) ::= <<
 >>
 
 field1_tmpl(tname, expr, indx) ::= <<
-<tname>.setTable(new Integer(<indx>), <expr>);
+<tname>.setTable(new Double(<indx>), <expr>);
 >>
 
 field2_tmpl(tname, fname, expr, tcast) ::= <<

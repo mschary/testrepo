@@ -29,6 +29,7 @@ import com.kony.nativecodegen.NativeCodeGenPlugin;
 import com.kony.nativecodegen.ui.VariableTypeInferenceEditor;
 import com.pat.tool.keditor.KEditorPlugin;
 import com.pat.tool.keditor.ant.AntRunner;
+import com.pat.tool.keditor.build.BuildConstants;
 import com.pat.tool.keditor.console.ConsoleDisplayManager;
 import com.pat.tool.keditor.preferences.IPreferenceConstants;
 import com.pat.tool.keditor.tasks.TAndroidBuild;
@@ -53,7 +54,7 @@ public class NativeCodeGenerationJob extends Job {
 	
 	private String imgMagicHome = KUtils.EMPTY_STRING;
 	private String androidHome = KUtils.EMPTY_STRING;
-	private String buildOption = KUtils.DEFAULT_BUILD_OPTION;
+	private String buildOption = BuildConstants.DEFAULT_BUILD_OPTION;
 	private String appID =  KUtils.EMPTY_STRING;
 	private String appName =  KUtils.EMPTY_STRING;
 	private String appVersion = "1.0.0";
@@ -236,7 +237,7 @@ public class NativeCodeGenerationJob extends Job {
 				antRCProperties.put(CLASS_PATH, classpath);
 			
 				if (executeNativeBuild(buildStatusFile, antRCProperties, platform)) {
-					String rel = KUtils.DEFAULT_BUILD_OPTION.equals(buildOption) ? "" : "-rel";
+					String rel = BuildConstants.DEFAULT_BUILD_OPTION.equals(buildOption) ? "" : "-rel";
 					String bbrel = bbBuildOption ? "" : "-lau";
 					bbrel = bbrel + rel;
 					antRCProperties.put("prefix", bbrel);
