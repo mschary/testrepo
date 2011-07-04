@@ -299,7 +299,7 @@ public class NativeCodeGenerationJob extends Job {
 			} else if (!mainresult) {
 				ConsoleDisplayManager.getDefault().println("Native code generation failed", ConsoleDisplayManager.MSG_ERROR);
 			} else {
-				ConsoleDisplayManager.getDefault().println("Native code generation is successfull for " + platform, ConsoleDisplayManager.MSG_SUCCESS);
+				ConsoleDisplayManager.getDefault().println("Native code generation is successful for " + platform, ConsoleDisplayManager.MSG_SUCCESS);
 			}
 			ConsoleDisplayManager.getDefault().println("Time taken for generating native code: " + (System.currentTimeMillis() - time));
 		}
