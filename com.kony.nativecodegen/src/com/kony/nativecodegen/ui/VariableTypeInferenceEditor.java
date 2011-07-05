@@ -74,6 +74,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.kony.nativecodegen.actions.NativeCodeGenerationJob;
 import com.pat.tool.keditor.propertyDescriptor.TableLabelProvider;
+import com.pat.tool.keditor.utils.ValidationUtil;
 
 public class VariableTypeInferenceEditor extends EditorPart {
 
@@ -83,6 +84,7 @@ public class VariableTypeInferenceEditor extends EditorPart {
 	private static final String VARIABLE = "VARIABLE";
 	private static final String USAGE = "USAGE";
 	private static final String LUA_EXTENSION = ".lua";
+	private static final String DEFAULT_TYPE = "object";
 
 	private Properties variablesMap;
 	private Map<Object, Object> backupMap = new HashMap<Object, Object>();
@@ -503,6 +505,9 @@ public class VariableTypeInferenceEditor extends EditorPart {
 					value = entry.getKey();
 				} else if (columnIndex == 1) {
 					value = entry.getValue().split(DELIMITER)[0];
+					if(!ValidationUtil.isNonEmptyString(value)) {
+						value = DEFAULT_TYPE;
+					}
 				} else {
 					value = getUsageStatus(entry.getValue());
 				}
