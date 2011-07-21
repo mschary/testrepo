@@ -1,5 +1,8 @@
 package com.kony.nativecodegen.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -15,13 +18,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.pat.tool.keditor.utils.RendererHashMapData;
+import com.pat.tool.keditor.widgets.IMobileChannel;
 import com.pat.tool.keditor.widgets.RichClientChannel;
+import com.pat.tool.keditor.widgets.TabletRichClientChannel;
 
 /**
  * Dialog allow to choose the mobile platform to generate
  * native code for respective platforms.
  * 
- * Supported platform so far (Iphone,Android,Blackberry and Windows)
+ * Supported platform so far (Iphone,Android,Blackberry and Ipad)
  * 
  * @author Rakesh
  */
@@ -31,11 +37,11 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 	public static final int IPHONE_SELECTED = 1;
 	public static final int ANDROID_SELECTED = 2;
 	public static final int BB_SELECTED = 4;
-	public static final int WINDOWS_SELECTED = 8;
+	public static final int IPAD_SELECTED = 8;
+	private RendererHashMapData rendererHashMapData = new RendererHashMapData(false);
 	
-	private Button iphoneBtn,androidBtn,bBtn,windowsBtn,selectAllBtn;
-	
-	private int selectionState;
+	private Button selectAllBtn;
+	private List<Button> platformButtons = new ArrayList<Button>();
 
 	public NativeCodePlatformSelectionDialog(Shell shell) {
 		super(shell);
@@ -50,7 +56,7 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite client = new Composite(parent,SWT.NONE);
-		client.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		client.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		client.setLayout(new GridLayout());
 		
@@ -64,32 +70,10 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 		selectAllBtn.setText("Select &All");
 		selectAllBtn.setLayoutData(gridData);
 		
-		gridData = new GridData();
-		gridData.horizontalIndent = 25;
-		iphoneBtn = new Button(client,SWT.CHECK);
-		iphoneBtn.setText(RichClientChannel.IPHONE.getDisplayName());
-		iphoneBtn.setImage(RichClientChannel.IPHONE.getImage());
-		iphoneBtn.setLayoutData(gridData);
-		iphoneBtn.addSelectionListener(selectionListener);
-		
-		androidBtn = new Button(client,SWT.CHECK);
-		androidBtn.setText(RichClientChannel.ANDROID.getDisplayName());
-		androidBtn.setImage(RichClientChannel.ANDROID.getImage());
-		androidBtn.setLayoutData(gridData);
-		androidBtn.addSelectionListener(selectionListener);
-
-		
-		bBtn = new Button(client,SWT.CHECK);
-		bBtn.setText(RichClientChannel.BLACKBERRY.getDisplayName());
-		bBtn.setImage(RichClientChannel.BLACKBERRY.getImage());
-		bBtn.setLayoutData(gridData);
-		bBtn.addSelectionListener(selectionListener);
-
-		
-		/*windowsBtn = new Button(client,SWT.CHECK);
-		windowsBtn.setText(RichClientChannel.WINMOBILE.getDisplayName());
-		windowsBtn.setImage(RichClientChannel.WINMOBILE.getImage());
-		windowsBtn.setLayoutData(gridData);*/
+		createButton(RichClientChannel.IPHONE, client);
+		createButton(RichClientChannel.ANDROID, client);
+		createButton(RichClientChannel.BLACKBERRY, client);
+		createButton(TabletRichClientChannel.IPAD, client);
 		
 		Label lineLabel = new Label(client, SWT.NONE);
 		lineLabel.setText("____________________________________________________" +
@@ -104,40 +88,71 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				boolean selected = selectAllBtn.getSelection();
-				iphoneBtn.setSelection(selected);
-				androidBtn.setSelection(selected);
-				bBtn.setSelection(selected);
-				//windowsBtn.setSelection(selected);
-				getButton(IDialogConstants.OK_ID).setEnabled(selected);
+				for (Button button : platformButtons) {
+					button.setSelection(selected);
+				}
+				okButton.setEnabled(selected);
 			}
 		});
 		
 
 		return parent;
 	}
+
+	public void createButton(IMobileChannel mobileChannel, Composite client) {
+		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		gridData.horizontalIndent = 25;
+		Button button = new Button(client,SWT.CHECK);
+		button.setText(mobileChannel.getDisplayName());
+		button.setImage(mobileChannel.getImage());
+		button.setLayoutData(gridData);
+		button.addSelectionListener(selectionListener);
+		button.setData(mobileChannel);
+		platformButtons.add(button);
+	}
 	
 	private SelectionListener selectionListener = new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent e) {
-		     selectAllBtn.setSelection(iphoneBtn.getSelection() && androidBtn.getSelection() && bBtn.getSelection());	
-			 getButton(IDialogConstants.OK_ID).setEnabled(iphoneBtn.getSelection() || androidBtn.getSelection() || bBtn.getSelection());
+			boolean isSelected = false;
+			for (Button button : platformButtons) {
+				if (button.getSelection()) {
+					isSelected = true;
+				}
+			}
+			selectAllBtn.setSelection(isSelected);
+			okButton.setEnabled(isSelected);
 		}
 	};
-	
-	public int getSelectedState(){
-		return selectionState;
-	}
+
+	private Button okButton;
 	
 	@Override
 	protected void okPressed() {
-		if(iphoneBtn.getSelection())
-			selectionState |= IPHONE_SELECTED;
-		if(androidBtn.getSelection())
-			selectionState |= ANDROID_SELECTED;
-		if(bBtn.getSelection())
-			selectionState |= BB_SELECTED;
-		/*if(windowsBtn.getSelection())
-			selectionState |= WINDOWS_SELECTED;*/
+		for (Button button : platformButtons) {
+			if (button.getSelection()) {
+				IMobileChannel mobileChannel = ((IMobileChannel)button.getData());
+				rendererHashMapData.put(mobileChannel, true);
+			}
+		}
 		super.okPressed();
+	}
+	
+	public RendererHashMapData getRendererHashMapData() {
+		return rendererHashMapData;
+	}
+	
+
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		okButton.setEnabled(false);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+	}
+	
+	@Override
+	protected Control createContents(Composite parent) {
+		// TODO Auto-generated method stub
+		return super.createContents(parent);
 	}
 	
 

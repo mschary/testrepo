@@ -9,14 +9,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import com.pat.tool.keditor.navigation.model.ResourceLeaf;
+import com.pat.tool.keditor.utils.KConstants;
 
 public class OpenAllInferenceEditors  extends AbstractNativeCodeGenAction {
 
 	@Override
 	public void run(IAction action) {
-		openEditor(NativeCodeGenerationJob.IPHONE_TYPE_INFERENCE_FILE, selectedElement);
-		openEditor(NativeCodeGenerationJob.ANDROID_TYPE_INFERENCE_FILE, selectedElement);
-		openEditor(NativeCodeGenerationJob.BB_TYPE_INFERENCE_FILE, selectedElement);
+		openEditor(KConstants.IPHONE_TYPE_INFERENCE_FILE, selectedElement);
+		openEditor(KConstants.ANDROID_TYPE_INFERENCE_FILE, selectedElement);
+		openEditor(KConstants.BB_TYPE_INFERENCE_FILE, selectedElement);
 		
 	}
 	

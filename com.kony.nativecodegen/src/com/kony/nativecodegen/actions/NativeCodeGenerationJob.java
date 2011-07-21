@@ -37,6 +37,7 @@ import com.pat.tool.keditor.tasks.TJetty;
 import com.pat.tool.keditor.tasks.Task;
 import com.pat.tool.keditor.utils.CustomLibrariesUtils;
 import com.pat.tool.keditor.utils.FileUtilities;
+import com.pat.tool.keditor.utils.KConstants;
 import com.pat.tool.keditor.utils.KUtils;
 import com.pat.tool.keditor.utils.ProjectProperties;
 
@@ -113,33 +114,35 @@ public class NativeCodeGenerationJob extends Job {
 	private static final String CLASS_NAME = "classname";
 
 	// Update com.pat.tool.keditor.navigation.model.ResourceRoot.testAttribute(Object, String, String) when file names are modified
-	public static final String IPHONE_TYPE_INFERENCE_FILE = "typeinference_iphone.npf";
-	public static final String ANDROID_TYPE_INFERENCE_FILE = "typeinference_android.npf";
-	public static final String BB_TYPE_INFERENCE_FILE = "typeinference_bb.npf";
 	private static final String IPHONE_STATUS_FILE = "iphone_buildstatus.properties";
+	private static final String IPAD_STATUS_FILE = "ipad_buildstatus.properties";
 	private static final String ANDROID_STATUS_FILE = "android_buildstatus.properties";
 	private static final String BB_STATUS_FILE = "bb_buildstatus.properties";
 	private static final char FILE_SEPARATOR = '/';
 	private static final String LUASRC_ANDROID = "/luasrc/android";
 	private static final String LUASRC_BB = "/luasrc/bb";
 	private static final String LUASRC_IPHONE = "/luasrc/iphone";
+	private static final String LUASRC_IPAD = "/luasrc/ipad";
 	private static final String GENERATED_FOLDER = "/generated";
 	private static final String BUILD_SERVER_PATH = "/build/server";
 	private static final String IPHONE_NATIVE_PATH = "/iphonenative";
+	private static final String IPAD_NATIVE_PATH = "/ipadnative";
 	private static final String ANDROID_NATIVE_PATH = "/androidnative";
 	private static final String BB_NATIVE_PATH = "/bbnative";
 
 
 	
-    private IFile typeInferenceFile;	
+    private IFile typeInferenceFile;
+	private boolean ipadSelected;	
 	
 	public NativeCodeGenerationJob(String name, String projectName, String inferenceFileName) {
 		super(name);
 		this.projectName = projectName;
 		this.inferenceFileName = inferenceFileName;
-		iphoneSelected = inferenceFileName.equals(IPHONE_TYPE_INFERENCE_FILE);
-		androidSelected = inferenceFileName.equals(ANDROID_TYPE_INFERENCE_FILE);
-		bbSelected = inferenceFileName.equals(BB_TYPE_INFERENCE_FILE);
+		iphoneSelected = inferenceFileName.equals(KConstants.IPHONE_TYPE_INFERENCE_FILE);
+		ipadSelected = inferenceFileName.equals(KConstants.IPAD_TYPE_INFERENCE_FILE);
+		androidSelected = inferenceFileName.equals(KConstants.ANDROID_TYPE_INFERENCE_FILE);
+		bbSelected = inferenceFileName.equals(KConstants.BB_TYPE_INFERENCE_FILE);
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		typeInferenceFile = project.getFile(inferenceFileName);
 	    setRule(project);
@@ -184,11 +187,11 @@ public class NativeCodeGenerationJob extends Job {
 			HashMap<String, String> antRCProperties = getAntRCProperties();
 			antRCProperties.put(SOURCE_XML_DIR, srcXmlDir);
 
-			String srcDir = projLoc + LUASRC_IPHONE;
+			String srcDir = projLoc + (iphoneSelected ? LUASRC_IPHONE : LUASRC_IPAD);
 			String resourceDir = pluginLoc + "nativefiles/iphone";
-			String typeInferenceFile = projLoc + FILE_SEPARATOR +  IPHONE_TYPE_INFERENCE_FILE;
-			String buildStatusFile = tempLocation + FILE_SEPARATOR + IPHONE_STATUS_FILE;
-			String destDir = serverLoc + IPHONE_NATIVE_PATH;
+			String typeInferenceFile = projLoc + FILE_SEPARATOR + inferenceFileName;
+			String buildStatusFile = tempLocation + FILE_SEPARATOR + (iphoneSelected ? IPHONE_STATUS_FILE : IPAD_STATUS_FILE);
+			String destDir = serverLoc + (iphoneSelected ? IPHONE_NATIVE_PATH : IPAD_NATIVE_PATH);
 			String className = "com.konylabs.iphone.transformer.Transform";
 			String classpath = "iphone.classpath";
 
@@ -203,7 +206,7 @@ public class NativeCodeGenerationJob extends Job {
 			// variable properties
 
 			// com.konylabs.transformer.CodeGen.main(new String[] {source.dir, sourcexml.dir, resource.dir, typeinfer.file, buildstatus.file, destination.dir});
-			if (iphoneSelected) {
+			if (iphoneSelected || ipadSelected) {
 				if (executeNativeBuild(buildStatusFile, antRCProperties, platform)) {
 					// Handle KAR File, this may require restarting Jetty server
 					AntRunner antRunner = new AntRunner();
@@ -223,14 +226,12 @@ public class NativeCodeGenerationJob extends Job {
 			if (bbSelected) {
 				srcDir = projLoc + LUASRC_BB;
 				resourceDir = pluginLoc + "nativefiles/blackberry";
-				typeInferenceFile = projLoc + FILE_SEPARATOR + BB_TYPE_INFERENCE_FILE;
 				buildStatusFile = tempLocation + FILE_SEPARATOR + BB_STATUS_FILE;
 				destDir = serverLoc + BB_NATIVE_PATH;
 				className = "com.konylabs.transformer.Transform";
 				classpath = "bb.classpath";
 				antRCProperties.put(SOURCE_DIR, srcDir);
 				antRCProperties.put(RESOURCE_DIR, resourceDir);
-				antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 				antRCProperties.put(BUILD_STATUS_FILE, buildStatusFile);
 				antRCProperties.put(DESTINATION_DIR, destDir);
 				antRCProperties.put(CLASS_NAME, className);
@@ -255,14 +256,12 @@ public class NativeCodeGenerationJob extends Job {
 			if (androidSelected) {
 				srcDir = projLoc + LUASRC_ANDROID;
 				resourceDir = pluginLoc + "nativefiles/android";
-				typeInferenceFile = projLoc + FILE_SEPARATOR + ANDROID_TYPE_INFERENCE_FILE;
 				buildStatusFile = tempLocation + FILE_SEPARATOR + ANDROID_STATUS_FILE;
 				destDir = serverLoc + ANDROID_NATIVE_PATH;
 				className = "com.konylabs.transformer.Transform";
 				classpath = "android.classpath";
 				antRCProperties.put(SOURCE_DIR, srcDir);
 				antRCProperties.put(RESOURCE_DIR, resourceDir);
-				antRCProperties.put(TYPE_INFERENCE_FILE, typeInferenceFile);
 				antRCProperties.put(BUILD_STATUS_FILE, buildStatusFile);
 				antRCProperties.put(DESTINATION_DIR, destDir);
 				antRCProperties.put(CLASS_NAME, className);
@@ -638,9 +637,11 @@ public class NativeCodeGenerationJob extends Job {
 	
 	
 	public static String getPlatformName(String inferenceFileName) {
-		if (inferenceFileName.equals(IPHONE_TYPE_INFERENCE_FILE)) {
+		if (inferenceFileName.equals(KConstants.IPHONE_TYPE_INFERENCE_FILE)) {
 			return "iPhone";
-		} else if (inferenceFileName.equals(ANDROID_TYPE_INFERENCE_FILE)) {
+		} if (inferenceFileName.equals(KConstants.IPAD_TYPE_INFERENCE_FILE)) {
+			return "ipad";
+		}else if (inferenceFileName.equals(KConstants.ANDROID_TYPE_INFERENCE_FILE)) {
 			return "Android";
 		} else {
 			return "Blackberry";
@@ -650,9 +651,11 @@ public class NativeCodeGenerationJob extends Job {
 	
 	public static IFile getSourceFile(String fileName, String inferenceFileName, IProject project) throws CoreException {
 		String folderPath = null;
-		if (inferenceFileName.equals(IPHONE_TYPE_INFERENCE_FILE)) {
+		if (inferenceFileName.equals(KConstants.IPHONE_TYPE_INFERENCE_FILE)) {
 			folderPath = LUASRC_IPHONE + GENERATED_FOLDER;
-		} else if (inferenceFileName.equals(ANDROID_TYPE_INFERENCE_FILE)) {
+		} else if (inferenceFileName.equals(KConstants.IPAD_TYPE_INFERENCE_FILE)) {
+			folderPath = LUASRC_IPAD + GENERATED_FOLDER;
+		} else if (inferenceFileName.equals(KConstants.ANDROID_TYPE_INFERENCE_FILE)) {
 			folderPath = LUASRC_ANDROID + GENERATED_FOLDER;
 		} else {
 			folderPath = LUASRC_BB + GENERATED_FOLDER;
@@ -677,10 +680,13 @@ public class NativeCodeGenerationJob extends Job {
 	public static File getNativeSourceFile(String fileName, String inferenceFileName, String project) {
 		String serverLoc = KUtils.getTempLocation(project) + BUILD_SERVER_PATH;
 		String folderPath = null;
-		if (inferenceFileName.equals(IPHONE_TYPE_INFERENCE_FILE)) {
+		if (inferenceFileName.equals(KConstants.IPHONE_TYPE_INFERENCE_FILE)) {
 			folderPath = serverLoc + IPHONE_NATIVE_PATH;
 			fileName = fileName + C_EXTENSION;
-		} else if (inferenceFileName.equals(ANDROID_TYPE_INFERENCE_FILE)) {
+		} else if (inferenceFileName.equals(KConstants.IPAD_TYPE_INFERENCE_FILE)) {
+			folderPath = serverLoc + IPAD_NATIVE_PATH;
+			fileName = fileName + C_EXTENSION;
+		} else if (inferenceFileName.equals(KConstants.ANDROID_TYPE_INFERENCE_FILE)) {
 			folderPath = serverLoc + ANDROID_NATIVE_PATH;
 			fileName = fileName + JAVA_EXTENSION;
 		} else {

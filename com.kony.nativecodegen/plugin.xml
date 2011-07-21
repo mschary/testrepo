@@ -56,7 +56,7 @@
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="com.pat.tool.keditor.navigation.model.EditIphoneVariablesContribution"
+            id="com.pat.tool.keditor.navigation.model.EditIpadVariablesContribution"
             objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
          <visibility>
             <and>
@@ -65,16 +65,40 @@
                      value="true">
                </objectState>
                <objectState
-                     name="isNativeIphone"
+                     name="isNativeIpad"
                      value="true">
                </objectState>
             </and>
          </visibility>
          <action
-               class="com.kony.nativecodegen.actions.OpenIphoneInferenceEditor"
+               class="com.kony.nativecodegen.actions.OpenIpadInferenceEditor"
                icon="icons/iphone.png"
-               id="com.kony.nativecodegen.actions.OpenIphoneInferenceEditor"
-               label="iPhone"
+               id="com.kony.nativecodegen.actions.OpenIpadInferenceEditor"
+               label="Ipad"
+               menubarPath="nativeCodeMenu/editVariablesMenu/additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="com.pat.tool.keditor.navigation.model.EditBBVariablesContribution"
+            objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
+         <visibility>
+            <and>
+               <objectState
+                     name="isProject"
+                     value="true">
+               </objectState>
+               <objectState
+                     name="isNativeBB"
+                     value="true">
+               </objectState>
+            </and>
+         </visibility>
+         <action
+               class="com.kony.nativecodegen.actions.OpenBBInferenceEditor"
+               icon="icons/blackberry.png"
+               id="com.kony.nativecodegen.actions.OpenBBInferenceEditor"
+               label="Blackberry"
                menubarPath="nativeCodeMenu/editVariablesMenu/additions">
          </action>
       </objectContribution>
@@ -104,7 +128,7 @@
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="com.pat.tool.keditor.navigation.model.EditBBVariablesContribution"
+            id="com.pat.tool.keditor.navigation.model.EditIphoneVariablesContribution"
             objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
          <visibility>
             <and>
@@ -113,16 +137,16 @@
                      value="true">
                </objectState>
                <objectState
-                     name="isNativeBB"
+                     name="isNativeIphone"
                      value="true">
                </objectState>
             </and>
          </visibility>
          <action
-               class="com.kony.nativecodegen.actions.OpenBBInferenceEditor"
-               icon="icons/blackberry.png"
-               id="com.kony.nativecodegen.actions.OpenBBInferenceEditor"
-               label="Blackberry"
+               class="com.kony.nativecodegen.actions.OpenIphoneInferenceEditor"
+               icon="icons/iphone.png"
+               id="com.kony.nativecodegen.actions.OpenIphoneInferenceEditor"
+               label="iPhone"
                menubarPath="nativeCodeMenu/editVariablesMenu/additions">
          </action>
       </objectContribution>

@@ -5,6 +5,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
 
 import com.kony.nativecodegen.ui.NativeCodePlatformSelectionDialog;
+import com.pat.tool.keditor.utils.KConstants;
+import com.pat.tool.keditor.utils.RendererHashMapData;
+import com.pat.tool.keditor.widgets.RichClientChannel;
+import com.pat.tool.keditor.widgets.TabletRichClientChannel;
 
 /**
  * Native code generation is supported only IPhone,Windows Phone, Android and BlackBerry. So for the first time allow to choose the platform from the dialog and create the respective folder under <code>nativecode</code> folder.
@@ -23,26 +27,26 @@ public class NativeCodeGenAction extends AbstractNativeCodeGenAction {
 		dialog.setHelpAvailable(false);
 		int option = dialog.open();
 		if (option == Window.OK) {
-			int selectedState = dialog.getSelectedState();
+			RendererHashMapData selectedPlatforms = dialog.getRendererHashMapData();
 
-			if (selectedState == 0)
-				return;
 			Job job = null;
-			int value = selectedState & NativeCodePlatformSelectionDialog.IPHONE_SELECTED;
-			if (value == NativeCodePlatformSelectionDialog.IPHONE_SELECTED) {
-				job = getExecutionJob(NativeCodeGenerationJob.IPHONE_TYPE_INFERENCE_FILE);
+			if (selectedPlatforms.getValue(RichClientChannel.IPHONE)) {
+				job = getExecutionJob(KConstants.IPHONE_TYPE_INFERENCE_FILE);
+				job.schedule();
+			}
+			
+			if (selectedPlatforms.getValue(TabletRichClientChannel.IPAD)) {
+				job = getExecutionJob(KConstants.IPAD_TYPE_INFERENCE_FILE);
 				job.schedule();
 			}
 
-			value = selectedState & NativeCodePlatformSelectionDialog.ANDROID_SELECTED;
-			if (value == NativeCodePlatformSelectionDialog.ANDROID_SELECTED) {
-				job = getExecutionJob(NativeCodeGenerationJob.ANDROID_TYPE_INFERENCE_FILE);
+			if (selectedPlatforms.getValue(RichClientChannel.ANDROID)) {
+				job = getExecutionJob(KConstants.ANDROID_TYPE_INFERENCE_FILE);
 				job.schedule();
 			}
 
-			value = selectedState & NativeCodePlatformSelectionDialog.BB_SELECTED;
-			if (value == NativeCodePlatformSelectionDialog.BB_SELECTED) {
-				job = getExecutionJob(NativeCodeGenerationJob.BB_TYPE_INFERENCE_FILE);
+			if (selectedPlatforms.getValue(RichClientChannel.BLACKBERRY)) {
+				job = getExecutionJob(KConstants.BB_TYPE_INFERENCE_FILE);
 				job.schedule();
 			}
 
