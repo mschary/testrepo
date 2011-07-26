@@ -188,7 +188,7 @@ public class NativeCodeGenerationJob extends Job {
 			antRCProperties.put(SOURCE_XML_DIR, srcXmlDir);
 
 			String srcDir = projLoc + (iphoneSelected ? LUASRC_IPHONE : LUASRC_IPAD);
-			String resourceDir = pluginLoc + "nativefiles/iphone";
+			String resourceDir = pluginLoc + (iphoneSelected ? "nativefiles/iphone" : "nativefiles/ipad");
 			String typeInferenceFile = projLoc + FILE_SEPARATOR + inferenceFileName;
 			String buildStatusFile = tempLocation + FILE_SEPARATOR + (iphoneSelected ? IPHONE_STATUS_FILE : IPAD_STATUS_FILE);
 			String destDir = serverLoc + (iphoneSelected ? IPHONE_NATIVE_PATH : IPAD_NATIVE_PATH);
@@ -216,9 +216,11 @@ public class NativeCodeGenerationJob extends Job {
 					antRunner.setTarget("nativeiphone");
 					succeeded = antRunner.execute();
 
-					TJetty jetty = new TJetty();
-					jetty.setClean(false);
-					succeeded = jetty.execute();
+					if (succeeded) {
+						TJetty jetty = new TJetty();
+						jetty.setClean(false);
+						succeeded = jetty.execute();
+					}
 				} else {
 					succeeded = false;
 				}

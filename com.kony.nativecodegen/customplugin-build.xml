@@ -73,6 +73,7 @@
 		<copydir src="${luatranslator.dir}/iPhone/dist/resources" dest="${dist.plugin.dir}/nativefiles/iphone"/>
 		<copydir src="${luatranslator.dir}/BlackBerry/dist/resources" dest="${dist.plugin.dir}/nativefiles/blackberry"/>
 		<copydir src="${luatranslator.dir}/Android/dist/resources" dest="${dist.plugin.dir}/nativefiles/android"/>
+		<copydir src="${luatranslator.dir}/iPhone/dist/resources" dest="${dist.plugin.dir}/nativefiles/ipad"/>
 		<copy file="nativefiles/nativebuild.xml" todir="${dist.plugin.dir}/nativefiles" overwrite="true"/>	
 		<copy file="nativefiles/blackberry/KonyApplicationStart.java" todir="${dist.plugin.dir}/nativefiles/blackberry" overwrite="true"/>
 		
