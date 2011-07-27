@@ -213,7 +213,7 @@ public class NativeCodeGenerationJob extends Job {
 					antRCProperties.put(Task.PLUGIN_LOC_KEY, KUtils.getPluginLocation());
 					antRunner.setBuildFile(tempLocation + "/build/server/build.xml");
 					antRunner.setProps(antRCProperties);
-					antRunner.setTarget("nativeiphone");
+					antRunner.setTarget(iphoneSelected ? "nativeiphone" : "nativeipad");
 					succeeded = antRunner.execute();
 
 					if (succeeded) {
