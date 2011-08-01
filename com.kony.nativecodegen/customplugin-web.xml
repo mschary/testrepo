@@ -13,25 +13,7 @@
      	<!-- <condition property="plugin.version" value="2.0.0.R${build}" else="2.0.0.${branch}${build}">
 			<equals arg1="bbj2me" arg2="${branch}" casesensitive="false" trim="true"/>
 		</condition> -->
-		
-		<propertyregex property="RLABEL"
-               input="${LABEL}"
-               regexp="\."
-               replace="_"
-               global="true" />
-			   			   
-		<property name="RLABEL" value="${LABEL}"/>
-		
-		<propertyregex property="Rtarget.branch"
-               input="${target.branch}."
-               regexp="\."
-               replace="_"
-               global="true" />
-			   
-		<condition property="nativeplugin.version" value="2.0.0.${Rtarget.branch}R${LABELNUM}" else="2.0.0.${RLABEL}">
-			<matches pattern=".+_plugin-.+\.[0-9]+$" string="${LABEL}"/>
-		</condition>
-		
+				
 		<echo message="pulgin version:${nativeplugin.version}"/>
 		<echo message="branch:${branch}"/>
 		<echo message="build:${build}"/>
@@ -81,12 +63,8 @@
        <replace file="${temp.dir}/features/feature.xml" token="{pluginversion}" value="${nativeplugin.version}"/>
 	   <sleep seconds="1"/>
        <replace file="${temp.dir}/features/feature.xml" token="{platformversion}" value="${platform.version}"/>
-       <!-- <jar destfile="${temp.dir}/features/com.pat.j2me_${plugin.version}.jar" basedir="${temp.dir}/features"/> -->
-	   <condition property="jar-file-name" value="com.kony.nativecodegen_${target.branch}_R${LABELNUM}.jar" else="com.kony.nativecodegen_${LABEL}.jar">
-			<matches pattern=".+_plugin-.+\.[0-9]+" string="${LABEL}"/>
-	   </condition>
-	   
-	   <jar destfile="${temp.dir}/features/${jar-file-name}" basedir="${temp.dir}/features"/>
+       	   
+	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" basedir="${temp.dir}/features"/>
 	   
        <copyfile src="${temp.dir}/site-template.xml" dest="${temp.dir}/site.xml" forceoverwrite="true"/>
 	   <echo message="Updating site.xml file with timestamp" />
@@ -101,9 +79,7 @@
 	   <sleep seconds="1"/>
        <replace file="${temp.dir}/site.xml" token="{pluginversion}" value="${plugin.version}"/>
 	   <sleep seconds="1"/>
-	   <replaceregexp file="${temp.dir}/site.xml" flags="g" match="\{sitepluginjar\}" replace="${jar-file-name}">
-	   </replaceregexp>
-	   <sleep seconds="2"/>
+	   
        <replace file="${dest.dir}/releases_template.xml" token="{newsite}" value="&lt;mirrors&gt;&lt;mirror url=&quot;http://10.10.19.180/dashboard/${branch}/updatesite/${timestamp}/&quot; label=&quot;BlackBerry and J2ME Plugin [Release:${timestamp}]&quot; /&gt;"/>
 	   
      	<delete>
@@ -112,10 +88,10 @@
      	<delete>
      	     <fileset dir="${dest.dir}/plugins" includes="**/*.jar"/>
      	</delete>
-		<copyfile src="${temp.dir}/features/${jar-file-name}" dest="${dest.dir}/features/${jar-file-name}" forceoverwrite="true"/>
-		<copyfile src="${temp.dir}/plugins/${jar-file-name}" dest="${dest.dir}/plugins/${jar-file-name}" forceoverwrite="true"/>
-     	<copyfile src="${temp.dir}/features/${jar-file-name}" dest="${dest.dir}/${timestamp}/features/${jar-file-name}" forceoverwrite="true"/>
-		<copyfile src="${temp.dir}/plugins/${jar-file-name}" dest="${dest.dir}/${timestamp}/plugins/${jar-file-name}" forceoverwrite="true"/>
+		<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
+		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/plugins/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
+     	<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/${timestamp}/features/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
+		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/${timestamp}/plugins/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
 	
      	<copyfile src="${temp.dir}/site.xml" dest="${dest.dir}/${timestamp}/site.xml" forceoverwrite="true"/>
      	<copyfile src="${temp.dir}/site.xml" dest="${dest.dir}/site.xml" forceoverwrite="true"/>

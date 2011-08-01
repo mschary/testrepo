@@ -8,24 +8,49 @@
 	<property name="dist.plugin.dir" value="dist"/>
 	<property name="luatranslator.dir" value="../../luatranslator"/>
  
-	<!-- Replace . character with _ for the plugin.version -->
-	<propertyregex property="RLABEL"
-               input="${LABEL}"
-               regexp="\."
-               replace="_"
-               global="true" />
-			   			   
-	<property name="RLABEL" value="${LABEL}"/>
-	
-	<propertyregex property="Rtarget.branch"
-               input="${target.branch}."
-               regexp="\."
-               replace="_"
-               global="true" />
-			   
-	<condition property="nativeplugin.version" value="2.0.0.${Rtarget.branch}R${LABELNUM}" else="2.0.0.${RLABEL}">
-		<matches pattern=".+_plugin-.+\.[0-9]+$" string="${LABEL}"/>
+	<!-- find the plugin version. If Custom label is  platform-branch-major.minor.releasnumber format.  Then plugin-version=major.minor.releasenumber -->
+	<propertyregex
+		property="plugin-version"
+		input="${LABEL}"
+		regexp=".*-(\d)\.(\d)\.(\d+)$"
+		select="\1.\2.\3"/> 
+  
+	<!-- find the plugin version. If Custom label is  platform-branch-major.minor format. Then plugin-version=major.minor.0 -->
+	<propertyregex
+		property="plugin-version"
+		input="${LABEL}"
+		regexp=".*-(\d)\.(\d)$"
+		select="\1.\2.0"/> 
+		
+	<!-- find the plugin version. If Custom label is  platform_pluign-branch-build_number format. Then plugin-version=1.0.build_number else 1.0.0. Default version is 1.0.0-->
+	<condition property="plugin-version" value="1.0.${LABELNUM}" else="1.0.0">
+		<matches pattern=".+_plugin-.+\.[0-9]+" string="${LABEL}"/>
 	</condition>
+	
+	<!-- find the plugin environment (Dev|QA|GA). If Custom label is  platform-branch-major.minor format. Then plugin-environmnent=branch -->
+	<propertyregex 
+		property="envmnt"
+		input="${LABEL}"
+		regexp=".*-(.+)-(\d)\.(\d|\d\.\d+)$"
+		select="\1"/> 
+		
+	<!-- If Custom label is other format, assign target.branch value to plugin-environment -->
+	<!-- Replace . character with _ for the plugin.version -->		
+	<propertyregex property="Rtarget.branch"
+        input="${target.branch}"
+        regexp="\."
+        replace="_"
+        global="true" />
+		   
+	<condition property="Rtarget.branch" value="${target.branch}">
+		<not>  
+			<isset property="Rtarget.branch"/>
+		</not>
+	</condition>		
+		
+	<property name="envmnt" value="${Rtarget.branch}" />
+		
+	<property name="nativeplugin.version" value="${plugin-version}.${envmnt}" />
 	
 	<echo message="pulgin version:${nativeplugin.version}"/>
 	<echo message="branch:${branch}"/>
@@ -85,13 +110,8 @@
 	
 	<target name="build" depends="init,clean,setup">		
 		<!-- Create the plugin jar file -->
-		<!-- <jar destfile="${dist.plugin.dir}/com.pat.j2me_${plugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/> -->
-		<condition property="jar-file-name" value="com.kony.nativecodegen_${target.branch}_R${LABELNUM}.jar" else="com.kony.nativecodegen_${LABEL}.jar">
-			<matches pattern=".+_plugin-.+\.[0-9]+" string="${LABEL}"/>
-		</condition>
-		
-		<jar destfile="${dist.plugin.dir}/${jar-file-name}" filesetmanifest="merge" basedir="${dist.plugin.dir}"/>
-		
+		<jar destfile="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/> -->
+				
 		<echo message="Publishing the Kony Native Codegen Plugin"/>
 		<ant dir="." antfile="customplugin-web.xml"/>
 		<echo message="Sucessfully Published the Kony Native Codegen Plugin"/>
