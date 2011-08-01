@@ -110,7 +110,7 @@
 	
 	<target name="build" depends="init,clean,setup">		
 		<!-- Create the plugin jar file -->
-		<jar destfile="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/> -->
+		<jar destfile="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/>
 				
 		<echo message="Publishing the Kony Native Codegen Plugin"/>
 		<ant dir="." antfile="customplugin-web.xml"/>
