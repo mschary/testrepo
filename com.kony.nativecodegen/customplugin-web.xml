@@ -64,7 +64,7 @@
 	   <sleep seconds="1"/>
        <replace file="${temp.dir}/features/feature.xml" token="{platformversion}" value="${platform.version}"/>
        	   
-	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" basedir="${temp.dir}/features"/>
+	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" basedir="${temp.dir}/features"/>
 	   
        <copyfile src="${temp.dir}/site-template.xml" dest="${temp.dir}/site.xml" forceoverwrite="true"/>
 	   <echo message="Updating site.xml file with timestamp" />
@@ -88,10 +88,10 @@
      	<delete>
      	     <fileset dir="${dest.dir}/plugins" includes="**/*.jar"/>
      	</delete>
-		<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
-		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/plugins/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
-     	<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/${timestamp}/features/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
-		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${plugin.version}.jar" dest="${dest.dir}/${timestamp}/plugins/com.kony.nativecodegen_${plugin.version}.jar" forceoverwrite="true"/>
+		<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
+		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
+     	<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/${timestamp}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
+		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/${timestamp}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
 	
      	<copyfile src="${temp.dir}/site.xml" dest="${dest.dir}/${timestamp}/site.xml" forceoverwrite="true"/>
      	<copyfile src="${temp.dir}/site.xml" dest="${dest.dir}/site.xml" forceoverwrite="true"/>
