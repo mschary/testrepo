@@ -133,7 +133,8 @@ public class NativeCodeGenerationJob extends Job {
 
 	
     private IFile typeInferenceFile;
-	private boolean ipadSelected;	
+	private boolean ipadSelected;
+	private boolean success;	
 	
 	public NativeCodeGenerationJob(String name, String projectName, String inferenceFileName) {
 		super(name);
@@ -151,7 +152,7 @@ public class NativeCodeGenerationJob extends Job {
 
 	
 	public IStatus run(IProgressMonitor monitor) {
-		boolean succeeded = true;
+		success = true;
 		String platform = getPlatformName(inferenceFileName);
 		projLoc = KUtils.getProjectLocation(projectName);
 		pluginLoc = NativeCodeGenPlugin.getDefault().getInstallLocation();
@@ -214,15 +215,15 @@ public class NativeCodeGenerationJob extends Job {
 					antRunner.setBuildFile(tempLocation + "/build/server/build.xml");
 					antRunner.setProps(antRCProperties);
 					antRunner.setTarget(iphoneSelected ? "nativeiphone" : "nativeipad");
-					succeeded = antRunner.execute();
+					success = antRunner.execute();
 
-					if (succeeded) {
+					if (success) {
 						TJetty jetty = new TJetty();
 						jetty.setClean(false);
-						succeeded = jetty.execute();
+						success = jetty.execute();
 					}
 				} else {
-					succeeded = false;
+					success = false;
 				}
 			}
 
@@ -250,9 +251,9 @@ public class NativeCodeGenerationJob extends Job {
 					antRunner.setBuildFile(tempLocation + "/build/luaj2me/native/build.xml");
 					antRunner.setProps(antRCProperties);
 					antRunner.setTarget("copy");
-					succeeded = antRunner.execute();
+					success = antRunner.execute();
 				}  else {
-					succeeded = false;
+					success = false;
 				}
 			}
 
@@ -278,9 +279,9 @@ public class NativeCodeGenerationJob extends Job {
 					androidBuild.setProjectName(projectName);
 					androidBuild.setAndriodHome(androidHome);
 					androidBuild.setAntProperties(antRCProperties);
-					succeeded = androidBuild.execute();
+					success = androidBuild.execute();
 				} else {
-					succeeded = false;
+					success = false;
 				}
 			}
 			if (monitor.isCanceled()) {
@@ -290,16 +291,16 @@ public class NativeCodeGenerationJob extends Job {
 			}
 			return Status.OK_STATUS;
 		} catch (Exception e) {
-			succeeded = false;
+			success = false;
 			ConsoleDisplayManager.getDefault().printException(e.getCause(), ConsoleDisplayManager.MSG_ERROR);
 			e.printStackTrace();
-			Status status = new Status(Status.ERROR, KEditorPlugin.PLUGIN_ID, "Native code generation is failed", e);
+			Status status = new Status(Status.ERROR, KEditorPlugin.PLUGIN_ID, "Native code generation has failed", e);
 			return status;
 		} finally {
-			if (!succeeded) {
-				ConsoleDisplayManager.getDefault().println("Native code generation failed for:-->" + platform, ConsoleDisplayManager.MSG_ERROR);
+			if (!success) {
+				ConsoleDisplayManager.getDefault().println("Native code generation has failed for " + platform, ConsoleDisplayManager.MSG_ERROR);
 			} else if (!mainresult) {
-				ConsoleDisplayManager.getDefault().println("Native code generation failed", ConsoleDisplayManager.MSG_ERROR);
+				ConsoleDisplayManager.getDefault().println("Native code generation has failed", ConsoleDisplayManager.MSG_ERROR);
 			} else {
 				ConsoleDisplayManager.getDefault().println("Native code generation is successful for " + platform, ConsoleDisplayManager.MSG_SUCCESS);
 			}
@@ -475,28 +476,6 @@ public class NativeCodeGenerationJob extends Job {
 					}					
 				}
 			}
-
-//			if (projPropMap.containsKey(ProjectProperties.WIN_BUILD_OPTION_KEY)) {
-//				String wmbuildStr = projPropMap.get(ProjectProperties.WIN_BUILD_OPTION_KEY);
-//				if (wmbuildStr != null && wmbuildStr.trim().length() > 0 ) {
-//					if("false".equals(wmbuildStr))  {
-//						wmBuildOption = false;
-//					} else {
-//						wmBuildOption = true;
-//					}					
-//				}
-//			}
-//
-//			if (projPropMap.containsKey(ProjectProperties.WIN_SMOOTH_SCROLL_KEY)) {
-//				String wmsmoothStr = projPropMap.get(ProjectProperties.WIN_SMOOTH_SCROLL_KEY);
-//				if (wmsmoothStr != null && wmsmoothStr.trim().length() > 0 ) {
-//					if("false".equals(wmsmoothStr))  {
-//						wmsmoothScroll = false;
-//					} else {
-//						wmsmoothScroll = true;
-//					}					
-//				}
-//			}
 
 			if (projPropMap.containsKey(ProjectProperties.COMMENT_MODULE_KEY)) {
 				String removeCommentStr = projPropMap.get(ProjectProperties.COMMENT_MODULE_KEY);
@@ -709,7 +688,9 @@ public class NativeCodeGenerationJob extends Job {
 		return null;
 	}
 	
-	
-	
+
+	public boolean isSuccess() {
+		return success;
+	}
 	
 }

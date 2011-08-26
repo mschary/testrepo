@@ -1,11 +1,17 @@
 package com.kony.nativecodegen.actions;
 
-import org.eclipse.core.runtime.jobs.Job;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
 
 import com.kony.nativecodegen.ui.NativeCodePlatformSelectionDialog;
+import com.pat.tool.keditor.console.ConsoleDisplayManager;
 import com.pat.tool.keditor.utils.KConstants;
+import com.pat.tool.keditor.utils.KUtils;
 import com.pat.tool.keditor.utils.RendererHashMapData;
 import com.pat.tool.keditor.widgets.RichClientChannel;
 import com.pat.tool.keditor.widgets.TabletRichClientChannel;
@@ -19,6 +25,9 @@ import com.pat.tool.keditor.widgets.TabletRichClientChannel;
 public class NativeCodeGenAction extends AbstractNativeCodeGenAction {
 
 	private String projectName;
+	private int selectedPlatforms;
+	private List<String> successList = new ArrayList<String>();
+	private List<String> failureList = new ArrayList<String>();
 
 	public void run(IAction action) {
 		projectName = selectedElement.getName();
@@ -27,14 +36,16 @@ public class NativeCodeGenAction extends AbstractNativeCodeGenAction {
 		dialog.setHelpAvailable(false);
 		int option = dialog.open();
 		if (option == Window.OK) {
+			selectedPlatforms = 0;
+			successList.clear();
+			failureList.clear();
 			RendererHashMapData selectedPlatforms = dialog.getRendererHashMapData();
-
-			Job job = null;
+			NativeCodeGenerationJob job = null;
 			if (selectedPlatforms.getValue(RichClientChannel.IPHONE)) {
 				job = getExecutionJob(KConstants.IPHONE_TYPE_INFERENCE_FILE);
 				job.schedule();
 			}
-			
+
 			if (selectedPlatforms.getValue(TabletRichClientChannel.IPAD)) {
 				job = getExecutionJob(KConstants.IPAD_TYPE_INFERENCE_FILE);
 				job.schedule();
@@ -53,11 +64,42 @@ public class NativeCodeGenAction extends AbstractNativeCodeGenAction {
 		}
 	}
 
-	private Job getExecutionJob(String fileName) {
-		String jobName = "Generating native code for " + NativeCodeGenerationJob.getPlatformName(fileName);
-		NativeCodeGenerationJob job = new NativeCodeGenerationJob(jobName, projectName, fileName);
+	private NativeCodeGenerationJob getExecutionJob(String fileName) {
+		final String platformName = NativeCodeGenerationJob.getPlatformName(fileName);
+		String jobName = "Generating native code for " + platformName;
+		final NativeCodeGenerationJob job = new NativeCodeGenerationJob(jobName, projectName, fileName);
 		job.setUser(true);
+		selectedPlatforms++;
+
+		job.addJobChangeListener(new JobChangeAdapter() {
+			public void done(IJobChangeEvent event) {
+				if (job.isSuccess()) {
+					successList.add(platformName);
+				} else {
+					failureList.add(platformName);
+				}
+
+				if (selectedPlatforms != 1 && selectedPlatforms == (successList.size() + failureList.size())) {
+					printInfo(successList, "Native code generation is successfull for the following platforms: ", ConsoleDisplayManager.MSG_SUCCESS);
+					printInfo(failureList, "Native code generation has failed for the following platforms: ", ConsoleDisplayManager.MSG_ERROR);
+				}
+			}
+		});
+
 		return job;
+	}
+
+	private void printInfo(List<String> list, String initialMsg, int msgType) {
+		if (list.size() > 0) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(initialMsg);
+			for (String platName : list) {
+				builder.append(platName);
+				builder.append(",");
+			}
+			KUtils.removeCommaAtEndofBuffer(builder);
+			ConsoleDisplayManager.getDefault().println(builder.toString(), msgType);
+		}
 	}
 
 }
