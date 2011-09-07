@@ -91,6 +91,7 @@
 		<copy file="${luatranslator.dir}/iPhone/dist/ioscodegen.jar" todir="${dist.plugin.dir}/lib" overwrite="true"/>
 		<copy file="${luatranslator.dir}/BlackBerry/dist/bbcodegen.jar" todir="${dist.plugin.dir}/lib" overwrite="true"/>
 		<copy file="${luatranslator.dir}/Android/dist/droidcodegen.jar" todir="${dist.plugin.dir}/lib" overwrite="true"/>
+		<copy file="${luatranslator.dir}/SPA/dist/spacodegen.jar" todir="${dist.plugin.dir}/lib" overwrite="true"/>
 		<copy file="lib/antlr-3.3-complete.jar" todir="${dist.plugin.dir}/lib" overwrite="true"/>
 		<copy file="lib/ant-contrib-0.6.jar" todir="${dist.plugin.dir}/lib" overwrite="true"/>		
 		<copydir src="icons" dest="${dist.plugin.dir}/icons" forceoverwrite="true" />
@@ -99,6 +100,7 @@
 		<copydir src="${luatranslator.dir}/BlackBerry/dist/resources" dest="${dist.plugin.dir}/nativefiles/blackberry"/>
 		<copydir src="${luatranslator.dir}/Android/dist/resources" dest="${dist.plugin.dir}/nativefiles/android"/>
 		<copydir src="${luatranslator.dir}/iPhone/dist/resources" dest="${dist.plugin.dir}/nativefiles/ipad"/>
+		<copydir src="${luatranslator.dir}/SPA/dist/resources" dest="${dist.plugin.dir}/nativefiles/SPA"/>
 		<copy file="nativefiles/nativebuild.xml" todir="${dist.plugin.dir}/nativefiles" overwrite="true"/>	
 		<copy file="nativefiles/blackberry/KonyApplicationStart.java" todir="${dist.plugin.dir}/nativefiles/blackberry" overwrite="true"/>
 		
