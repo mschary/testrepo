@@ -1,0 +1,491 @@
+
+group JS;
+
+typeInitMap ::= [
+        "int":"0",
+        "long":"0",
+        "float":"0.0",
+        "double":"0.0",
+        "boolean":"false",
+        "byte":"0",
+        "short":"0",
+        "char":"0",
+        default:"null" // anything other than an atomic type
+]
+
+javaWidgetMap ::= [
+  "dummy" : "dummy"
+]
+
+javaAPIInstanceMap ::= [
+  "dummy" : "dummy"
+]
+
+javaAPIInstance0Map ::= [
+  "dummy" : "dummy"
+]
+
+javaAPIMap ::= [
+
+  "addappmenuitems" : "$KW.Appmenu.addAppMenuItems",
+  
+  "Alert.show" : "$KW.Alert.show",
+
+  "box.add" : "$KW.Box.add",
+  "box.setvisibility" : "$KW.Box.setVisibility",
+
+  "calendar.clear" : "$KW.Calendar.clear",
+
+  "datagrid.addall" : "$KW.DataGrid.addAll",
+  "datagrid.addat" : "$KW.DataGrid.addAt",
+  "datagrid.applycellskin": "$KW.DataGrid.applyCellSkin",
+  "datagrid.removeall" : "$KW.DataGrid.removeAll",
+  "datagrid.removeat" : "$KW.DataGrid.removeAt",
+  "datagrid.setcelldata" : "$KW.DataGrid.setCellData",
+  "datagrid.setdata" : "$KW.DataGrid.setData",
+  "datagrid.selectall" : "$KW.DataGrid.selectAll",
+  "datagrid.setdataat" : "$KW.DataGrid.setDataAt",
+
+  "ds.delete" : "$KI.ds.Delete",
+  "ds.read" : "$KI.ds.read",	
+  "ds.save" : "$KI.ds.save",
+ 
+  "form.destroy" : "$KW.Form.destroy",
+  "form.getcurrentform" : "$KW.Form.getCurrentForm",
+  "form.getpreviousform" : "$KW.Form.getPreviousForm",
+  "form.show" : "$KW.Form.show",
+
+  "gallery.addall" : "$KW.IGallery.addAll", 
+  "gallery.removeall" : "$KW.IGallery.removeAll", 
+  "gallery.removeat" : "$KW.IGallery.removeAt", 
+  "gallery.setdata" : "$KW.IGallery.setData", 
+  "gallery.setdataat" : "$KW.IGallery.setDataAt", 
+
+  "hideappmenuitems" : "$KW.Appmenu.hideAppMenuItems",
+  
+  "imagestrip.addall" : "$KW.HStrip.addAll", 
+  "imagestrip.removeall" : "$KW.HStrip.removeAll",
+  "imagestrip.removeat" : "$KW.HStrip.removeAt",
+  "imagestrip.setdata" : "$KW.HStrip.setData",
+  "imagestrip.setdataat" : "$KW.HStrip.setDataAt",
+
+  "i18n.deleteresourcebundle" : "$KI.i18n.deleteResourceBundle",
+  "i18n.getlocalizedstring" : "$KI.i18n.getLocalizedString",
+  "i18n.isresourcebundlepresent": "$KI.i18n.isResourceBundlePresent",
+  "i18n.setdefaultlocale" : "$KI.i18n.setDefaultLocale",
+  "i18n.updateresourcebundle" : "$KI.i18n.updateResourceBundle",
+  "i18n.setresourcebundle" : "$KI.i18n.setResourceBundle",
+
+  "math.max" : "$KI.math.max",
+  "math.min" : "$KI.math.min",
+  "math.pow" : "$KI.math.pow",
+  "math.random" : "$KI.math.random",
+  "math.randomseed" : "$KI.math.randomseed",
+  "math.sqrt" : "$KI.math.sqrt",
+  "math.tointeger" : "$KI.math.tointeger",
+
+  "net.invokeserviceasync" : "$KI.net.invokeserviceasync",
+  "net.cancel" : "$KI.net.cancel",
+
+  "os.addtodate" : "$KI.os.addtodate",
+  "os.comparedates" : "$KI.os.comparedates",
+  "os.date" : "$KI.os.date",
+  "os.datecomponents" : "$KI.os.datecomponents",
+  "os.diffdatetime" : "$KI.os.diffdatetime",
+  "os.formatdate" : "$KI.os.formatdate",
+  "os.isleapyear" : "$KI.os.isleapyear",
+  "os.isvaliddate" : "$KI.os.isvaliddate",
+  "os.time" : "$KI.os.time",
+  "os.tonumber" : "$KI.os.tonumber",
+  "os.tocurrency" : "$KI.os.tocurrency",
+
+  "phone.dial" : "$KI.phone.dial",
+  "phone.mylocation" :"$KI.phone.myLocation",
+  "phone.openemail" : "$KI.phone.openEmail",
+  "phone.openmediagallery" : "$KI.phone.openMediaGallery", 
+  "phone.sendSMS" : "$KI.phone.sendSMS",
+
+  "popup.destroy" : "$KW.Popup.destroy",
+  "popup.dismiss" : "$KW.Popup.dismiss",
+  "popup.setcontext" : "$KW.Popup.setContext",
+  "popup.show" : "$KW.Popup.show",
+
+  "removeappmenuitems" : "$KW.Appmenu.removeAppMenuItems",
+
+  "segui.addat" : "$KW.Segment.addAt",
+  "segui.addall" : "$KW.Segment.addAll",
+  "segui.removeall" : "$KW.Segment.removeAll",
+  "segui.removeat" : "$KW.Segment.removeAt",
+  "segui.setdata" : "$KW.Segment.setData",
+  "segui.setdataat" : "$KW.Segment.setDataAt",
+  "segui.setdatawithsections" : "$KW.Segment.setDataWithSections",
+
+  "setappmenu" : "$KW.Appmenu.setAppMenu",
+  "setappmenufocusindex" : "$KW.Appmenu.setAppMenuFocusIndex",
+  "showappmenuitems" : "$KW.Appmenu.showAppMenuItems",
+
+  "string.charat" : "$KI.string.charat",
+  "string.compare" : "$KI.string.compare",
+  "string.containschars" : "$KI.string.containschars",
+  "string.containsnogivenchars" : "$KI.string.containsnogivenchars",
+  "string.containsonlygivenchars" : "$KI.string.containsonlygivenchars",
+  "string.endswith" : "$KI.string.endswith",
+  "string.equalsignorecase" : "$KI.string.equalsignorecase",
+  "string.find" : "$KI.string.find",
+  "string.isasciialpha" : "$KI.string.isasciialpha",
+  "string.isasciialphanumeric" : "$KI.string.isasciialphanumeric",
+  "string.isnumeric" : "$KI.string.isnumeric",
+  "string.isvalidemail" : "$KI.string.isvalidemail",
+  "string.len" : "$KI.string.len",
+  "string.lower" : "$KI.string.lower",
+  "string.rep" : "$KI.string.rep",
+  "string.replace" : "$KI.string.replace",
+  "string.reverse" : "$KI.string.reverse",
+  "string.split" : "$KI.string.split",
+  "string.startswith" : "$KI.string.startswith",
+  "string.sub" : "$KI.string.sub",
+  "string.trim" : "$KI.string.trim",
+  "string.upper" : "$KI.string.upper",
+
+  "table.append" : "$KI.table.append",
+  "table.concat" : "$KI.table.concat",
+  "table.contains" : "$KI.table.contains",
+  "table.filter" : "$KI.table.filter",
+  "table.get" : "$KI.table.get",
+  "table.insert" : "$KI.table.insert",
+  "table.map" : "$KI.table.map",
+  "table.mapnew" : "$KI.table.mapnew",
+  "table.remove" : "$KI.table.remove",
+  "table.removeall" : "$KI.table.removeall",
+  "table.sort" : "$KI.table.sort",
+  "table.parsejson" : "$KI.table.parsejson",
+
+  "widget.setvisibility" : "$KW.Widget.setvisibility",
+
+  "window.Box" : "$KW.Box",
+  "window.Button" : "$KW.Button",
+  "window.Calendar" : "$KW.Calendar",
+  "window.Camera" : "$KW.Camera",
+  "window.Chart" : "$KW.Chart",
+  "window.CheckBoxGroup" : "$KW.CheckboxGroup",
+  "window.ComboBox" : "$KW.ComboBox",
+  "window.DataGrid" : "$KW.DataGrid",
+  "window.Form" : "$KW.Form",
+  "window.Gallery" : "$KW.Gallery",
+  "window.HorizontalImageStrip" : "$KW.HorizontalImageStrip",
+  "window.Image" : "$KW.Image",
+  "window.Label" : "$KW.Label",
+  "window.Line" : "$KW.Line",
+  "window.Link" : "$KW.Link",
+  "window.ListBox" : "$KW.ListBox",
+  "window.Map" : "$KW.Map",
+  "window.PickerView" : "$KW.PickerView",
+  "window.Popup" : "$KW.PopUp",
+  "window.RadioButtonGroup" : "$KW.RadioGroup",
+  "window.RichText" : "$KW.RichText",
+  "window.SegmentedUI" : "$KW.SegUI",
+  "window.Skin" : "$KW.Skin",
+  "window.Slider" : "$KW.Slider",
+  "window.TabWidget" : "$KW.TabWidget",
+  "window.TextArea" : "$KW.TextArea",
+  "window.TextField" : "$KW.TextField",
+  "window.Web" : "$KW.Web",
+
+  "window.Alert":"$KI.window.alert",
+  "window.showloadingscreen" : "$KI.window.showLoadingScreen",
+  "window.dismissloadingscreen" : "$KI.window.dismissLoadingScreen",
+  "window.openurl" : "$KI.window.openURL", 
+  "window.openmediaurl" : "$KI.window.openMediaURL",
+  "assert" : "kony.utils.assert",
+  "type" : "kony.utils.type",
+  "unpack" : "$KI.table.unpack"
+]
+
+javaAPI0Map ::= [
+  "i18n.getcurrentlocale" : "$KI.i18n.getCurrentLocale",
+  "os.freememory" : "$KI.os.freememory",
+  "os.platform" : "$KI.os.platform",
+  "os.useragent" : "$KI.os.useragent"
+]
+
+javaAPIDataMap ::= [
+  "math.pi" : "$KI.math.pi"
+]
+
+global_tmpl(globalVars,globalFunctions) ::= <<
+    <globalVars; separator="\n">
+    <globalFunctions; separator="\n">
+>>
+
+program_tmpl(fileName, vars,functions ) ::= <<
+    <functions; separator="\n">
+>>
+// START: file
+file(defs) ::= <<
+<defs; separator="\n">
+>>
+
+block_tmpl(isMethodBlock, stmt) ::= <<
+<if(!isMethodBlock)> {<endif>
+    <stmt; separator="\n">
+<if(!isMethodBlock)>}<endif>
+>>
+
+comment_tmpl(comment, stmt) ::= <<
+<stmt><if(comment)>/*<comment>*/<endif>
+>>
+blockComment_tmpl(comment, stmt) ::= <<
+<if(comment)>/*<comment>*/<endif>
+<stmt>
+>>
+comment2_tmpl(prevComment, stmt, postComment) ::= <<
+<if(prevComment)><prevComment><endif>
+<stmt><if(postComment)><postComment><endif>
+>>
+
+comment1_tmpl(comment, stmt) ::= <<
+/*<comment>*/
+<stmt>
+>>
+
+var_tmpl(name, init) ::= <<
+var <name><if(init)> = <init><endif>;
+>>
+
+varList_tmpl(vars) ::= <<
+<vars; separator="\n">
+>>
+
+assign_tmpl(a, b) ::= <<
+<a><if(b)> = <b><endif>;
+>>
+
+pow_tmpl(a,b) ::= "Math.pow(<a>,<b>)"
+
+expression_tmpl(expr) ::= <<
+<expr>
+>>
+
+paren_expression_tmpl(expr) ::= <<
+(<expr>)
+>>
+
+bop_tmpl(op, a, b) ::= <<
+<a> <op> <b>
+>>
+
+uop_tmpl(op, a) ::= <<
+<op><a>
+>>
+
+double_equal_tmpl(a, b) ::= <<
+<a> == <b>
+>>
+
+boolean_equal_tmpl(a, b) ::= <<
+<a> == <b>
+>>
+
+hash_tmpl_luatable(a) ::= "(<a>.length - 1)"
+
+hash_tmpl_string(a) ::= "<a>.length"
+
+expr_tmpl(expr) ::= "<expr>"
+
+arrAccess_tmpl(tname, mem) ::= <<
+<tname>[<mem>]
+>>
+
+arrAccess2_tmpl(tname, mem) ::= <<
+<tname>.<mem>
+>>
+
+methodCallStmt_tmpl(call) ::= "<call>;"
+
+methodCall1_tmpl(name, args) ::= <<
+$KA.<name>(<args; separator=",">)
+>>
+
+methodCall2_tmpl(name, args) ::= <<
+<name>(<args; separator=",">)
+>>
+
+methodCall3_tmpl(name) ::= <<
+<name>()
+>>
+
+methodCall4_tmpl(name, rcast, suffix) ::= <<
+<name>()
+>>
+
+javaapi_tmpl(name) ::= <<
+<if (javaAPIMap.(name))><javaAPIMap.(name)><else><name><endif>
+>>
+
+javaapi0_tmpl(name) ::= <<
+<if (javaAPI0Map.(name))><javaAPI0Map.(name)><else><name><endif>
+>>
+
+javaapiinstance_tmpl(name) ::= <<
+<if (javaAPIInstanceMap.(name))><javaAPIInstanceMap.(name)><else><name><endif>
+>>
+
+javaapiinstance0_tmpl(name) ::= <<
+<if (javaAPIInstance0Map.(name))><javaAPIInstance0Map.(name)><else><name><endif>
+>>
+
+javawidget_tmpl(name) ::= <<
+<if (javaWidgetMap.(name))><javaWidgetMap.(name)><else><name><endif>
+>>
+
+javaapidata_tmpl(name) ::= <<
+<if (javaAPIDataMap.(name))><javaAPIDataMap.(name)><else><name><endif>
+>>
+
+while_tmpl(cond, stmt) ::= <<
+while (<cond>) <stmt>
+>>
+
+doWhile_tmpl(cond, stmt) ::= <<
+do <stmt> while (<cond>);
+>>
+
+return_tmpl(val) ::= "return <val>;"
+
+if_stmt(cond, stmt, elb) ::= <<
+if (<cond>)<if(stmt)><stmt><else> { }<endif><if(elb)>else <elb><endif>
+>>
+
+if_stmt1(cond, stmt) ::= "if (<cond>)<if(stmt)><stmt><else> { }<endif>"
+
+ifelse_stmt(cond, stmt, elseb) ::= <<
+if (<cond>)<if(stmt)><stmt><else> { }<endif>else <if(elseb)><elseb><else> { }<endif>
+>>
+
+dotMember_tmpl(tname, mem) ::= <<
+<tname>.<mem>
+>>
+
+dotMember2_tmpl(tname, mem) ::= <<
+<tname>.<mem>
+>>
+
+method_dotMember_tmpl(tname, mem) ::= <<
+<tname>.<mem>
+>>
+
+ident_tmpl(name) ::= "<name>"
+
+ident2_tmpl(name) ::= "$KMA.<name>"
+
+ident3_tmpl(name) ::= <<
+$KMA["<name>"]
+>>
+
+dotList_tmpl(names) ::= <<
+<names; separator=".">
+>>
+
+param_tmpl(name) ::= "<name>"
+
+paramList_tmpl(params) ::= <<
+<params; separator=",">
+>>
+
+vararg_tmpl() ::= <<
+
+>>
+
+methodDecl_tmpl(name, params, fvars, bl) ::= <<
+$KA.<name> = function(<params>) {
+     <fvars; separator="\n">
+     <bl>
+}
+>>
+
+forInit_tmpl(var, init) ::= "var <var> = <init>"
+
+forCondition_tmpl(name, cond) ::= <<
+<name> \< <cond>
+>> 
+
+forUpdater_tmpl(name, cond) ::= "<name><cond>" 
+
+for_tmpl(init, cond, updt, stmt) ::= <<
+<if(updt)>
+for (<init>;<cond>;<updt>) <stmt>
+<else>
+for (<init> ; <cond> ; <init.stmt.var>++) <stmt>
+<endif>
+>>
+
+forIpair_tmpl(decl1, decl2, i, val, var, bl) ::= <<
+<if(decl1)><decl1><endif>
+<if(decl2)><decl2><endif>
+for (<i>=1; ((<var>) != null) && <i> \< <var>.length; <i>++) {
+    <val> = <var>[<i>];
+    <bl; separator="\n">
+}
+>>
+
+forPair_tmpl(decl1, decl2, enm, key, val, var, bl) ::= <<
+<if(decl1)><decl1><endif>
+<if(decl2)><decl2><endif>
+for (<key> in <var>) {
+    <val> = <var>[<key>];
+    <bl; separator="\n">
+}
+>>
+
+break_tmpl() ::= "break;"
+
+table_init_tmpl(tname) ::= <<
+<tname>
+>>
+
+table_tmpl(tname, body) ::= <<
+var <tname> = new Object();
+<body>
+>>
+
+tablea_tmpl(body) ::= <<
+[<body>]
+>>
+
+table_field_list_tmpl(fields) ::= <<
+<fields; separator="\n">
+
+>>
+
+tablea_field_list_tmpl(fields) ::= <<
+<fields; separator=",">
+>>
+
+field1_tmpl(tname, expr, indx) ::= <<
+<tname>[<indx>] = <expr>;
+>>
+
+field1a_tmpl(expr) ::= <<
+<expr>
+>>
+
+field2_tmpl(tname, fname, expr, tcast) ::= <<
+<tname>.<fname> = <expr>;
+>>
+
+field3_tmpl(tname, expr1, expr2) ::= <<
+<tname>[<expr1>] = <expr2>;
+>>
+
+field4_tmpl(tname, fname, expr) ::= <<
+kony.model.update("<tname>.<fname>", <expr>);
+>>
+
+field5_tmpl(tname, expr1, expr2) ::= <<
+kony.model.update("<tname>.<expr1>", <expr2>);
+>>
+
+field_tmpl(fields) ::= <<
+<fields; separator=",">
+>>
+
