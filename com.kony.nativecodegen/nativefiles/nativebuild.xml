@@ -32,6 +32,9 @@
         <path id="android.classpath">
             <fileset dir="${plugin.loc}/lib" includes = "droidcodegen.jar,antlr-3.3-complete.jar"/>
         </path>
+        <path id="spa.classpath">
+            <fileset dir="${plugin.loc}/lib" includes = "spacodegen.jar,antlr-3.3-complete.jar"/>
+        </path>
     	
     </target>
 	
@@ -69,6 +72,7 @@
     		</then>
     	</if>
     </target>
+	
 	
 	<!-- source.dir, sourcexml.dir, resource.dir, typeinfer.file, buildstatus.file, destination.dir -->
     <target name="nativerun" depends="init">
