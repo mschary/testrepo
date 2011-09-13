@@ -89,6 +89,15 @@
    		</java>
     </target>
 	
+	<target name="copyfiles">
+		<copy file="${html.file}" todir="${dest.dir}"/>
+		<copy todir="${dest.dir}">
+			<fileset dir="${css.dir}" includes="*.css"/>
+		</copy>
+	</target>
+	
+	<target name="nativerunwithcopyfiles" depends="init,copyfiles,nativerun"/>
+	
 	<!-- Main target  -->
     <target name="all" depends="init, createdir"/>
 
