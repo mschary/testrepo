@@ -90,9 +90,12 @@
     </target>
 	
 	<target name="copyfiles">
-		<copy file="${html.file}" todir="${dest.dir}"/>
+		<copy file="${spa.dir}/index.html" todir="${dest.dir}"/>
 		<copy todir="${dest.dir}">
 			<fileset dir="${css.dir}" includes="*.css"/>
+		</copy>
+		<copy todir="${dest.dir}/jslib">
+			<fileset dir="${spa.dir}" includes="*.js"/>
 		</copy>
 	</target>
 	
