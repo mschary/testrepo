@@ -90,7 +90,6 @@
     </target>
 	
 	<target name="copyfiles">
-		<copy file="${spa.dir}/index.html" todir="${dest.dir}"/>
 		<copy todir="${dest.dir}">
 			<fileset dir="${css.dir}" includes="*.css"/>
 		</copy>
