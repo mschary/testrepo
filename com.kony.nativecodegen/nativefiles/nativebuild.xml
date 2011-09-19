@@ -98,7 +98,18 @@
 		</copy>
 	</target>
 	
-	<target name="nativerunwithcopyfiles" depends="init,copyfiles,nativerun"/>
+	<target name="concatcombo">
+		<echo message="Concating to ${dest.dir}/appjs/combo.js"/>
+		<delete file="${dest.dir}/appjs/comb.js" failonerror="false"/>
+		<concat fixlastline="yes" destfile="${dest.dir}/appjs/comb.js" append="yes">
+			<fileset dir="${dest.dir}/appjs">
+				<include name="*.js"/>
+				<exclude name="appmodel.js"/>
+			</fileset>
+		</concat>
+	</target>
+	
+	<target name="nativerunwithcopyfiles" depends="init,copyfiles,nativerun,concatcombo"/>
 	
 	<!-- Main target  -->
     <target name="all" depends="init, createdir"/>
