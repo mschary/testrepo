@@ -89,6 +89,28 @@
    		</java>
     </target>
 	
+	<target name="copyfiles">
+		<copy todir="${dest.dir}">
+			<fileset dir="${css.dir}" includes="*.css"/>
+		</copy>
+		<copy todir="${dest.dir}/jslib">
+			<fileset dir="${spa.dir}" includes="*.js"/>
+		</copy>
+	</target>
+	
+	<target name="concatcombo">
+		<echo message="Concating to ${dest.dir}/appjs/combo.js"/>
+		<delete file="${dest.dir}/appjs/comb.js" failonerror="false"/>
+		<concat fixlastline="yes" destfile="${dest.dir}/appjs/comb.js" append="yes">
+			<fileset dir="${dest.dir}/appjs">
+				<include name="*.js"/>
+				<exclude name="appmodel.js"/>
+			</fileset>
+		</concat>
+	</target>
+	
+	<target name="nativerunwithcopyfiles" depends="init,copyfiles,nativerun,concatcombo"/>
+	
 	<!-- Main target  -->
     <target name="all" depends="init, createdir"/>
 
