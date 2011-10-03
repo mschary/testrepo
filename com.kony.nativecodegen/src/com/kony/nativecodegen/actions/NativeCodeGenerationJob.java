@@ -32,6 +32,8 @@ import com.pat.tool.keditor.ant.AntRunner;
 import com.pat.tool.keditor.build.BuildConstants;
 import com.pat.tool.keditor.console.ConsoleDisplayManager;
 import com.pat.tool.keditor.preferences.IPreferenceConstants;
+import com.pat.tool.keditor.splash.SplashData;
+import com.pat.tool.keditor.splash.SplashUtils;
 import com.pat.tool.keditor.tasks.TAndroidBuild;
 import com.pat.tool.keditor.tasks.TJetty;
 import com.pat.tool.keditor.tasks.Task;
@@ -69,6 +71,9 @@ public class NativeCodeGenerationJob extends Job {
 	private String pluginLoc;
 	private String projLoc;
 	private String tempLocation;
+
+	private SplashData splashData;
+	private String ipadSupportedOrientations = "";
 
 	//splash properties
 	private String splashLogo;
@@ -134,7 +139,8 @@ public class NativeCodeGenerationJob extends Job {
 	
     private IFile typeInferenceFile;
 	private boolean ipadSelected;
-	private boolean success;	
+	private boolean success;
+	private boolean iphoneLoadIndctr;	
 	
 	public NativeCodeGenerationJob(String name, String projectName, String inferenceFileName) {
 		super(name);
@@ -372,6 +378,8 @@ public class NativeCodeGenerationJob extends Job {
 	private void loadProjProperties() {
 		
 		HashMap<String, String> projPropMap = KUtils.loadProjProperties(projectName);
+		splashData = SplashUtils.loadSplashData(projectName);
+
 		if (!projPropMap.isEmpty()) {
 			if (projPropMap.get(ProjectProperties.BUILD_OPTION_KEY) != null) {
 				buildOption = projPropMap.get(ProjectProperties.BUILD_OPTION_KEY);
@@ -423,6 +431,36 @@ public class NativeCodeGenerationJob extends Job {
 				splashBGColor = "ffffff00";
 			}
 			
+
+			String launchMode = splashData.getLaunchMode();
+			String portraitOrientation = projPropMap.get(ProjectProperties.IPAD_PORTRAIT_MODEKEY);
+			String landscapeOrientation = projPropMap.get(ProjectProperties.IPAD_LANDSCAPE_MODEKEY);
+			
+			if (portraitOrientation == null) {
+				portraitOrientation = Boolean.TRUE.toString();
+			}
+			if (landscapeOrientation == null) {
+				landscapeOrientation = Boolean.FALSE.toString();
+			}
+			StringBuilder buffer = new StringBuilder();
+
+			if (Boolean.TRUE.toString().equals(portraitOrientation) || SplashData.PORTRAIT_MODE.equals(launchMode)
+					|| SplashData.BOTH_MODE.equals(launchMode)) {
+				buffer.append(SplashData.PORTRAIT_MODE.toLowerCase());
+				buffer.append(",");
+			}
+
+			if (Boolean.TRUE.toString().equals(landscapeOrientation) || SplashData.LANDSCAPE_MODE.equals(launchMode)
+					|| SplashData.BOTH_MODE.equals(launchMode)) {
+				buffer.append(SplashData.LANDSCAPE_MODE.toLowerCase());
+				buffer.append(",");
+			}
+
+			KUtils.removeCommaAtEndofBuffer(buffer);
+			ipadSupportedOrientations = buffer.toString();
+			splashLogo = splashData.getPortrait_splash_image();
+
+			
 			String andLoad = projPropMap.get(ProjectProperties.ANDROID_LOAD_INDICATOR_KEY);
 			if (andLoad != null && andLoad.trim().length() > 0 ) {
 				if("false".equals(andLoad))  {
@@ -432,6 +470,17 @@ public class NativeCodeGenerationJob extends Job {
 				}					
 			} else {
 				andLoadIndctr = true;
+			}
+			
+			String iphoneLoad = projPropMap.get(ProjectProperties.IPHONE_LOAD_INDICATOR_KEY);
+			if ((iphoneLoad != null) && (iphoneLoad.trim().length() > 0) ) {
+				if(Boolean.FALSE.toString().equals(iphoneLoad))  {
+					iphoneLoadIndctr = false;
+				} else {
+					iphoneLoadIndctr = true;
+				}
+			} else {
+				iphoneLoadIndctr = true;
 			}
 
 			if (projPropMap.containsKey(ProjectProperties.VENDORNAME_KEY)) {
@@ -576,18 +625,35 @@ public class NativeCodeGenerationJob extends Job {
 		dlServerProp.put(Task.MACHINE_IP, com.pat.tool.keditor.KEditorPlugin.getMachineIP());
 		dlServerProp.put("jetty.portnum", jettyPortNum+"");
 		dlServerProp.put("jetty.httpsportnum", jettyHttpsPortNum+"");
-
-		if (!isEmpty(splashLogo)) dlServerProp.put("splash.image", splashLogo);
-		if (!isEmpty(splashPBImg1)) dlServerProp.put("splash.progress1", splashPBImg1);
-		if (!isEmpty(splashPBImg2)) dlServerProp.put("splash.progress2", splashPBImg2);
-		if (!isEmpty(splashPBImg3)) dlServerProp.put("splash.progress3", splashPBImg3);
-		if (!isEmpty(splashPBImg4)) dlServerProp.put("splash.progress4", splashPBImg4);
+		
+		if (!isEmpty(splashLogo)) {
+			dlServerProp.put(Task.SPLASH_IMAGE, splashLogo);
+		} 
+		String splashVideo = splashData.getPortrait_splash_video();
+		dlServerProp.put(Task.SPLASH_VIDEO, splashVideo);
 		if (!isEmpty(splashBGColor)) dlServerProp.put("splash.bgcolor", splashBGColor);
 		if (!isEmpty(splashFGColor)) dlServerProp.put("splash.fgcolor", splashFGColor);
 		
-		dlServerProp.put("splash.li", andLoadIndctr+"");
-		dlServerProp.put("fonts_workspace", ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString()+"/"+ FileUtilities.METADATA_KONYSTUDIO_FONTS);
+		String launchMode = splashData.getLaunchMode().toLowerCase();
+		if("portait".equals(launchMode)) launchMode = "portrait";
+		dlServerProp.put(Task.APP_LAUNCH_MODE, launchMode);
 
+		dlServerProp.put(Task.SPLASH_ANDROID_LOAD_INDICATOR, andLoadIndctr+"");
+		dlServerProp.put(Task.SPLASH_IPHONE_LOAD_INDICATOR, iphoneLoadIndctr+"");
+		dlServerProp.put(Task.FONTS_WORKSPACE, ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString()+"/"+ FileUtilities.METADATA_KONYSTUDIO_FONTS);
+
+		String splashAnimationImages = SplashUtils.getSplashAnimationImages(splashData, SplashData.PORTRAIT_MODE);
+		dlServerProp.put(Task.SPLASH_ANIMATION_LIST, splashAnimationImages);
+		String landscape_splashAnimationImages = SplashUtils.getSplashAnimationImages(splashData, SplashData.LANDSCAPE_MODE);
+		dlServerProp.put(Task.SPLASH_LANDSCAPE_ANIMATION_LIST, landscape_splashAnimationImages);
+		
+		dlServerProp.put(Task.SPLASH_VIDEO_INTERRUPTABLE, splashData.isPotrait_animation_interruptable()+"");
+		dlServerProp.put(Task.SPLASH_LANDSCAPE_VIDEO_INTERRUPTABLE, splashData.isLandscape_animation_interruptable()+"");
+		
+		dlServerProp.put(Task.SPLASH_ANIMATION_DURATION, splashData.getPortrait_animationDuration());
+		dlServerProp.put(Task.SPLASH_LANDSCAPE_ANIMATION_DURATION, splashData.getLandscape_animationDuration());
+		
+		
 		if (appPKGName != null && appPKGName.trim().length() > 0) {
 			dlServerProp.put("packagename",appPKGName);
 		}
