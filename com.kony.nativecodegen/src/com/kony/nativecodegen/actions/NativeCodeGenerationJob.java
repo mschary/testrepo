@@ -2,7 +2,9 @@ package com.kony.nativecodegen.actions;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -39,9 +41,13 @@ import com.pat.tool.keditor.tasks.TJetty;
 import com.pat.tool.keditor.tasks.Task;
 import com.pat.tool.keditor.utils.CustomLibrariesUtils;
 import com.pat.tool.keditor.utils.FileUtilities;
+import com.pat.tool.keditor.utils.ImageUtils;
 import com.pat.tool.keditor.utils.KConstants;
 import com.pat.tool.keditor.utils.KUtils;
 import com.pat.tool.keditor.utils.ProjectProperties;
+import com.pat.tool.keditor.utils.ValidationUtil;
+import com.pat.tool.keditor.widgets.IMobileChannel;
+import com.pat.tool.keditor.widgets.MobileChannels;
 
 public class NativeCodeGenerationJob extends Job {
 
@@ -103,6 +109,9 @@ public class NativeCodeGenerationJob extends Job {
 	boolean androidSelected = false;
 	boolean bbSelected = false;
 	boolean winSelected = false;
+	private String iphoneBundleIdentifier;
+	private String iphoneBundleVersion;
+	private boolean iphoneipadGlossyEffect = false;
 	
 	private boolean mainresult;
 	
@@ -432,6 +441,20 @@ public class NativeCodeGenerationJob extends Job {
 			}
 			
 
+			iphoneBundleIdentifier = projPropMap.get(ProjectProperties.IPHONE_BUNDLE_IDENTIFIER_KEY);
+			if(!ValidationUtil.isNonEmptyString(iphoneBundleIdentifier)) {
+				iphoneBundleIdentifier = "com.kony."+appID;
+			}
+			iphoneBundleVersion = projPropMap.get(ProjectProperties.IPHONE_BUNDLE_VERSION_KEY);
+			if(!ValidationUtil.isNonEmptyString(iphoneBundleVersion)) {
+				iphoneBundleVersion = "1.0";
+			}
+			
+			String glossyEffect = projPropMap.get(ProjectProperties.IPHONE_IPAD_GLOSSYEFFECT);
+			if(glossyEffect != null && "true".equals(glossyEffect)) {
+				iphoneipadGlossyEffect = true;
+			}
+			
 			String launchMode = splashData.getLaunchMode();
 			String portraitOrientation = projPropMap.get(ProjectProperties.IPAD_PORTRAIT_MODEKEY);
 			String landscapeOrientation = projPropMap.get(ProjectProperties.IPAD_LANDSCAPE_MODEKEY);
@@ -658,7 +681,66 @@ public class NativeCodeGenerationJob extends Job {
 			dlServerProp.put("packagename",appPKGName);
 		}
 
+		dlServerProp.put(Task.BUNDLE_IDENTIFIER, iphoneBundleIdentifier);
+		dlServerProp.put(Task.BUNDLE_VERSION, iphoneBundleVersion);
+		dlServerProp.put(Task.APPICON_GLOSSYEFFECT, iphoneipadGlossyEffect+"");
+		dlServerProp.put(Task.IPAD_SUPPORTED_ORIENTATIONS, ipadSupportedOrientations);
+		
+		appendPlaformSpecificLogos(dlServerProp);
+		
+		Properties properties = new Properties();
+		properties.putAll(dlServerProp);
+		try {
+			String fileName = "application.properties";
+			properties.store(new FileWriter(fileName), "");
+			System.out.println("------------------------------Test----------------------" + new File(fileName).getAbsolutePath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return dlServerProp;
+	}
+	
+	private void appendPlaformSpecificLogos(HashMap<String, String> dlServerProp) {
+		ArrayList<IMobileChannel> mobileChannels = new ArrayList<IMobileChannel>();
+		mobileChannels.addAll(MobileChannels.getRichClientChannels());
+		mobileChannels.addAll(MobileChannels.getTabletRichClientChannels());
+		for (IMobileChannel mobileChannel : mobileChannels) {
+			String xmlName = MobileChannels.getXMLName(mobileChannel);
+			String logoKey = Task.APP_LOGO + "_" + xmlName;
+			if (appLogo == null) {
+				appLogo = KUtils.EMPTY_STRING;
+			}
+			dlServerProp.put(logoKey, ImageUtils.getPlatformSpecificImage(appLogo, mobileChannel));
+			
+			String splashKey = Task.SPLASH_IMAGE + "_" + xmlName;
+			if (splashLogo == null) {
+				splashLogo = KUtils.EMPTY_STRING;
+			}
+			dlServerProp.put(splashKey, ImageUtils.getPlatformSpecificImage(splashLogo, mobileChannel));
+			
+			String splashVideoKey = Task.SPLASH_VIDEO + "_" + xmlName;
+			String splashVideo = splashData.getPortrait_splash_video();
+			if (splashVideo == null) {
+				splashVideo = KUtils.EMPTY_STRING;
+			}
+			dlServerProp.put(splashVideoKey, ImageUtils.getPlatformSpecificImage(splashVideo, mobileChannel));
+			
+			String splashLandscapeKey = Task.SPLASH_LANDSCAPE_IMAGE + "_" + xmlName;
+			String splashLandscapeLogo = splashData.getLandscape_splash_image();
+			if (splashLandscapeLogo == null) {
+				splashLandscapeLogo = KUtils.EMPTY_STRING;
+			}
+			dlServerProp.put(splashLandscapeKey, ImageUtils.getPlatformSpecificImage(splashLandscapeLogo, mobileChannel));
+			
+			String splashLandscapeVideoKey = Task.SPLASH_LANDSCAPE_VIDEO + "_" + xmlName;
+			String splashLandscapeVideo = splashData.getLandscape_splash_video();
+			if (splashLandscapeVideo == null) {
+				splashLandscapeVideo = KUtils.EMPTY_STRING;
+			}
+			dlServerProp.put(splashLandscapeVideoKey, ImageUtils.getPlatformSpecificImage(splashLandscapeVideo, mobileChannel));
+		}
 	}
 	
 	private void readPeferences() {
