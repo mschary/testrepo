@@ -663,7 +663,7 @@ public class NativeCodeGenerationJob extends Job {
 
 		dlServerProp.put(Task.SPLASH_ANDROID_LOAD_INDICATOR, andLoadIndctr+"");
 		dlServerProp.put(Task.SPLASH_IPHONE_LOAD_INDICATOR, iphoneLoadIndctr+"");
-		dlServerProp.put(Task.FONTS_WORKSPACE, ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString()+"/"+ FileUtilities.METADATA_KONYSTUDIO_FONTS);
+		dlServerProp.put(Task.FONTS_WORKSPACE_KEY, ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString()+"/"+ FileUtilities.METADATA_KONYSTUDIO_FONTS);
 
 		String splashAnimationImages = SplashUtils.getSplashAnimationImages(splashData, SplashData.PORTRAIT_MODE);
 		dlServerProp.put(Task.SPLASH_ANIMATION_LIST, splashAnimationImages);
