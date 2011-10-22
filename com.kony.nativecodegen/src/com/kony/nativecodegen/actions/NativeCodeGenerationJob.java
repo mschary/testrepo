@@ -2,7 +2,6 @@ package com.kony.nativecodegen.actions;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -687,17 +686,6 @@ public class NativeCodeGenerationJob extends Job {
 		dlServerProp.put(Task.IPAD_SUPPORTED_ORIENTATIONS, ipadSupportedOrientations);
 		
 		appendPlaformSpecificLogos(dlServerProp);
-		
-		Properties properties = new Properties();
-		properties.putAll(dlServerProp);
-		try {
-			String fileName = "application.properties";
-			properties.store(new FileWriter(fileName), "");
-			System.out.println("------------------------------Test----------------------" + new File(fileName).getAbsolutePath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		return dlServerProp;
 	}
