@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.pat.tool.keditor.editors.help.ContextSensitiveHelpConstants;
+import com.pat.tool.keditor.editors.help.ContextSensitiveHelpUtil;
 import com.pat.tool.keditor.utils.RendererHashMapData;
 import com.pat.tool.keditor.widgets.IMobileChannel;
 import com.pat.tool.keditor.widgets.RichClientChannel;
@@ -95,6 +97,7 @@ public class NativeCodePlatformSelectionDialog extends TrayDialog {
 			}
 		});
 		
+		ContextSensitiveHelpUtil.hookHelp(parent,ContextSensitiveHelpConstants.GENERATE_NATIVE_CODE);
 
 		return parent;
 	}
