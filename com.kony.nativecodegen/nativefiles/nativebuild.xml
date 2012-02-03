@@ -94,7 +94,7 @@
 			<fileset dir="${css.dir}" includes="*.css"/>
 		</copy>
 		<copy todir="${dest.dir}/jslib">
-			<fileset dir="${spa.dir}" includes="*.js"/>
+			<fileset dir="${spa.dir}" includes="**/*.js"/>
 		</copy>
 	</target>
 	
@@ -103,7 +103,7 @@
 		<delete file="${dest.dir}/appjs/app.js" failonerror="false"/>
 		<concat fixlastline="yes" destfile="${dest.dir}/appjs/app.js" append="yes">
 			<fileset dir="${dest.dir}/appjs">
-				<include name="*.js"/>
+				<include name="**/*.js"/>
 				<exclude name="appmodel.js"/>
 			</fileset>
 		</concat>
