@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <!--extension
+   <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
@@ -9,7 +9,7 @@
             objectClass="com.pat.tool.keditor.navigation.model.ResourceRoot">
          <visibility>
             <objectState
-                  name="isProject"
+                  name="isProjectLua"
                   value="true">
             </objectState>
          </visibility>
@@ -33,7 +33,7 @@
          <visibility>
             <and>
                <objectState
-                     name="isProject"
+                     name="isProjectLua"
                      value="true">
                </objectState>
                <objectState
@@ -61,7 +61,7 @@
          <visibility>
             <and>
                <objectState
-                     name="isProject"
+                     name="isProjectLua"
                      value="true">
                </objectState>
                <objectState
@@ -85,7 +85,7 @@
          <visibility>
             <and>
                <objectState
-                     name="isProject"
+                     name="isProjectLua"
                      value="true">
                </objectState>
                <objectState
@@ -109,7 +109,7 @@
          <visibility>
             <and>
                <objectState
-                     name="isProject"
+                     name="isProjectLua"
                      value="true">
                </objectState>
                <objectState
@@ -133,7 +133,7 @@
          <visibility>
             <and>
                <objectState
-                     name="isProject"
+                     name="isProjectLua"
                      value="true">
                </objectState>
                <objectState
@@ -150,7 +150,7 @@
                menubarPath="nativeCodeMenu/editVariablesMenu/additions">
          </action>
       </objectContribution>
-   </extension-->
+   </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
