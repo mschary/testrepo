@@ -4,7 +4,7 @@ Bundle-Name: Nativecodegen
 Bundle-SymbolicName: com.kony.nativecodegen;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.kony.nativecodegen.NativeCodeGenPlugin
-Bundle-Vendor: Kony
+Bundle-Vendor: Kony Solutions, Inc.
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.jface,
