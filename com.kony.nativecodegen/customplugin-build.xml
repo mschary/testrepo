@@ -8,6 +8,8 @@
 	<property name="dist.plugin.dir" value="dist"/>
 	<property name="luatranslator.dir" value="../../luatranslator"/>
  
+	<property name="key.store" value="C:\\konyjarsigner-key\\Kony_keystore" />
+	
 	<!-- find the plugin version. If Custom label is  platform-branch-major.minor.releasnumber format.  Then plugin-version=major.minor.releasenumber -->
 	<propertyregex
 		property="plugin-version"
@@ -113,7 +115,15 @@
 	<target name="build" depends="init,clean,setup">		
 		<!-- Create the plugin jar file -->
 		<jar destfile="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/>
-				
+		
+		<!-- Sign the Final Jar -->
+		 <signjar           
+            jar="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar"
+            keystore="${key.store}"
+			storepass="kony123"
+            alias="KonyKeys"
+            keypass="kony123" />
+			
 		<echo message="Publishing the Kony Native Codegen Plugin"/>
 		<ant dir="." antfile="customplugin-web.xml"/>
 		<echo message="Sucessfully Published the Kony Native Codegen Plugin"/>
