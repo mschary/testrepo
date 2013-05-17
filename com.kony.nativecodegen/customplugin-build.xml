@@ -54,7 +54,7 @@
 		
 	<property name="nativeplugin.version" value="${plugin-version}.${envmnt}" />
 	
-	<echo message="pulgin version:${nativeplugin.version}"/>
+	<echo message="pulgin version:${plugin.version}"/>
 	<echo message="branch:${branch}"/>
 	<echo message="build:${build}"/>
   </target>
@@ -86,7 +86,7 @@
 		<copydir src="bin" dest="${dist.plugin.dir}"/>
 		
 		
-		<replace file="${dist.plugin.dir}/META-INF/MANIFEST.MF" token="Bundle-Version: 1.0.0.qualifier" value="Bundle-Version: ${nativeplugin.version}"/>
+		<replace file="${dist.plugin.dir}/META-INF/MANIFEST.MF" token="Bundle-Version: 1.0.0.qualifier" value="Bundle-Version: ${plugin.version}"/>
 		 
 		 
 		<!-- Copy necessary luatraslator resources	-->
@@ -114,11 +114,11 @@
 	
 	<target name="build" depends="init,clean,setup">		
 		<!-- Create the plugin jar file -->
-		<jar destfile="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/>
+		<jar destfile="${dist.plugin.dir}/com.kony.nativecodegen_${plugin.version}.jar" filesetmanifest="merge" basedir="${dist.plugin.dir}"/>
 		
 		<!-- Sign the Final Jar -->
 		 <signjar           
-            jar="${dist.plugin.dir}/com.kony.nativecodegen_${nativeplugin.version}.jar"
+            jar="${dist.plugin.dir}/com.kony.nativecodegen_${plugin.version}.jar"
             keystore="${key.store}"
 			storepass="kony123"
             alias="KonyKeys"
