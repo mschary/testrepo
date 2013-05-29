@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="build" default="deploy" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="build" default="deploy" basedir="." >
  	
      <target name="init">
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
@@ -107,108 +107,7 @@
      </target>
 	
 
-	<target name="deploy" depends="publish">
-		<property name="nexus_repo_url" value="http://10.10.6.9:8081/nexus/content/repositories" />
-		<property name="artifactId" value="com.kony.desktopweb" />
-		<property name="ftp_server" value="10.10.6.38" />
-		<property name="ftp_user" value="user" />
-		<property name="ftp_passwd" value="user123" />
-		<property name="ftp_dir" value="/50" />
-
-
-
-		
-		<if>
-			<equals arg1="${envt}" arg2="QA" />
-				<then>
-					<artifact:mvn failonerror="true">
-						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-						<arg value="-Durl=${nexus_repo_url}/${envt}" />
-						<arg value="-DrepositoryId=${envt}" />						
-						<arg value="-DgroupId=features" />
-						<arg value="-DartifactId=${artifactId}" />
-						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/features/${artifactId}_${plugin.version}.jar" />
-					</artifact:mvn>
-					<artifact:mvn failonerror="true">
-						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-						<arg value="-Durl=${nexus_repo_url}/${envt}" />
-						<arg value="-DrepositoryId=${envt}" />						
-						<arg value="-DgroupId=plugins" />
-						<arg value="-DartifactId=${artifactId}" />
-						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/plugins/${artifactId}_${plugin.version}.jar" />
-					</artifact:mvn>	
-
-					<echo meassage=" Uploading QA-Plugins to Maven Repo: http://10.10.6.9:8081/nexus/content/repositories/QA Done" />
-
-				</then>
-		</if>
-		
-		<if>
-			<equals arg1="${envt}" arg2="GA" />
-				<then>
-					<artifact:mvn failonerror="true">
-						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-						<arg value="-Durl=${nexus_repo_url}/${envt}" />
-						<arg value="-DrepositoryId=${envt}" />						
-						<arg value="-DgroupId=features" />
-						<arg value="-DartifactId=${artifactId}" />
-						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/features/${artifactId}_${plugin.version}.jar" />
-					</artifact:mvn>
-					<artifact:mvn failonerror="true">
-						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-						<arg value="-Durl=${nexus_repo_url}/${envt}" />
-						<arg value="-DrepositoryId=${envt}" />						
-						<arg value="-DgroupId=plugins" />
-						<arg value="-DartifactId=${artifactId}" />
-						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/plugins/${artifactId}_${plugin.version}.jar" />
-					</artifact:mvn>	
-
-					<echo meassage=" Uploading GA-Plugins to Maven Repo: http://10.10.6.9:8081/nexus/content/repositories/GA Done" />
-					
-					<ftp	server="${ftp_server}" 
-							remotedir="${ftp_dir}/features" 
-							userid="${ftp_user}" 
-							password="${ftp_passwd}" 
-							passive="yes" 
-							depends="yes" 
-							binary="yes"
-							verbose="yes"
-							retriesAllowed="3"
-							skipFailedTransfers="yes" >
-
-					<fileset dir="${dest.dir}/${timestamp}/features/">
-					  <include name="${artifactId}_${plugin.version}.jar"/>
-					</fileset>
-
-				   </ftp>
-					<ftp	server="${ftp_server}" 
-							remotedir="${ftp_dir}/plugins" 
-							userid="${ftp_user}" 
-							password="${ftp_passwd}" 
-							passive="yes" 
-							depends="yes" 
-							binary="yes"
-							verbose="yes"
-							retriesAllowed="3"
-							skipFailedTransfers="yes" >
-
-					<fileset dir="${dest.dir}/${timestamp}/plugins/">
-					  <include name="${artifactId}_${plugin.version}.jar"/>
-					</fileset>
-
-				  </ftp>
-
-					<echo meassage=" Uploading GA-Plugins to Local Update Site is Done" />
-
-				</then>
-		</if>
-		
-	</target>
-
+	
 
 	 <target name="clean">
 	 	<delete>
