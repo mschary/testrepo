@@ -14,11 +14,9 @@
 			<equals arg1="bbj2me" arg2="${branch}" casesensitive="false" trim="true"/>
 		</condition> -->
 				
-		<echo message="pulgin version:${nativeplugin.version}"/>
+		<echo message="pulgin version:${plugin.version}"/>
 		<echo message="branch:${branch}"/>
 		<echo message="build:${build}"/>
-     	
-     	<mkdir dir="${temp.dir}/plugins"/>
      </target>
      	     	
      <target name="publish" depends="init, clean">
@@ -33,91 +31,42 @@
       <mkdir dir="${dest.dir}/${timestamp}/features"/>
       <mkdir dir="${dest.dir}/${timestamp}/plugins"/>
      	
-	  <delete includeEmptyDirs="true">
-		<fileset dir="${temp.dir}/plugins" includes="**/*"/>
-	  </delete>
+	  <copy todir="${dest.dir}/${timestamp}/plugins">
+			<fileset dir="${plugin.loc}">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>
      	
-	  <mkdir dir="${temp.dir}/plugins"/>
-      <mkdir dir="${temp.dir}/features"/>
-	
-	  <copy todir="${temp.dir}/plugins">
-	    <fileset dir="${plugin.loc}">
-	      <include name="*.jar"/>
-	    </fileset>
-	  </copy>
-     	
-    <echo message="timestamp ....${timestamp}"/>
-       <copyfile src="${temp.dir}/feature-template.xml" dest="${temp.dir}/features/feature.xml" forceoverwrite="true"/>
-	   <sleep seconds="2"/>
-       <replace file="${temp.dir}/features/feature.xml" token="{timestamp}" value="${timestamp}"/>
-     	
-     	<condition property="build.fet" value="${build}" else="${branch}-${build}">
-			<equals arg1="bbj2me" arg2="${branch}" casesensitive="false" trim="true"/>
-		</condition>
-     	<echo message="Updating feature.xml file with build" />
-		<sleep seconds="2"/>
-       <replace file="${temp.dir}/features/feature.xml" token="{build}" value="${build.fet}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/features/feature.xml" token="{branch}" value="${branch}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/features/feature.xml" token="{pluginversion}" value="${nativeplugin.version}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/features/feature.xml" token="{platformversion}" value="${platform.version}"/>
+		<copyfile src="${temp.dir}/feature-template.xml" dest="${temp.dir}/feature.xml" forceoverwrite="true"/>
+		<replace file="${temp.dir}/feature.xml" token="{PLUGIN-VERS}" value="${plugin.version}"/>    	
+		<replace file="${temp.dir}/feature.xml" token="{DEP-CORE-PLUGIN-VER}" value="${IDECOREDEPENDENCY}"/>
+		
+       	<copyfile src="${temp.dir}/site-template.xml" dest="${temp.dir}/site.xml" forceoverwrite="true"/>
+		<replace file="${temp.dir}/site.xml" token="{PLUGIN-VERS}" value="${plugin.version}"/>
        	   
-	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" basedir="${temp.dir}/features"/>
+	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" basedir="${temp.dir}" excludes="**/feature-template.xml, **/site-template.xml, **/site.xml"/>
 	   
-       <copyfile src="${temp.dir}/site-template.xml" dest="${temp.dir}/site.xml" forceoverwrite="true"/>
-	   <echo message="Updating site.xml file with timestamp" />
-	   <sleep seconds="2"/>
-       <replace file="${temp.dir}/site.xml" token="{timestamp}" value="${timestamp}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/site.xml" token="{build}" value="${build.fet}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/site.xml" token="{branch}" value="${branch}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/site.xml" token="{platformversion}" value="${platform.version}"/>
-	   <sleep seconds="1"/>
-       <replace file="${temp.dir}/site.xml" token="{pluginversion}" value="${plugin.version}"/>
-	   <sleep seconds="1"/>
-	   
-       <replace file="${dest.dir}/releases_template.xml" token="{newsite}" value="&lt;mirrors&gt;&lt;mirror url=&quot;http://10.10.19.180/dashboard/${branch}/updatesite/${timestamp}/&quot; label=&quot;BlackBerry and J2ME Plugin [Release:${timestamp}]&quot; /&gt;"/>
-	   
-     	<delete>
-     		<fileset dir="${dest.dir}/features" includes="**/*.jar"/>
-     	</delete>
-     	<delete>
-     	     <fileset dir="${dest.dir}/plugins" includes="**/*.jar"/>
-     	</delete>
-		<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
-		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
-     	<copyfile src="${temp.dir}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/${timestamp}/features/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
-		<copyfile src="${temp.dir}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" dest="${dest.dir}/${timestamp}/plugins/com.kony.nativecodegen_${nativeplugin.version}.jar" forceoverwrite="true"/>
-	
-     	<copyfile src="${temp.dir}/site.xml" dest="${dest.dir}/${timestamp}/site.xml" forceoverwrite="true"/>
-     	<copyfile src="${temp.dir}/site.xml" dest="${dest.dir}/site.xml" forceoverwrite="true"/>
-     	
-     	<echo message="firsttime"/>
-     	
-     	<replaceregexp file="${dest.dir}/site.xml" match="&lt;site&gt;" replace="&lt;site mirrorsURL=&quot;http://10.10.19.180/dashboard/${branch}/updatesite/releases.xml&quot;&gt;" flags="s"/>
-     	<copyfile src="${dest.dir}/releases_template.xml" dest="${dest.dir}/releases.xml" forceoverwrite="true"/>
-     	<copyfile src="../../version.html" dest="${dest.dir}/version${timestamp}.html" forceoverwrite="true"/>
-     	<copyfile src="../../version.html" dest="${dest.dir}/${timestamp}/version${timestamp}.html" forceoverwrite="true"/>
-     	<copyfile src="${dest.dir}/releases.xml" dest="${dest.dir}/releases_template.xml" forceoverwrite="true"/>
-     	<replace file="${dest.dir}/releases_template.xml" token="&lt;mirrors&gt;" value="{newsite}"/>
+       <!-- Sign the Final Feature Jar -->
+		<signjar           
+            jar="${dest.dir}/${timestamp}/features/com.kony.nativecodegen_${plugin.version}.jar"
+            keystore="${key.store}"
+			storepass="kony123"
+            alias="KonyKeys"
+            keypass="kony123" />
+			
+       	<copy file="${temp.dir}/site.xml" todir="${dest.dir}/${timestamp}/"/>	  
      </target>
 	
 
 	<target name="deploy" depends="publish">
 		<property name="nexus_repo_url" value="http://10.10.6.9:8081/nexus/content/repositories" />
-		<property name="artifactId" value="com.kony.desktopweb" />
 		<property name="ftp_server" value="10.10.6.38" />
 		<property name="ftp_user" value="user" />
 		<property name="ftp_passwd" value="user123" />
 		<property name="ftp_dir" value="/50" />
+		<property name="feature_jar_name" value="com.kony.nativecodegen" />
+		<property name="plugin_jar_name" value="com.kony.nativecodegen" />
 
-
-
-		
 		<if>
 			<equals arg1="${envt}" arg2="QA" />
 				<then>
@@ -211,14 +160,6 @@
 
 
 	 <target name="clean">
-	 	<delete>
-	 		<fileset dir="${temp.dir}/plugins" includes="**/*.jar"/>
-	 	</delete>
-	 	<delete>
-	 		<fileset dir="${temp.dir}/features" includes="**/*.jar"/>
-	 	</delete>
-	 	<delete file="${temp.dir}/site.xml"/>
-	 	<delete file="${temp.dir}/features/feature.xml"/>
 	</target>
 	
  </project>
