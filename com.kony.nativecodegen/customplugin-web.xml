@@ -8,7 +8,7 @@
 		<property name="plugin.loc" location="dist"/>
  	    <property name="temp.dir" location="pluginupdatesite"/>
     	<property name="dest.dir" location="D:\apache-tomcat-7.0.2\webapps\dashboard\\${branch}\\updatesite"/>
-     	<property name="timestamp" value="${target.branch}.${build}"/>
+     	<property name="timestamp" value="${build}"/>
      	
      	<!-- <condition property="plugin.version" value="2.0.0.R${build}" else="2.0.0.${branch}${build}">
 			<equals arg1="bbj2me" arg2="${branch}" casesensitive="false" trim="true"/>
