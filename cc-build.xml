@@ -71,7 +71,19 @@
 				<not>  
 					<isset property="Rtarget.branch"/>
 				</not>
-			</condition>		
+			</condition>
+
+			<propertyregex
+				property="envmnt"
+				input="${label}"
+				regexp="(.*)-(.*)-(\d)\.(\d+)\.(\d+)\.(\d+)$"
+				select="\2"/>
+		
+			<propertyregex
+				property="envmnt"
+				input="${label}"
+				regexp="(.*)-(.*)-(\d)\.(\d+)\.(\d+)$"
+				select="\2"/>
 		
 			<property name="envmnt" value="${Rtarget.branch}" />
 	
@@ -91,7 +103,8 @@
 	        <touch file="../../../ccbuild.properties"/>
 	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">ds=${DSTAMP}</concat>
 	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">ts=${TSTAMP}</concat>
-	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">build=${LABELNUM}</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">buildnum=${LABELNUM}${line.separator}</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">build=${tlabel}</concat>
 	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">platform.version=1.0.0</concat>
 			<!-- <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">jar-filename-change=${jar-filename-change}</concat>
 			<concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">jar-filename=${jar-filename}</concat> -->
@@ -114,6 +127,7 @@
 		  <ant dir="../../../nativecodegen/com.kony.nativecodegen" antfile="customplugin-build.xml">
 			<property name="LABEL" value="${tlabel}"/>
 			<property name="plugin.version" value="${plugin.version}"/>
+			<property name="envmnt" value="${envmnt}"/>
 		  </ant>
 		  <echo message="Sucessfully Packaging the Kony NativeCodegen Plugin"/>
 			
