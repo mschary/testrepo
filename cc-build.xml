@@ -127,7 +127,7 @@
 		  <ant dir="../../../nativecodegen/com.kony.nativecodegen" antfile="customplugin-build.xml">
 			<property name="LABEL" value="${tlabel}"/>
 			<property name="plugin.version" value="${plugin.version}"/>
-			<property name="envmnt" value="${envmnt}"/>
+			<property name="envt" value="${envmnt}"/>
 		  </ant>
 		  <echo message="Sucessfully Packaging the Kony NativeCodegen Plugin"/>
 			
