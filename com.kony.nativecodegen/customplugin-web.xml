@@ -146,8 +146,8 @@
 							retriesAllowed="3"
 							skipFailedTransfers="yes" >
 
-					<fileset dir="${dest.dir}/${timestamp}/plugins/">
-					  <include name="${artifactId}_${plugin.version}.jar"/>
+					<fileset dir="${plugin.loc}">
+					  <include name="*.jar"/>
 					</fileset>
 
 				  </ftp>
