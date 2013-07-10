@@ -63,7 +63,7 @@
 		<property name="ftp_server" value="10.10.6.38" />
 		<property name="ftp_user" value="user" />
 		<property name="ftp_passwd" value="user123" />
-		<property name="ftp_dir" value="/50" />
+		<property name="ftp_dir" value="/55" />
 		<property name="feature_jar_name" value="com.kony.nativecodegen" />
 		<property name="plugin_jar_name" value="com.kony.nativecodegen" />
 
