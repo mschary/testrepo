@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    	  Copyright 2012 Kony Solutions, Inc. All rights reserved.
+ -->
+
+<feature
+      id="com.kony.core"
+      label="%featureName"
+      version="{PLUGIN-VERS}"
+      provider-name="%providerName"      
+      image="Kony_Logo.jpg">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://developer.kony.com/updatesite/50/site.xml"/>
+      <discovery label="%updateSiteName" url="http://developer.kony.com/updatesite/50/site.xml"/>
+   </url>
+
+  <!-- <requires>
+		<import feature="com.kony.core" version="{DEP-CORE-PLUGIN-VER}" match="greaterOrEqual"/>
+   </requires>  -->
+   
+	<plugin
+         id="com.pat.tool.keditor"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+	
+		 
+	<plugin
+         id="com.kony.thirdparty.jars"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+	
+		 
+	<plugin
+         id="com.pat.soapui"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+
+	<plugin
+         id="com.pat.soapui.preversion"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+	
+	<plugin
+         id="com.kony.nativecodegen"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+	
+	<plugin
+         id="com.kony.codegen"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+		 
+	<plugin
+         id="com.kony.license"
+         download-size="0"
+         install-size="0"
+         version="{PLUGIN-VERS}"
+         unpack="false"/>
+	
+		 
+</feature>

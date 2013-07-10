@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<description url="http://developer.kony.com/updatesite">
+      KonyOne Version 5.0
+	</description>
+	<feature url="features/com.kony.core_{PLUGIN-VERS}.jar" id="com.kony.core" version="{PLUGIN-VERS}" patch="true">
+      <category name="KonyOneStudio"/>
+	</feature>
+   
+    <category-def name="KonyOneStudio" label="KonyOne Studio 5.0"/>
+</site>
