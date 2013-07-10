@@ -7,8 +7,8 @@
 		<property file="../../ccbuild.properties"/>
 		<property name="plugin.loc" location="dist"/>
  	    <property name="temp.dir" location="pluginupdatesite"/>
-    	<property name="dest.dir" location="D:\apache-tomcat-7.0.2\webapps\dashboard\\${branch}\\updatesite"/>
-     	<property name="timestamp" value="${target.branch}.${build}"/>
+    	<property name="dest.dir" location="D:\apache-tomcat-7.0.2\webapps\dashboard\konyplatform_custom_plugin\updatesite"/>
+     	<property name="timestamp" value="${IDECOREDEPENDENCY}"/>
      	
      	<!-- <condition property="plugin.version" value="2.0.0.R${build}" else="2.0.0.${branch}${build}">
 			<equals arg1="bbj2me" arg2="${branch}" casesensitive="false" trim="true"/>
@@ -28,7 +28,7 @@
 		<tstamp/>
       
       <mkdir dir="${dest.dir}/${timestamp}"/>
-      <mkdir dir="${dest.dir}/${timestamp}/features"/>
+      <!-- <mkdir dir="${dest.dir}/${timestamp}/features"/> -->
       <mkdir dir="${dest.dir}/${timestamp}/plugins"/>
      	
 	  <copy todir="${dest.dir}/${timestamp}/plugins">
@@ -37,24 +37,24 @@
 			</fileset>
 		</copy>
      	
-		<copyfile src="${temp.dir}/feature-template.xml" dest="${temp.dir}/feature.xml" forceoverwrite="true"/>
+		<!--<copyfile src="${temp.dir}/feature-template.xml" dest="${temp.dir}/feature.xml" forceoverwrite="true"/>
 		<replace file="${temp.dir}/feature.xml" token="{PLUGIN-VERS}" value="${plugin.version}"/>    	
 		<replace file="${temp.dir}/feature.xml" token="{DEP-CORE-PLUGIN-VER}" value="${IDECOREDEPENDENCY}"/>
 		
        	<copyfile src="${temp.dir}/site-template.xml" dest="${temp.dir}/site.xml" forceoverwrite="true"/>
 		<replace file="${temp.dir}/site.xml" token="{PLUGIN-VERS}" value="${plugin.version}"/>
        	   
-	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" basedir="${temp.dir}" excludes="**/feature-template.xml, **/site-template.xml, **/site.xml"/>
+	   <jar destfile="${temp.dir}/features/com.kony.nativecodegen_${plugin.version}.jar" basedir="${temp.dir}" excludes="**/feature-template.xml, **/site-template.xml, **/site.xml"/> -->
 	   
        <!-- Sign the Final Feature Jar -->
-		<signjar           
+		<!-- <signjar           
             jar="${dest.dir}/${timestamp}/features/com.kony.nativecodegen_${plugin.version}.jar"
             keystore="${key.store}"
 			storepass="kony123"
             alias="KonyKeys"
             keypass="kony123" />
 			
-       	<copy file="${temp.dir}/site.xml" todir="${dest.dir}/${timestamp}/"/>	  
+       	<copy file="${temp.dir}/site.xml" todir="${dest.dir}/${timestamp}/"/>	-->  
      </target>
 	
 
@@ -70,23 +70,23 @@
 		<if>
 			<equals arg1="${envt}" arg2="QA" />
 				<then>
-					<artifact:mvn failonerror="true">
+					<!--<artifact:mvn failonerror="true">
 						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 						<arg value="-Durl=${nexus_repo_url}/${envt}" />
 						<arg value="-DrepositoryId=${envt}" />						
 						<arg value="-DgroupId=features" />
-						<arg value="-DartifactId=${artifactId}" />
+						<arg value="-DartifactId=${feature_jar_name}" />
 						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/features/${artifactId}_${plugin.version}.jar" />
-					</artifact:mvn>
+						<arg value="-Dfile=${dest.dir}/${timestamp}/features/${feature_jar_name}_${plugin.version}.jar" />
+					</artifact:mvn> -->
 					<artifact:mvn failonerror="true">
 						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 						<arg value="-Durl=${nexus_repo_url}/${envt}" />
 						<arg value="-DrepositoryId=${envt}" />						
 						<arg value="-DgroupId=plugins" />
-						<arg value="-DartifactId=${artifactId}" />
+						<arg value="-DartifactId=${plugin_jar_name}" />
 						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/plugins/${artifactId}_${plugin.version}.jar" />
+						<arg value="-Dfile=${dest.dir}/${timestamp}/plugins/${plugin_jar_name}_${plugin.version}.jar" />
 					</artifact:mvn>	
 
 					<echo message=" Uploading QA-Plugins to Maven Repo: http://10.10.6.9:8081/nexus/content/repositories/QA Done" />
@@ -97,27 +97,28 @@
 		<if>
 			<equals arg1="${envt}" arg2="GA" />
 				<then>
-					<artifact:mvn failonerror="true">
+				<!--	<artifact:mvn failonerror="true">
 						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 						<arg value="-Durl=${nexus_repo_url}/${envt}" />
 						<arg value="-DrepositoryId=${envt}" />						
 						<arg value="-DgroupId=features" />
-						<arg value="-DartifactId=${artifactId}" />
+						<arg value="-DartifactId=${feature_jar_name}" />
 						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/features/${artifactId}_${plugin.version}.jar" />
-					</artifact:mvn>
+						<arg value="-Dfile=${dest.dir}/${timestamp}/features/${feature_jar_name}_${plugin.version}.jar" />
+					</artifact:mvn>  -->
 					<artifact:mvn failonerror="true">
 						<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 						<arg value="-Durl=${nexus_repo_url}/${envt}" />
 						<arg value="-DrepositoryId=${envt}" />						
 						<arg value="-DgroupId=plugins" />
-						<arg value="-DartifactId=${artifactId}" />
+						<arg value="-DartifactId=${plugin_jar_name}" />
 						<arg value="-Dversion=${plugin.version}" />
-						<arg value="-Dfile=${dest.dir}/${timestamp}/plugins/${artifactId}_${plugin.version}.jar" />
+						<arg value="-Dfile=${dest.dir}/${timestamp}/plugins/${plugin_jar_name}_${plugin.version}.jar" />
 					</artifact:mvn>	
 
 					<echo message=" Uploading GA-Plugins to Maven Repo: http://10.10.6.9:8081/nexus/content/repositories/GA Done" />
 					
+					<!--
 					<ftp	server="${ftp_server}" 
 							remotedir="${ftp_dir}/features" 
 							userid="${ftp_user}" 
@@ -133,7 +134,7 @@
 					  <include name="${artifactId}_${plugin.version}.jar"/>
 					</fileset>
 
-				   </ftp>
+				   </ftp> -->
 					<ftp	server="${ftp_server}" 
 							remotedir="${ftp_dir}/plugins" 
 							userid="${ftp_user}" 
@@ -145,8 +146,8 @@
 							retriesAllowed="3"
 							skipFailedTransfers="yes" >
 
-					<fileset dir="${dest.dir}/${timestamp}/plugins/">
-					  <include name="${artifactId}_${plugin.version}.jar"/>
+					<fileset dir="${plugin.loc}">
+					  <include name="*.jar"/>
 					</fileset>
 
 				  </ftp>

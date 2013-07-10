@@ -10,53 +10,16 @@
  
 	<property name="key.store" value="C:\\konyjarsigner-key\\Kony_keystore" />
 	
-	<!-- find the plugin version. If Custom label is  platform-branch-major.minor.releasnumber format.  Then plugin-version=major.minor.releasenumber -->
-	<propertyregex
-		property="plugin-version"
-		input="${LABEL}"
-		regexp=".*-(\d)\.(\d)\.(\d+)$"
-		select="\1.\2.\3"/> 
-  
-	<!-- find the plugin version. If Custom label is  platform-branch-major.minor format. Then plugin-version=major.minor.0 -->
-	<propertyregex
-		property="plugin-version"
-		input="${LABEL}"
-		regexp=".*-(\d)\.(\d)$"
-		select="\1.\2.0"/> 
-		
-	<!-- find the plugin version. If Custom label is  platform_pluign-branch-build_number format. Then plugin-version=1.0.build_number else 1.0.0. Default version is 1.0.0-->
-	<condition property="plugin-version" value="1.0.${LABELNUM}" else="1.0.0">
-		<matches pattern=".+_plugin-.+\.[0-9]+" string="${LABEL}"/>
-	</condition>
-	
-	<!-- find the plugin environment (Dev|QA|GA). If Custom label is  platform-branch-major.minor format. Then plugin-environmnent=branch -->
 	<propertyregex 
-		property="envmnt"
-		input="${LABEL}"
-		regexp=".*-(.+)-(\d)\.(\d|\d\.\d+)$"
-		select="\1"/> 
-		
-	<!-- If Custom label is other format, assign target.branch value to plugin-environment -->
-	<!-- Replace . character with _ for the plugin.version -->		
-	<propertyregex property="Rtarget.branch"
-        input="${target.branch}"
-        regexp="\."
-        replace="_"
-        global="true" />
-		   
-	<condition property="Rtarget.branch" value="${target.branch}">
-		<not>  
-			<isset property="Rtarget.branch"/>
-		</not>
-	</condition>		
-		
-	<property name="envmnt" value="${Rtarget.branch}" />
-		
-	<property name="nativeplugin.version" value="${plugin-version}.${envmnt}" />
-	
+			property="envt"
+			input="${plugin.version}"
+			regexp="(\d+)\.(\d+)\.(\d+)\.(.*)_(.*)"
+			select="\4"/>
+			
 	<echo message="pulgin version:${plugin.version}"/>
 	<echo message="branch:${branch}"/>
 	<echo message="build:${build}"/>
+	<echo message="envt:${envt}"/>
   </target>
 
 	<target name="clean">

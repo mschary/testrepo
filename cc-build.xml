@@ -71,8 +71,20 @@
 				<not>  
 					<isset property="Rtarget.branch"/>
 				</not>
-			</condition>		
+			</condition>
+
+			<propertyregex
+				property="envmnt"
+				input="${label}"
+				regexp="(.*)-(.*)-(\d)\.(\d+)\.(\d+)\.(\d+)$"
+				select="\2"/>
 		
+			<propertyregex
+				property="envmnt"
+				input="${label}"
+				regexp="(.*)-(.*)-(\d)\.(\d+)\.(\d+)$"
+				select="\2"/>
+	
 			<property name="envmnt" value="${Rtarget.branch}" />
 	
 			<condition property="plugin.version" value="3.0.${LABELNUM}.${envmnt}_v${DSTAMP}${TSTAMP}" else="3.0.0.${envmnt}_v${DSTAMP}${TSTAMP}">
@@ -89,22 +101,23 @@
 	        <delete file="../../../version.html"/>
 
 	        <touch file="../../../ccbuild.properties"/>
-	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">ds=${DSTAMP}</concat>
-	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">ts=${TSTAMP}</concat>
-	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">build=${LABELNUM}</concat>
-	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">platform.version=1.0.0</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">ds=${DSTAMP}${line.separator}</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">ts=${TSTAMP}${line.separator}</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">buildnum=${LABELNUM}${line.separator}</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">build=${tlabel}${line.separator}</concat>
+	        <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">platform.version=1.0.0${line.separator}</concat>
 			<!-- <concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">jar-filename-change=${jar-filename-change}</concat>
 			<concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">jar-filename=${jar-filename}</concat> -->
-			<concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">LABEL=${tlabel}</concat>
-			<concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">branch=${branch}</concat>
+			<concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">LABEL=${tlabel}${line.separator}</concat>
+			<concat destfile="../../../ccbuild.properties" append="true" fixlastline="yes">branch=${branch}${line.separator}</concat>
 
                 <replace file="../../../ccbuild.properties" token="build." value=""/>
 
 	        <touch file="../../../version.html"/>
-	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build DATE = ${DSTAMP}</concat>
-	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build Time = ${TSTAMP}</concat>
-	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build Number =${LABELNUM}</concat>
-	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build Branch =${branch}</concat>
+	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build DATE = ${DSTAMP}${line.separator}</concat>
+	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build Time = ${TSTAMP}${line.separator}</concat>
+	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build Number =${LABELNUM}${line.separator}</concat>
+	        <concat destfile="../../../version.html" append="true" fixlastline="yes">Build Branch =${branch}${line.separator}</concat>
         
 		  <echo message="Compiling the Kony NativeCodegen Plugin"/>
 		  <ant dir="../../../nativecodegen/com.kony.nativecodegen" antfile="plugin-compile.xml"/>
@@ -114,6 +127,7 @@
 		  <ant dir="../../../nativecodegen/com.kony.nativecodegen" antfile="customplugin-build.xml">
 			<property name="LABEL" value="${tlabel}"/>
 			<property name="plugin.version" value="${plugin.version}"/>
+			<property name="envt" value="${envmnt}"/>
 		  </ant>
 		  <echo message="Sucessfully Packaging the Kony NativeCodegen Plugin"/>
 			
